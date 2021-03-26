@@ -15,7 +15,7 @@
 
 1. base 폴더 내에는 전부다같이 쓸 설정이 담긴 scss가 들어 있다.
 2. 각자 사용할 scss는 page용이면 pages, component 용이면 components 내에 만들어준다.
-3. main.scss로 scss가 전체 적용되기 때문에 해당 파일 명으로 중첩 적용 해준다. _pages의 _main.scss 참조
+3. main.scss로 scss가 전체 적용되기 때문에 해당 파일 명으로 중첩 적용 해준다. _pages의 _main.scss, _colorTest.scss 참조
 4. main.scss에서 import 해주면 js에서 불러올 필요 없이 파일에 적용된다.
 5. 파일 이름 앞에 _붙은건 private라 main통해서만 가는 구조
 
