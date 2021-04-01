@@ -2,7 +2,7 @@
 
 ## 초기 설정법
 
-1. vscode 확장 프로그램 prettier 설치
+1. eslint 설치
 2. frontend 폴더와 backend 폴더 내에서 npm install
 
 ## components, pages 파일 규칙
