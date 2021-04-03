@@ -2,6 +2,10 @@
 @import './base/reset';
 @import './base/variables';
 
-// components
+// pages
 @import './pages/main';
 @import './pages/colorTest';
+@import './pages/challengeStatusModify';
+
+// components
+@import './conponents/requestApproval';
