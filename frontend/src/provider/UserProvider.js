@@ -9,7 +9,7 @@ const LoginContext = createContext({
 	}
 });
 
-const UserProvider = ({children}) => {
+const UserProvider = ({ children }) => {
 	const [loginInfo, setLoginInfo] = useState({});
 
 	const value = {
@@ -21,8 +21,8 @@ const UserProvider = ({children}) => {
 		<LoginContext.Provider value={[value.state, value.actions]}>
 			{children}
 		</LoginContext.Provider>
-	)
-}
+	);
+};
 
 const LoginConsumer = LoginContext.Consumer;
 

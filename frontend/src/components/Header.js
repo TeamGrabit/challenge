@@ -33,11 +33,20 @@ function Header() {
 	return (
 		<AppBar className="header" position="static">
 			<Toolbar>
-				<Link className="link" href="/">
-					<Typography className="title" variant="h5">
-						세살버릇 여든까지
-					</Typography>
-				</Link>
+				{
+					isLogined ?
+						<Link className="link" href="/">
+							<Typography className="title" variant="h5">
+								세살버릇 여든까지
+							</Typography>
+						</Link>
+						:
+						<Link className="link" href="/intro">
+							<Typography className="title" variant="h5">
+								세살버릇 여든까지
+							</Typography>
+						</Link>
+				}
 				<div className="grow" />
 				{
 					isLogined ?
