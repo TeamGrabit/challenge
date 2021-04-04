@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express');
 const { areComponentsEqual } = require('react-hot-loader');
 const User = require('../models/userModel');
 
