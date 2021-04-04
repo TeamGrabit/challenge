@@ -4,7 +4,7 @@ import { Button, Input, RadioGroup, FormControlLabel, Radio, TextareaAutosize } 
 function RequestApproval() {
 	const handleCheck = () => { };
 	return (
-		<div className="background">
+		<div className="requestApproval">
 			<div className="title">
 				승인 요청
 			</div>
@@ -17,12 +17,14 @@ function RequestApproval() {
 				defaultChecked="pass"
 			>
 				<FormControlLabel
+					className="typeLabel"
 					value="pass"
 					control={<Radio color="primary" />}
 					label="면제"
 					labelPlacement="end"
 				/>
 				<FormControlLabel
+					className="typeLabel"
 					value="approval"
 					control={<Radio color="primary" />}
 					label="승인"
@@ -35,8 +37,8 @@ function RequestApproval() {
 				rowsMax={10}
 			/>
 			<div className="setBtn">
-				<Button className="selectBtn" type="button">보내기</Button>
 				<Button className="selectBtn" type="button">취소</Button>
+				<Button className="selectBtn" type="button">보내기</Button>
 			</div>
 		</div>
 	);

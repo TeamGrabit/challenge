@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, challengeStatusModify } from "../pages";
+import { Main, colorTest, challengeInfoFix } from "../pages";
 import '../css/main.scss';
 
 function Router() {
@@ -9,7 +9,7 @@ function Router() {
 			<Switch>
 				<Route exact path="/" component={Main} />
 				<Route exact path="/color" component={colorTest} />
-				<Route exact path="/challengeStatusModify" component={challengeStatusModify} />
+				<Route exact path="/challengeInfoFix" component={challengeInfoFix} />
 			</Switch>
 		</BrowserRouter>
 	);

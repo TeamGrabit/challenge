@@ -1,4 +1,4 @@
-.background{
+.requestApproval{
 	height: 60vh;
 	width: 40vw;
 	display: flex;
@@ -9,7 +9,7 @@
 	
 	.title{
 		font-family: 'Courier New', Courier, monospace;
-		font-size: 3rem;
+		font-size: 3vw;
 		margin-top: 3vh;
 		margin-bottom: 2vh;
 		font-weight: 700;
@@ -21,9 +21,8 @@
 		display: flex;
 		flex-direction: row;
 		align-content: flex-start;
-		font-size: 1.4rem;
 		margin-bottom: 1vh;
-		height: auto;
+		height: 10vh;
 		width: 35vw;
 	}
 	
@@ -35,11 +34,11 @@
 	.data{
 		padding: 1%;
 		padding-left: 1%;
-		font-size: 1.5rem;
+		font-size: 2vw;
 		resize: none;
 		width: 35vw;
 		height: 40vh;
-		margin-bottom: 5vh;
+		margin-bottom: 3vh;
 		line-height: 120%;
 	}
 	
@@ -50,9 +49,9 @@
 	}
 	
 	.selectBtn{
-		font-size: 1.5rem;
-		margin-left: 2vw;
-		margin-right: 2vw;
+		font-size: 2vw;
+		margin-left: 1vw;
+		margin-right: 1vw;
 		width: 10vw;
 		height: 6vh;
 		background-color: $green3;

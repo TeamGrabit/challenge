@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function challengeStatusModify() {
+function challengeInfoFix() {
 	const classes = useStyles();
 	const [open, setopen] = useState(false);
 	const handleOpen = () => {
@@ -24,7 +24,7 @@ function challengeStatusModify() {
 		setopen(false);
 	};
 	return (
-		<div className="challengeStatusModify">
+		<div className="challengeInfoFix">
 			<div className="body">
 				<div className="title">
 					나의 챌린지 현황
@@ -52,15 +52,17 @@ function challengeStatusModify() {
 						</Fade>
 					</Modal>
 				</div>
-				<Button className="canselBtn" type="button">
-					취소
-				</Button>
-				<Button className="completeBtn" type="button">
-					수정완료
-				</Button>
+				<div className="btnSet">
+					<Button className="Btn" type="button">
+						취소
+					</Button>
+					<Button className="Btn" type="button">
+						수정완료
+					</Button>
+				</div>
 			</div>
 		</div>
 	);
 }
 
-export default challengeStatusModify;
+export default challengeInfoFix;
