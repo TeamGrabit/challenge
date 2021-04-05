@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest } from "../pages";
+import { Main, colorTest, MyPage, Login, Register, Intro } from "../pages";
 import '../css/main.scss';
 
 function Router() {
@@ -9,6 +9,10 @@ function Router() {
 			<Switch>
 				<Route exact path="/" component={Main} />
 				<Route exact path="/color" component={colorTest} />
+				<Route exact path="/mypage" component={MyPage} />
+				<Route exact path="/login" component={Login} />
+				<Route exact path="/register" component={Register} />
+				<Route exact path="/intro" component={Intro} />
 			</Switch>
 		</BrowserRouter>
 	);
