@@ -1,4 +1,6 @@
 .challengeInfoFix{
+	width: 100vw;
+	height: 100vh;
 	.body{
 		display: flex;
 		height: 100vh;
@@ -9,7 +11,7 @@
 	.title{
 		margin-top: 10vh;
 		margin-bottom: 5vh;
-		font-size: 4vw;
+		font-size: 4vmax;
 		font-weight: 500;
 		font-family: 'Courier New', Courier, monospace;
 	}
@@ -26,17 +28,28 @@
 		margin-bottom: 5vh;
 	}
 	.Btn{
-		font-size: 1.2rem;
+		font-size: 3vmin;
 		margin-left: 3vw;
 		width: 10vw;
 		background: $green3;
-		border-radius: 7px;
-		min-width: 100px;
+		border-radius: 1%;
 	}
 	.btnSet{
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-end;
 		width: 70vw;
+		height: 7vh;
 	}
+}
+.modalpaper{
+	background-color: black;
+	box-shadow: black;
+	width: 100vw;
+}
+.modal{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
 }

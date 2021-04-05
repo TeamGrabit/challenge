@@ -9,7 +9,7 @@ function Router() {
 			<Switch>
 				<Route exact path="/" component={Main} />
 				<Route exact path="/color" component={colorTest} />
-				<Route exact path="/challengeInfoFix" component={challengeInfoFix} />
+				<Route exact path="/challenge/info/:challengeId/fix" component={challengeInfoFix} />
 			</Switch>
 		</BrowserRouter>
 	);

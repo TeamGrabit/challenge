@@ -1,21 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Modal, makeStyles, Backdrop, Fade } from '@material-ui/core';
-import RequestApproval from '../components/RequestApproval';
+import { RequestApproval } from '../components/index';
 
-const useStyles = makeStyles((theme) => ({
-	modal: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	paper: {
-		backgroundColor: theme.palette.background.paper,
-		boxShadow: theme.shadows[5],
-	},
-}));
-
-function challengeInfoFix() {
-	const classes = useStyles();
+function challengeInfoFix(props) {
+	const _challengeId = props.match.params.challengeId;
+	console.log(_challengeId);
 	const [open, setopen] = useState(false);
 	const handleOpen = () => {
 		setopen(true);
@@ -33,24 +22,6 @@ function challengeInfoFix() {
 					<Button className="status_box" onClick={handleOpen}>
 						여기에 네모들 들어갈 예정
 					</Button>
-					<Modal
-						aria-labelledby="transition-modal-title"
-						aria-describedby="transition-modal-description"
-						className={classes.modal}
-						open={open}
-						onClose={handleClose}
-						closeAfterTransition
-						BackdropComponent={Backdrop}
-						BackdropProps={{
-							timeout: 500,
-						}}
-					>
-						<Fade in={open}>
-							<div className={classes.paper}>
-								<RequestApproval />
-							</div>
-						</Fade>
-					</Modal>
 				</div>
 				<div className="btnSet">
 					<Button className="Btn" type="button">
@@ -61,6 +32,22 @@ function challengeInfoFix() {
 					</Button>
 				</div>
 			</div>
+			<Modal
+				className="modal"
+				open={open}
+				onClose={handleClose}
+				closeAfterTransition
+				BackdropComponent={Backdrop}
+				BackdropProps={{
+					timeout: 500,
+				}}
+			>
+				<Fade in={open}>
+					<div className="modalPaper">
+						<RequestApproval />
+					</div>
+				</Fade>
+			</Modal>
 		</div>
 	);
 }

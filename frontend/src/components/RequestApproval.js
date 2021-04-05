@@ -19,14 +19,14 @@ function RequestApproval() {
 				<FormControlLabel
 					className="typeLabel"
 					value="pass"
-					control={<Radio color="primary" />}
+					control={<Radio className="radioBtn" color="primary" />}
 					label="면제"
 					labelPlacement="end"
 				/>
 				<FormControlLabel
 					className="typeLabel"
 					value="approval"
-					control={<Radio color="primary" />}
+					control={<Radio className="radioBtn" color="primary" />}
 					label="승인"
 					labelPlacement="end"
 				/>
