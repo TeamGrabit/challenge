@@ -22,6 +22,7 @@ module.exports = {
 		"eslint-plugin-react-hooks"
 	],
 	"rules": {
+		"react/prop-types": "off",
 		"indent": [
 			"error",
 			"tab"

@@ -1,0 +1,39 @@
+#wrap{
+	padding: 0em;
+}
+.MuiTypography-colorPrimary {
+	color: black !important;
+}
+.MuiLink-underlineHover {
+	text-decoration: none !important;
+}
+header {
+	color: black !important;
+	background-color: $green2 !important;
+	box-shadow: none !important;
+	
+	.link {
+		color: black !important;
+	}
+	.link:hover {
+		text-decoration: none !important;
+	}
+	.title {
+		font-size: 2rem;
+		font-weight: bold;
+	}
+	.grow {
+		flex-grow: 1;
+	}
+	.profileImg {
+		width: 2rem;
+		border-radius: 50%;
+	}
+	.profileBtn {
+		background-color: $green3 !important;
+		width: 5rem;
+	}
+	.loginBtn {
+		margin-right: 1rem;
+	}
+}
