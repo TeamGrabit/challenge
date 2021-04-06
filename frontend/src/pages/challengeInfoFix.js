@@ -1,21 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Modal, makeStyles, Backdrop, Fade } from '@material-ui/core';
+import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import { RequestApproval } from '../components/index';
-
-function getModalStyle() {
-	const top = 0;
-	const left = 0;
-
-	return {
-		top: `${top}%`,
-		left: `${left}%`,
-	};
-}
 
 function challengeInfoFix(props) {
 	const _challengeId = props.match.params.challengeId;
 	const [open, setopen] = useState(false);
-	const [modalStyle] = useState(getModalStyle);
 	const handleOpen = () => {
 		setopen(true);
 	};
@@ -46,7 +35,6 @@ function challengeInfoFix(props) {
 				className="modal"
 				open={open}
 				onClose={handleClose}
-				style={modalStyle}
 				closeAfterTransition
 				BackdropComponent={Backdrop}
 				BackdropProps={{
@@ -55,7 +43,7 @@ function challengeInfoFix(props) {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<RequestApproval />
+						<RequestApproval onClose={handleClose} />
 					</div>
 				</Fade>
 			</Modal>

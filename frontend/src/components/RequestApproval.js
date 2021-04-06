@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Input, RadioGroup, FormControlLabel, Radio, TextareaAutosize } from '@material-ui/core';
 
-function RequestApproval() {
+function RequestApproval({ onClose }) {
 	const handleCheck = () => { };
 	return (
 		<div className="requestApproval">
@@ -37,7 +37,7 @@ function RequestApproval() {
 				rowsMax={10}
 			/>
 			<div className="setBtn">
-				<Button className="selectBtn" type="button">취소</Button>
+				<Button className="selectBtn" type="button" onClick={onClose}>취소</Button>
 				<Button className="selectBtn" type="button">보내기</Button>
 			</div>
 		</div>
