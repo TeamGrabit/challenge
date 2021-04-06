@@ -3,9 +3,9 @@ import { Layout } from '../components';
 
 function MyPage() {
 	return (
-		<Layout>
+		<>
 			Mypage;
-		</Layout>
+		</>
 	);
 }
 

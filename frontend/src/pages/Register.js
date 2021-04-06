@@ -3,9 +3,9 @@ import { Layout } from '../components';
 
 function Register() {
 	return (
-		<Layout>
+		<>
 			Register
-		</Layout>
+		</>
 	);
 }
 
