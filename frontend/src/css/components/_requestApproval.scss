@@ -1,0 +1,79 @@
+.requestApproval{
+	height: 60vh;
+	min-height: 30vmax;
+	width: 40vmax;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: $ghost-white;
+	
+	.title{
+		font-family: 'Courier New', Courier, monospace;
+		font-size: 3vmax;
+		margin-top: 3vh;
+		margin-bottom: 2vh;
+		font-weight: 700;
+		letter-spacing: 1vmin;
+	}
+	
+	.selectType{
+		font-family: 'Courier New', Courier, monospace;
+		display: flex;
+		flex-direction: row;
+		align-content: flex-start;
+		margin-bottom: 1vmin;
+		height: 10vh;
+		width: 35vmax;
+		font-size: 1vmax;
+		size: 1vmax;
+	}
+
+	.typeLabel{
+		font-size: 1vmax;
+		size: 1vmax;
+	}
+
+	.radioBtn{
+		font-size: 1vmax;
+		size: 1vmax;
+	}
+	
+	.formTypeCheck{
+		height: 3vh;
+		width: 3vw;
+		font-size: 1vmax;
+		size: 1vmax;
+	}
+	
+	.data{
+		padding: 1%;
+		padding-left: 1%;
+		font-size: 2vmax;
+		resize: none;
+		width: 35vmax;
+		height: 35vmin;
+		margin-bottom: 3vh;
+		line-height: 120%;
+	}
+	
+	.setBtn{
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 2vh;
+	}
+	
+	.selectBtn{
+		font-size: 2vmax;
+		margin-left: 1vw;
+		margin-right: 1vw;
+		width: 10vw;
+		height: 6vh;
+		background-color: #D3D0E5;
+		border-radius: 7%;
+	}
+	.modal{
+		border: black solid 1px;
+	}
+}
+
