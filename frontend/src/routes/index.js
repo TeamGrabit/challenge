@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, challengeInfoFix } from "../pages";
 import { Main, colorTest, MyPage, Login, Register, Intro, challengeInfoFix } from "../pages";
 import '../css/main.scss';
 

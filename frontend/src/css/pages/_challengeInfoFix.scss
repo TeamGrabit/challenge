@@ -1,6 +1,4 @@
 .challengeInfoFix{
-	width: 100vw;
-	height: 100vh;
 	.body{
 		display: flex;
 		height: 100vh;
@@ -41,15 +39,4 @@
 		width: 70vw;
 		height: 7vh;
 	}
-}
-.modalpaper{
-	background-color: black;
-	box-shadow: black;
-	width: 100vw;
-}
-.modal{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100vw;
 }
