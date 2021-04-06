@@ -18,6 +18,7 @@ db.once('open', function(){
     console.log('Connection success!');
 });
 
+app.use(express.json());
 app.use('/',router);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))

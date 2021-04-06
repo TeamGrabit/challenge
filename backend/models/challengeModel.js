@@ -1,10 +1,29 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-var challengeSchema = new Schema({
+var Challenge = new Schema({
   name: String,
-  chaellenge_id: String,
-  user_count: Int16Array
+  challenge_id: String,
 });
 
-module.exports = mongoose.model('challenge',challengeSchema);
+
+Challenge.statics.create = function(name, challenge_id) {
+  const challenge = new this({
+      name,
+      challenge_id
+  })
+  console.log('ddd');
+  // return the Promise
+  return challenge.save()
+}
+
+
+Challenge.statics.findOneByUsername = function(name) {
+  return this.findOne({
+      name
+  }).exec()
+}
+
+
+
+module.exports = mongoose.model('challenge',Challenge);

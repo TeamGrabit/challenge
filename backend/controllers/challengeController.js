@@ -3,6 +3,20 @@ const { areComponentsEqual } = require('react-hot-loader');
 const Challenge = require('../models/challengeModel');
 
 function CreateChallenge (req,res) {
+    const {name,challenge_id}=req.body;
+    let newChallenge = null;
+  
+    const create = (challenge)=>{
+        if(challenge){
+            throw new Error ('challengename exists')
+        }else{
+            return Challenge.create(name,challenge_id);
+        }
+    }
+
+    Challenge.findOneByUsername(name)
+  .then(create)
+
 
 }
 function WhoIsKing (req, res) {
@@ -18,6 +32,8 @@ function WhoIsKing (req, res) {
     })
 
 }
+
+
 module.exports = {
     whoIsKing: WhoIsKing,
     createChallenge: CreateChallenge
