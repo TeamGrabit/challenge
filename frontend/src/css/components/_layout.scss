@@ -12,8 +12,19 @@ header {
 	background-color: $green2 !important;
 	box-shadow: none !important;
 	
+	.logoImg {
+		width: 2rem;
+		margin-right: 1rem;
+		@include mobile {
+			width: 3rem;
+		}
+	}
 	.link {
 		color: black !important;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
 	}
 	.link:hover {
 		text-decoration: none !important;
@@ -21,6 +32,12 @@ header {
 	.title {
 		font-size: 2rem;
 		font-weight: bold;
+		@include mobile {
+			font-size: 1rem;
+			@media (max-width: 337px){
+				display:none;
+			}
+		}
 	}
 	.grow {
 		flex-grow: 1;
