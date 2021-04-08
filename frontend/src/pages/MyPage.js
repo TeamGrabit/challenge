@@ -1,9 +1,13 @@
 import React from 'react';
+import { SideBar } from '../components';
 
 function MyPage() {
 	return (
 		<>
-			Mypage;
+			<div className="mypage">
+				<SideBar />
+				dd
+			</div>
 		</>
 	);
 }
