@@ -4,17 +4,21 @@ const User = require('../models/userModel');
 
 
 function CreateUser (req, res) {
-    var newUser = new User(req.body);
-    
-    newUser.save(function(error, data) {
-        if (error) {
-            console.log('save error');
-        } 
-        else {
-            console.log('save success');
+    const {User_name,User_password,email}=req.body;
+    let newUser = null;
+  
+    const create = (user)=>{
+        if(user){
+            throw new Error ('user exists')
+        }else{
+            return User.create(User_name,User_password,email);
         }
-    });
-    res.end('createUser');
+    }
+
+    User.findOneByUsername(User_name)
+  .then(create)
+
+  res.end("created")
 }
 
 function DeleteUser (req, res) {
