@@ -1,12 +1,12 @@
 import React from 'react';
+import { Container } from '@material-ui/core';
 import LogInForm from '../components/logInForm';
 
 function logIn() {
 	return (
-		<div className="logIn">
+		<div>
 			<LogInForm />
 		</div>
-
 	);
 }
 

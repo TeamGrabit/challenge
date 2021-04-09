@@ -2,6 +2,7 @@
     //vertical-align: middle;
     margin:0 auto;
 }
+
 .logInForm {
     flex-direction: column;
     display: inline-flex;
@@ -11,6 +12,7 @@
     flex-direction: row;
     display: inherit;
     margin-top:20px;
+    
     .text{
         width : 30px;
         align-self:center;
