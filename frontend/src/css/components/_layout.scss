@@ -34,7 +34,7 @@ header {
 		font-weight: bold;
 		@include mobile {
 			font-size: 1rem;
-			@media (max-width: 337px){
+			@media (max-width: 450px){
 				display:none;
 			}
 		}
