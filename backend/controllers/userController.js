@@ -1,9 +1,12 @@
+
 const express = require('express');
 const { areComponentsEqual } = require('react-hot-loader');
+
 const User = require('../models/userModel');
 
 
 function CreateUser (req, res) {
+
     const {User_name,User_password,email}=req.body;
     let newUser = null;
   
@@ -33,9 +36,12 @@ function DeleteUser (req, res) {
     }
 });
 res.end('Delete')
+
 }
 
 module.exports = {
     createUser: CreateUser,
+
     deleteUser: DeleteUser
+
 };
