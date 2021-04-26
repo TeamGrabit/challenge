@@ -1,9 +1,19 @@
 .sidebar{
 	position: relative;
 	height: 90vh;
-	width: 15vw;
+	width: 15vmax;
 	display: flex;
 	flex-direction: row;
 	border-right: 1px solid black;
+	justify-content: center;
 	
+	.menu_bar{
+		border: 1px solid black;
+		font-size: 2vw;
+		font-family: 'Courier New', Courier, monospace;
+		margin-top: 3vmax;
+		padding: 1vh;
+		padding-left: 2vw;
+		padding-right: 2vw;
+	}
 }

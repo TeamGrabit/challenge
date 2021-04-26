@@ -1,12 +1,14 @@
 import React from 'react';
-import { Grid, SideNav } from '@material-ui/core';
+import { Grid, SideNav, Box } from '@material-ui/core';
 
 function SideBar() {
 	return (
 		<div className="sidebar">
-			<Grid className="mypage">
-				마이페이지 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
-			</Grid>
+			<div>
+				<Box className="menu_bar">
+					마이페이지
+				</Box>
+			</div>
 		</div>
 	);
 }
