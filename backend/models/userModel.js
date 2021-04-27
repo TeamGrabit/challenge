@@ -2,9 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var User = new Schema({
+  User_id:String,
   User_name: String,
   User_password: String,
-  email: String
+  email: String,
+  git_account:String,
+  ch_ing:Array,
+  ch_end:Array,
+  in_date:Date,
 });
 
 User.statics.create = function(User_name,User_password,email) {
