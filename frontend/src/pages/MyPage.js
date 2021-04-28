@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Button, Input, TextField } from '@material-ui/core';
-import { SideBar } from '../components';
+import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@material-ui/core';
+import { SideBar, ChangePassword } from '../components/index';
 
 function MyPage() {
 	const [Name, setName] = useState("name");
 	const [Email, setEmail] = useState("test@gmail.com");
 	const [GitId, setGitId] = useState("gitId");
+	const [open, setopen] = useState(false);
+	const handleOpen = () => {
+		setopen(true);
+	};
+	const handleClose = () => {
+		setopen(false);
+	};
 	const changeName = (e) => {
 		setName(e.currentTarget.value);
 	};
@@ -74,8 +81,8 @@ function MyPage() {
 				<Grid item xs={12}>
 					<Grid container spacing={3} justify="center">
 						<Grid item>
-							<Button className="pro_password">
-								패스워드
+							<Button className="pro_password" onClick={handleOpen}>
+								패스워드 변경
 							</Button>
 						</Grid>
 					</Grid>
@@ -100,6 +107,22 @@ function MyPage() {
 					</Grid>
 				</Grid>
 			</Grid>
+			<Modal
+				className="modal"
+				open={open}
+				onClose={handleClose}
+				closeAfterTransition
+				BackdropComponent={Backdrop}
+				BackdropProps={{
+					timeout: 500,
+				}}
+			>
+				<Fade in={open}>
+					<div className="modalPaper">
+						<ChangePassword onClose={handleClose} />
+					</div>
+				</Fade>
+			</Modal>
 		</div>
 	);
 }
