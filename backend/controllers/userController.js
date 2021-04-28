@@ -7,14 +7,14 @@ const User = require('../models/userModel');
 
 function CreateUser (req, res) {
 
-    const {User_name,User_password,email}=req.body;
+    const {User_name,User_password,email,git_account,challenge_count,in_date}=req.body;
     let newUser = null;
   
     const create = (user)=>{
         if(user){
             throw new Error ('user exists')
         }else{
-            return User.create(User_name,User_password,email);
+            return User.create(User_name,User_password,email,git_account,challenge_count,in_date);
         }
     }
 

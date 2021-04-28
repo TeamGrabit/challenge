@@ -7,16 +7,18 @@ var User = new Schema({
   User_password: String,
   email: String,
   git_account:String,
-  ch_ing:Array,
-  ch_end:Array,
+  challenge_count:String,
   in_date:Date,
 });
 
-User.statics.create = function(User_name,User_password,email) {
+User.statics.create = function(User_name,User_password,email,git_account,challenge_count,in_date) {
   const challenge = new this({
       User_name,
       User_password,
-      email
+      email,
+      git_account,
+      challenge_count,
+      in_date
   })
   console.log('user만들어짐'+User_name);
   // return the Promise

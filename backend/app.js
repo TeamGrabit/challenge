@@ -16,6 +16,13 @@ db.on('error',function(){
 // 연결이 되면
 db.once('open', function(){
     console.log('Connection success!');
+    var mysort={challenge_count:-1};
+    db.collection("users").find().sort(mysort).toArray(function(err,result){
+        if(err){
+            throw err;
+        }
+        console.log(result);
+    } )
 });
 
 app.use(express.json());
