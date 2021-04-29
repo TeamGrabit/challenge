@@ -1,24 +1,33 @@
-.logIn {
-    //vertical-align: middle;
-    margin:0 auto;
-}
-
-.logInForm {
+.login{
+    display: flex;
     flex-direction: column;
-    display: inline-flex;
-}
-
-.textByForm{
-    flex-direction: row;
-    display: inherit;
-    margin-top:20px;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; //vh :높이값의 100분의 1의 단위
+    .form{
+        //display: flex;
+        // justify-content: center;
+        // align-items: center;
     
-    .text{
-        width : 30px;
-        align-self:center;
+        .loginBtn{ 
+            background-color: $green3 !important; 
+            border-radius: 80% !important;
+            padding: 20px !important;
+            height: 120px !important;
+            width: 120px !important;
+            margin-top: 30px !important;
+            margin-left: 20px !important;
+        }
+    }
+    .appendix{
+        margin-top: 5vh;
+        .text{
+            color: $green5;
+            text-decoration: underline;
+            margin-left: 4vh;
+            margin-right: 4vh;
+            width: 20vh;
+        }
     }
 }
 
-.btn{
-    color:aquamarine;
-}
