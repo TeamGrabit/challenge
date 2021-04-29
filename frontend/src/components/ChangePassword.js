@@ -7,6 +7,7 @@ function ChangePassword({ onClose }) {
 	const [changedPassword, setchangedPassword] = useState("");
 	const [confirmPassword, setconfirmPassword] = useState("");
 	const [pwderror, setpwderror] = useState(false);
+	const [hint, sethint] = useState("");
 	const changeCurrent = (e) => {
 		setcurrentPassword(e.currentTarget.value);
 	};
@@ -17,14 +18,16 @@ function ChangePassword({ onClose }) {
 		setconfirmPassword(e.currentTarget.value);
 	};
 	const checkPwd = () => {
-		if (changedPassword !== confirmPassword) {
+		if (currentPassword === "") {
 			setpwderror(true);
+			sethint("현재 비밀번호를 입력해주세요.");
 		} else if (changedPassword === "") {
 			setpwderror(true);
-		} else if (confirmPassword === "") {
+			sethint("비밀번호를 입력해주세요.");
+		} else if (changedPassword !== confirmPassword) {
 			setpwderror(true);
-		}
-		if (changedPassword !== "" && changedPassword === confirmPassword) {
+			sethint("비밀번호 확인이 일치하지 않습니다.");
+		} else if (changedPassword === confirmPassword) {
 			console.log("비밀번호가 같음.");
 			onClose();
 		}
@@ -68,6 +71,7 @@ function ChangePassword({ onClose }) {
 				variant="outlined"
 				value={confirmPassword}
 				onChange={changeConfirm}
+				helperText={hint}
 			/>
 			<div>
 				<Button className="pwdBtn" onClick={onClose}>
