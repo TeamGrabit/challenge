@@ -16,9 +16,6 @@ function MyPage() {
 	const changeName = (e) => {
 		setName(e.currentTarget.value);
 	};
-	const changeEmail = (e) => {
-		setEmail(e.currentTarget.value);
-	};
 	const changeGitId = (e) => {
 		setGitId(e.currentTarget.value);
 	};
@@ -62,7 +59,7 @@ function MyPage() {
 							</Box>
 						</Grid>
 						<Grid item>
-							<TextField value={Email} onChange={changeEmail} className="pro_emailFix" />
+							<TextField value={Email} disabled className="pro_emailFix" />
 						</Grid>
 					</Grid>
 				</Grid>
