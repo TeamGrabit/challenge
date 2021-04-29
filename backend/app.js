@@ -21,7 +21,8 @@ db.once('open', function(){
         if(err){
             throw err;
         }
-        console.log(result);
+        
+        console.log(result[0]);
     } )
 });
 
