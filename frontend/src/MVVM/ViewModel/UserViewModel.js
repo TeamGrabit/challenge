@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useContext, createContext } from 'react';
 import { useUserState, useUserDispatch } from '../Model/UserModel';
 
 const LoginUserContext = createContext((id, pw) => {});
@@ -9,13 +9,13 @@ export const UserLogicProvider = ({ children }) => {
 	const userDispatch = useUserDispatch();
 
 	const LoginUser = (id, pw) => {
-		if (id === "123" && pw === "123") {
+		if (id === 123 && pw === 123) {
 			// 임시 유저 id=123, pw=123
 			userDispatch({
 				...user, // user에 다른 속성이 있을 경우 가져오려고
 				auth: "user"
 			});
-			console.log("로그인성공");
+			console.log("로그인 성공");
 			return true;
 		}
 		return false;
@@ -27,6 +27,7 @@ export const UserLogicProvider = ({ children }) => {
 				...user,
 				auth: "no"
 			});
+			console.log("로그아웃 성공");
 		}
 	};
 

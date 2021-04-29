@@ -1,8 +1,8 @@
 import React from 'react';
 import { UserContextProvider } from './Model';
+import { ViewModel } from './ViewModel/ViewModel';
 import Router from '../routes/index';
 import { Layout } from '../components';
-import { ViewModel } from './ViewModel/ViewModel';
 
 function Provider() {
 	return (
