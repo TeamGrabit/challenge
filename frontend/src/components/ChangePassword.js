@@ -75,7 +75,7 @@ function ChangePassword({ onClose }) {
 			/>
 			<div>
 				<Button className="pwdBtn" onClick={onClose}>
-					나가기
+					취소
 				</Button>
 				<Button className="pwdBtn" onClick={checkPwd}>
 					변경
