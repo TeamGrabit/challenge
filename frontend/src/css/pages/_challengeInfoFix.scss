@@ -1,0 +1,42 @@
+.challengeInfoFix{
+	.body{
+		display: flex;
+		height: 100vh;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+	.title{
+		margin-top: 10vh;
+		margin-bottom: 5vh;
+		font-size: 4vmax;
+		font-weight: 500;
+		font-family: 'Courier New', Courier, monospace;
+	}
+	.status_box{
+		font-family: 'Courier New', Courier, monospace;
+	}
+	.box{
+		display: flex;
+		border: 1px solid black;
+		height: 50vh;
+		width: 70vw;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 5vh;
+	}
+	.Btn{
+		font-size: 3vmin;
+		margin-left: 3vw;
+		width: 10vw;
+		background: $green3;
+		border-radius: 1%;
+	}
+	.btnSet{
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		width: 70vw;
+		height: 7vh;
+	}
+}

@@ -1,8 +1,15 @@
 // base
 @import './base/reset';
 @import './base/variables';
+@import './base/mixin';
+
+// pages
+@import './pages/main';
+@import './pages/colorTest';
+@import './pages/challengeInfoFix';
+@import './pages/logIn';
 
 // components
-@import './pages/main';
-//@import './pages/colorTest';
-@import './pages/logIn';
+@import './components/requestApproval';
+@import './components/layout';
+@import './components/modal.scss';
