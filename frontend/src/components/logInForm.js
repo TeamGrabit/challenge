@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextField, Button, Box, Grid } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 
 const CssTextField = withStyles({
@@ -23,14 +24,13 @@ const CssTextField = withStyles({
 
 function LogInForm() {
 	return (
-		<div style={{ display: 'flex' }}>
-			{/* <GridList cols={2} className="logInForm"> */}
+		<div className="form">
 			<Grid>
 				<Box mt={2}>
 					<CssTextField variant="outlined" label="ID" placeholder="아이디를 입력하세요" />
 				</Box>
 				<Box mt={2}>
-					<CssTextField variant="outlined" label="PW" placeholder="비밀번호를 입력하세요" />
+					<CssTextField variant="outlined" label="PW" type="password" placeholder="비밀번호를 입력하세요" />
 				</Box>
 			</Grid>
 			<Button className="loginBtn" variant="contained">LogIn</Button>
