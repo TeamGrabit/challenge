@@ -21,9 +21,9 @@ module.exports = {
 		"eslint-plugin-react",
 		"eslint-plugin-react-hooks"
 	],
-	"rules": {
+	rules: {
 		"react/prop-types": "off",
-		"indent": [
+		indent: [
 			"error",
 			"tab"
 		], // indent는 tab으로 통일
