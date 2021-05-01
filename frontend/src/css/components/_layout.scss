@@ -1,5 +1,11 @@
+.layout{
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
 #wrap{
 	padding: 0em;
+	height: 100%;
 }
 .MuiTypography-colorPrimary {
 	color: black !important;
@@ -7,7 +13,7 @@
 .MuiLink-underlineHover {
 	text-decoration: none !important;
 }
-header {
+.header {
 	color: black !important;
 	background-color: $green2 !important;
 	box-shadow: none !important;
