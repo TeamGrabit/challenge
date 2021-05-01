@@ -16,8 +16,8 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 50%;
-		width: 14vmax;
-		height: 14vmax;
+		width: 20vmin;
+		height: 20vmin;
 	}
 	.pro_title{
 		justify-content: flex-end;
@@ -41,16 +41,19 @@
 		width: 15vmax;
 	}
 	.pro_password{
+		height: 5vmin;
 		padding-left: 4vmax;
 		padding-right: 4vmax;
 		background-color: $green3;
 	}
 	.pro_secession{
+		height: 5vmin;
 		padding-left: 1vmax;
 		padding-right: 1vmax;
 		background-color: $green3;
 	}
 	.pro_save{
+		height: 5vmin;
 		padding-left: 1vmax;
 		padding-right: 1vmax;
 		background-color: $green3;
