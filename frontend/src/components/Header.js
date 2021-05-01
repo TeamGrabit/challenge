@@ -35,13 +35,13 @@ function Header() {
 			<Toolbar>
 				{
 					isLogined ?
-						<Link className="link" href="/">
+						<Link className="link" href="/challenge/ing">
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
 							</Typography>
 						</Link>
 						:
-						<Link className="link" href="/intro">
+						<Link className="link" href="/">
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
 							</Typography>

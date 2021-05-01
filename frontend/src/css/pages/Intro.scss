@@ -5,9 +5,13 @@
 		align-items: center;
 		// margin-left: 15vw;
         overflow: hidden;
+		border-top-style: solid;
+		border-bottom-style: solid;
+		border-color: #000;
+		border-width: 2px;
 	}
     .box-img {
-        padding-left: 13vw;
-        padding-right: 13vw;
+        padding-left: 15vw;
+        padding-right: 15vw;
     }
 }
