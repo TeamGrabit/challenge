@@ -1,13 +1,8 @@
 import React from "react";
-import Router from "./routes";
-import { Layout } from './components';
+import Provider from "./MVVM/Provider";
 
 function App() {
-	return (
-		<Layout>
-			<Router />
-		</Layout>
-	);
+	return <Provider />;
 }
 
 export default App;

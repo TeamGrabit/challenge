@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Button,
 	AppBar,
@@ -9,11 +9,20 @@ import {
 	MenuItem,
 	Link
 } from '@material-ui/core';
+import { useUserState } from '../MVVM/Model/UserModel';
+import { useLogoutUser } from '../MVVM/ViewModel/UserViewModel';
 
 function Header() {
 	const git = "MOBUMIN";
+	const user = useUserState();
+	const userlogout = useLogoutUser();
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
+
+	useEffect(() => {
+		if (user.auth === "user") setIsLogined(true);
+		else setIsLogined(false);
+	}, [user]);
 
 	const handleClick = (e) => {
 		setAnchorEl(e.currentTarget);
@@ -24,7 +33,7 @@ function Header() {
 	};
 
 	const logout = () => {
-		setIsLogined(false);
+		userlogout();
 	};
 
 	const open = Boolean(anchorEl);
