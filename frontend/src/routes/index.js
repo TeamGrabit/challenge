@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, LogIn, MyPage, Register, Intro, challengeInfoFix } from "../pages";
+import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix } from "../pages";
 
 import '../css/main.scss';
 
@@ -8,14 +8,13 @@ function Router() {
 	return (
 		<BrowserRouter>
 			<Switch>
-				<Route exact path="/" component={Main} />
 				<Route exate path="/login" component={LogIn} />
 				<Route exact path="/challenge/ing" component={Main} />
 				<Route exact path="/color" component={colorTest} />
 				<Route exact path="/mypage" component={MyPage} />
 				<Route exact path="/register" component={Register} />
 				<Route exact path="/" component={Intro} />
-				<Route exact path="/challenge/info/:challengeId/fix" component={challengeInfoFix} />
+				<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
 			</Switch>
 		</BrowserRouter>
 	);
