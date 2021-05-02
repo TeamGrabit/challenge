@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogInForm from '../components/logInForm';
+import { useLoginUser } from '../MVVM/ViewModel/UserViewModel';
 
 function LogIn() {
+  const [id, setId] = useState(123);
+	const [pw, setPw] = useState(123);
+	const userLogin = useLoginUser();
+	const loginHandler = () => {
+		userLogin(id, pw);
+	};
 	return (
 		<div className="login">
 			<LogInForm />
@@ -10,7 +17,6 @@ function LogIn() {
 				<a className="text" href="/register">저희 사이트가 처음이시라구요?</a>
 			</div>
 		</div>
-
 	);
 }
 

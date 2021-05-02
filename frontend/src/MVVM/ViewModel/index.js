@@ -1,0 +1,1 @@
+export { UserLogicProvider } from './UserViewModel';

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import { RequestApproval } from '../components/index';
 
-function challengeInfoFix(props) {
-	const _challengeId = props.match.params.challengeId;
+function ChallengeInfoFix(props) {
+	const _props = props;
+	const _challengeId = _props.match.params.challengeId;
+	console.log(_challengeId);
 	const [open, setopen] = useState(false);
 	const handleOpen = () => {
 		setopen(true);
@@ -51,4 +53,4 @@ function challengeInfoFix(props) {
 	);
 }
 
-export default challengeInfoFix;
+export default ChallengeInfoFix;
