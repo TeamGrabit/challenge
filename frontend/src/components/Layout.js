@@ -4,12 +4,12 @@ import Header from './Header';
 
 function Layout({ children }) {
 	return (
-		<>
+		<Grid className="layout">
 			<Header />
 			<Grid id="wrap">
 				{children}
 			</Grid>
-		</>
+		</Grid>
 	);
 }
 
