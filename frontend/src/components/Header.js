@@ -44,14 +44,14 @@ function Header() {
 			<Toolbar>
 				{
 					isLogined ?
-						<Link className="link" href="/">
+						<Link className="link" href="/challenge/ing">
 							<img className="logoImg" src="ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
 							</Typography>
 						</Link>
 						:
-						<Link className="link" href="/intro">
+						<Link className="link" href="/">
 							<img className="logoImg" src="ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
