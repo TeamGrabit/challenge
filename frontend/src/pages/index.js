@@ -4,4 +4,4 @@ export { default as MyPage } from './MyPage';
 export { default as Login } from './Login';
 export { default as Register } from './Register';
 export { default as Intro } from './Intro';
-export { default as challengeInfoFix } from './challengeInfoFix';
+export { default as ChallengeInfoFix } from './ChallengeInfoFix';

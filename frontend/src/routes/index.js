@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, MyPage, Login, Register, Intro, challengeInfoFix } from "../pages";
+import { Main, colorTest, MyPage, Login, Register, Intro, ChallengeInfoFix } from "../pages";
 import '../css/main.scss';
 
 function Router() {
@@ -13,7 +13,7 @@ function Router() {
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
 				<Route exact path="/intro" component={Intro} />
-				<Route exact path="/challenge/info/:challengeId/fix" component={challengeInfoFix} />
+				<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
 			</Switch>
 		</BrowserRouter>
 	);
