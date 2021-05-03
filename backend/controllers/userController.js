@@ -1,6 +1,6 @@
 
 const express = require('express');
-const { areComponentsEqual } = require('react-hot-loader');
+// const { areComponentsEqual } = require('react-hot-loader');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 const User = require('../models/userModel');
@@ -37,13 +37,13 @@ function CreateUser (req, res) {
     User.findOneByUsername(User_name)
   .then(create)
 
-  var mysort={challenge_count:-1};
+  var mysort={in_date:-1};
   db.collection("users").find().sort(mysort).toArray(function(err,result){
     if(err){
         throw err;
     }
     
-    console.log(result[0]);
+   
    
 } )
 

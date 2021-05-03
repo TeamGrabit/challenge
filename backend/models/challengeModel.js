@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var Challenge = new Schema({
-  name: String,
-  challenge_id: String,
-  challeng_start: Date,
+  name: {type:String, required: true},
+  challenge_id: {type:String, required: true},
+  challeng_start:{type:Date, required: true},
   challenge_end:Date,
   challenge_user_num: Array,
-  challenge_leader:String,
+  challenge_leader:{type:String, required: true},
 });
 
 

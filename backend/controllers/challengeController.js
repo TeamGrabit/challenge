@@ -1,5 +1,5 @@
 const express = require('express');
-const { areComponentsEqual } = require('react-hot-loader');
+// const { areComponentsEqual } = require('react-hot-loader');
 const Challenge = require('../models/challengeModel');
 
 function CreateChallenge (req,res) {
@@ -16,9 +16,8 @@ function CreateChallenge (req,res) {
 
     Challenge.findOneByUsername(name)
   .then(create)
-
-
 }
+
 function WhoIsKing (req, res) {
     var _id = req.params.id;
 

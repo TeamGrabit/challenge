@@ -5,10 +5,10 @@ const db = mongoose.connection;
 
 var User = new Schema({
   User_id:String,
-  User_name: String,
-  User_password: String,
+  User_name: {type:String, required: true},
+  User_password: {type:String, required: true},
   email: String,
-  git_account:String,
+  git_account:{type:String, required: true},
   challenge_count:String,
   in_date:Date,
 });
