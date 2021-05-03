@@ -1,6 +1,5 @@
 
 const express = require('express');
-const { areComponentsEqual } = require('react-hot-loader');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 const User = require('../models/userModel');
@@ -43,7 +42,7 @@ function CreateUser (req, res) {
         throw err;
     }
     
-    console.log(result[0]);
+    console.log(result);
    
 } )
 

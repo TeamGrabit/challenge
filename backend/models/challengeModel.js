@@ -6,7 +6,7 @@ var Challenge = new Schema({
   name: String,
   challenge_id: String,
   challeng_start: Date,
-  challenge_end:Date,
+  challenge_end: Date,
   challenge_user_num: Array,
   challenge_leader:String,
 });

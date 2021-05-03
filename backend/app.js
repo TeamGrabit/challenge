@@ -24,6 +24,13 @@ db.once('open', function(){
         
         console.log(result[0]);
     } )
+	db.collection("challenge").find().sort(mysort).toArray(function(err,result){
+        if(err){
+            throw err;
+        }
+        
+        console.log(result[0]);
+    } )
 });
 
 app.use(express.json());
