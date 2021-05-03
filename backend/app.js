@@ -29,7 +29,7 @@ db.once('open', function(){
             throw err;
         }
         
-        console.log(result[0]);
+        console.log(result);
     } )
 });
 
@@ -37,4 +37,8 @@ app.use(express.json());
 
 app.use('/',router);
 
+app.get('/', (req, res)=> {
+	res.send("안녕");
+})
+	
 app.listen(port, () => console.log(`app listening on port ${port}!`))
