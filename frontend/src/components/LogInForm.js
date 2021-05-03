@@ -22,7 +22,7 @@ const CssTextField = withStyles({
 	},
 })(TextField);
 
-function LogInForm() {
+function LogInForm({ loginHandler }) {
 	return (
 		<div className="form">
 			<Grid>
@@ -33,7 +33,7 @@ function LogInForm() {
 					<CssTextField variant="outlined" label="PW" type="password" placeholder="비밀번호를 입력하세요" />
 				</Box>
 			</Grid>
-			<Button className="loginBtn" variant="contained">LogIn</Button>
+			<Button className="loginBtn" variant="contained" onClick={loginHandler}>LogIn</Button>
 		</div>
 	);
 }

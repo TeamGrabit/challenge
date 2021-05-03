@@ -9,20 +9,21 @@ import {
 	MenuItem,
 	Link
 } from '@material-ui/core';
+
 import { useUserState } from '../MVVM/Model/UserModel';
 import { useLogoutUser } from '../MVVM/ViewModel/UserViewModel';
 
 function Header() {
-	const git = "MOBUMIN";
-	const user = useUserState();
+	const userState = useUserState();
 	const userlogout = useLogoutUser();
+	const git = "MOBUMIN";
+
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 
 	useEffect(() => {
-		if (user.auth === "user") setIsLogined(true);
-		else setIsLogined(false);
-	}, [user]);
+		if (userState.auth === "user") setIsLogined(true);
+	}, [userState]);
 
 	const handleClick = (e) => {
 		setAnchorEl(e.currentTarget);
@@ -34,6 +35,7 @@ function Header() {
 
 	const logout = () => {
 		userlogout();
+		setIsLogined(false);
 	};
 
 	const open = Boolean(anchorEl);
@@ -45,14 +47,14 @@ function Header() {
 				{
 					isLogined ?
 						<Link className="link" href="/challenge/ing">
-							<img className="logoImg" src="ChallengeLogo.png" alt="logo" />
+							<img className="logoImg" src="/ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
 							</Typography>
 						</Link>
 						:
 						<Link className="link" href="/">
-							<img className="logoImg" src="ChallengeLogo.png" alt="logo" />
+							<img className="logoImg" src="/ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
 							</Typography>
