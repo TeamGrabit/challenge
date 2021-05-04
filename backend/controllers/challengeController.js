@@ -13,9 +13,10 @@ function CreateChallenge(req, res) {
 		}
 	}
 
-	Challenge.findOneByUsername(name)
+	Challenge.findOneByUsername(challenge_id)
 		.then(create)
 
+	res.send(req.body);
 }
 
 function readChallengeInfo(req, res) {

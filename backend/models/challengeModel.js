@@ -11,10 +11,9 @@ var Challenge = new Schema({
 		type: String,
 		unique: true
 	},
-	challeng_start: {
+	challenge_start: {
 		type: Date,
 		default: Date.now,
-		min: Date.now
 	},
 	challenge_end: {
 		type: Date
@@ -33,6 +32,9 @@ Challenge.statics.create = function (name, challenge_id) {
 		name,
 		challenge_id,
 	})
+
+	console.log("challenge 생성");
+	
 	// return the Promise
 	return challenge.save()
 }
