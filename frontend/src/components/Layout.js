@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import { Header } from '.';
+import Header from './Header';
 
 function Layout({ children }) {
 	return (
