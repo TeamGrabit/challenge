@@ -1,5 +1,21 @@
-.cssTest{
-	.pTest{
-		font-size: 2rem;
+.langding{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	overflow: hidden;
+
+	.cha_list{
+		justify-content: center;
+		height: 70vh;
+		width: 90vmax;
+	}
+	.cha_box{
+		border: black 1px solid;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+		width: 20vmin;
+		height: 20vmin
 	}
 }
