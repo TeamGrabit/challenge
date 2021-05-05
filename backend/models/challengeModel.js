@@ -24,13 +24,17 @@ var Challenge = new Schema({
 	challenge_leader: {
 		type: String
 	}
+},{
+	versionKey: false
 });
 
 
-Challenge.statics.create = function (name, challenge_id) {
+Challenge.statics.create = function (name, challenge_id, challenge_user_num, challenge_leader) {
 	const challenge = new this({
 		name,
 		challenge_id,
+		challenge_user_num,
+		challenge_leader
 	})
 
 	console.log("challenge 생성");
@@ -40,13 +44,10 @@ Challenge.statics.create = function (name, challenge_id) {
 }
 
 
-
-Challenge.statics.findOneByUsername = function (name) {
+Challenge.statics.findOneById = function (challenge_id) {
 	return this.findOne({
-		name
+		"challenge_id": challenge_id
 	}).exec()
 }
 
-
-
-module.exports = mongoose.model('challenge', Challenge);
+module.exports = mongoose.model('challenges', Challenge);
