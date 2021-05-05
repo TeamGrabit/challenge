@@ -5,10 +5,11 @@ const Schema = mongoose.Schema;
 var Challenge = new Schema({
   name: {type:String, required: true},
   challenge_id: {type:String, required: true},
-  challeng_start:{type:Date, required: true},
+  challeng_start:{type:Date},
   challenge_end:Date,
-  challenge_user_num: Array,
-  challenge_leader:{type:String, required: true},
+  challenge_user_name:[String],
+  challenge_leader:{type:String},
+  challenge_king:String,
 });
 
 
