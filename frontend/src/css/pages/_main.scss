@@ -1,15 +1,29 @@
-.langding{
+.main{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	overflow: hidden;
 
+	.info{
+		margin-left: 20px;
+		margin-top: 20px;
+	}
 	.cha_list{
 		justify-content: center;
 		height: 70vh;
-		width: 90vmax;
+		width: 90vw;
+	}
+	.tab_sel{
+		border-bottom: black 1px solid;
+		margin-bottom: 20px;
+	}
+	.tab_box{
+		padding-bottom: 10px;
+		border-bottom: $green3 5px solid;
+		display: inline-flex;
 	}
 	.cha_box{
+		background-color: gray;
 		border: black 1px solid;
 		display: flex;
 		justify-content: center;

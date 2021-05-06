@@ -3,16 +3,17 @@ import { Box, Grid, Button, Tabs, Tab } from '@material-ui/core';
 
 function Main() {
 	const [ing, setIng] = useState("");
-	const [fin, setFin] = useState("test@gmail.com");
+	const [fin, setFin] = useState("");
 
 	return (
-		<>
-			<div className="landing">
-				<Grid container spacing={3} className="cha_list">
-
-					<Grid item xs={12}>
+		<div className="main">
+			<div className="info">
+				<div className="tab_sel">
+					<Box className="tab_box">
 						참여중인 챌린지
-					</Grid>
+					</Box>
+				</div>
+				<Grid container spacing={3} className="cha_list">
 					<Grid item xs={3}>
 						<Box className="cha_box">
 							1일 1커밋
@@ -30,7 +31,7 @@ function Main() {
 					</Grid>
 				</Grid>
 			</div>
-		</>
+		</div>
 	);
 }
 
