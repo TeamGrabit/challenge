@@ -1,24 +1,18 @@
 const express = require('express');
 const Challenge = require('../models/challengeModel');
 const mongoose = require('mongoose');
+const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 function CreateChallenge(req, res) {
-	const { name, challenge_id, challenge_user_num, challenge_leader } = req.body;
-	let newChallenge = null;
+	const { name, challenge_user_num, challenge_leader, commitCount } = req.body;
 
-	const create = (challenge) => {
-		if (challenge) {
-			throw new Error('challengename exists')
-		} else {
-			return Challenge.create(name, challenge_id, challenge_user_num, challenge_leader);
-		}
-	}
+	Challenge.create(name, challenge_user_num, challenge_leader, commitCount)
+	.then(res.send(req.body))
+	.catch((err) => {
+		console.error(err);
+	})
 
-	Challenge.findOneById(challenge_id)
-		.then(create)
-
-	res.send(req.body);
 }
 
 function WhoIsKing(req, res) {
@@ -37,8 +31,6 @@ function WhoIsKing(req, res) {
 
 function GetChallengeList(req, res){
 	const userId = req.params.userId;
-
-	var challenge_list = [1, 2];
 	res.send(challenge_list);
 
 
@@ -48,21 +40,21 @@ function GetChallengeList(req, res){
 
 function GetChallengeInfo(req, res){
 	const challengeId = req.params.challengeId;
-	var challengeInfo;
+	const id = ObjectID(challengeId);
 
 	const getInfo = (challenge) => {
 		if(challenge){
-			db.collection("challenges").find({challenge_id: challengeId}).toArray(function(err,result){
-				if(err){
-					throw err;
-				}
-				
-				challengeInfo = result;
-				console.log(challengeInfo)
-				res.send(challengeInfo)
-			} )
+			db.collection("challenges").findOne({_id: id})
+			.then((result) => {
+				console.log("challengeInfo 받음");
+				res.send(result)
+			})
+			.catch((err) => {
+				console.error(err);
+			})
 		}else{
-			return new Error('Not found challenge')
+			res.send('false');
+			throw new Error('Not founded challenge');
 		}
 	}
 
@@ -72,29 +64,48 @@ function GetChallengeInfo(req, res){
 }
 
 
-function FixChallengeInfo(req, res){
+function FixChallengeInfo(req, res){	// 수정필요
 	const challengeId = req.params.challengeId;
+	const id = ObjectID(challengeId);
 	const { name, challenge_user_num, challenge_leader } = req.body;
-	var challengeInfo;
 
 	const fix = (challenge) => {
 		if(challenge){
-			db.collection("challenges").updateOne({challenge_id: challengeId}, {
-				$set: {
-					name: name,
-					if(challenge_user_num){
+			if(name!==null){
+				console.log(name);
+				db.collection("challenges").updateOne({_id: id}, {
+					$set: {
+						name: name
+					}
+				})
+				.then(() => {
+					console.log("challenge 이름 수정");
+				})
+				.then(res.send(req.body));
+			}else if(challenge_user_num!==null){
+				db.collection("challenges").updateOne({_id: id}, {
+					$set: {
 						challenge_user_num: challenge_user_num
-					},
-					if(challenge_leader){
+					}
+				})
+				.then(() => {
+					console.log("challenge 유저 수정");
+				})
+				.then(res.send(req.body));
+			}else if(challenge_leader!==null){
+				db.collection("challenges").updateOne({_id: id}, {
+					$set: {
 						challenge_leader: challenge_leader
 					}
-				}
-			})
-			.then((res) => {
-				console.log(req.body);
-			}).then(res.send(req.body));
+				})
+				.then(() => {
+					console.log("challenge 리더 수정");
+				})
+				.then(res.send(req.body));
+			}
 		}else{
-			return new Error('Not found challenge').then(res.send("false"));
+			res.send('false');
+			throw new Error('Not founded challenge');
 		}
 	}
 
@@ -105,16 +116,17 @@ function FixChallengeInfo(req, res){
 
 function DeleteChallenge(req, res){
 	const challengeId = req.params.challengeId;
-	var challengeInfo;
+	const id = ObjectID(challengeId);
 
 	const removeChallenge = (challenge) => {
 		if(challenge){
-			db.collection("challenges").deleteOne({challenge_id: challengeId})
+			db.collection("challenges").deleteOne({_id: id})
 			.then((res) => {
-				console.log(req.body)
-			}).then(res.send(req.body));
+				console.log("challenge 삭제");
+			}).then(res.send(challenge));
 		}else{
-			return new Error('Not found challenge').then(res.send("false"));
+			res.send('false');
+			throw new Error('Not founded challenge');
 		}
 	}
 

@@ -2,14 +2,15 @@ const { date } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const commitSchema = new Schema({
+	_id: String,
+	count: String
+});
+
 var Challenge = new Schema({
 	name: {
 		type: String,
 		required: true
-	},
-	challenge_id: {
-		type: String,
-		unique: true
 	},
 	challenge_start: {
 		type: Date,
@@ -23,30 +24,31 @@ var Challenge = new Schema({
 	},
 	challenge_leader: {
 		type: String
-	}
-},{
+	},
+	commitCount: [commitSchema]
+}, {
 	versionKey: false
 });
 
 
-Challenge.statics.create = function (name, challenge_id, challenge_user_num, challenge_leader) {
+Challenge.statics.create = function (name, challenge_user_num, challenge_leader, commitCount) {
 	const challenge = new this({
 		name,
-		challenge_id,
 		challenge_user_num,
-		challenge_leader
+		challenge_leader,
+		commitCount
 	})
 
 	console.log("challenge 생성");
-	
+
 	// return the Promise
 	return challenge.save()
 }
 
 
-Challenge.statics.findOneById = function (challenge_id) {
+Challenge.statics.findOneById = function (id) {
 	return this.findOne({
-		"challenge_id": challenge_id
+		_id: id
 	}).exec()
 }
 
