@@ -3,8 +3,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const commitSchema = new Schema({
-	_id: String,
-	count: String
+	_id: {
+		type: String,
+	},
+	count: {
+		type: String,
+		default: "0"
+	}
 });
 
 var Challenge = new Schema({
@@ -23,7 +28,8 @@ var Challenge = new Schema({
 		type: Array
 	},
 	challenge_leader: {
-		type: String
+		type: String,
+		required: true
 	},
 	commitCount: [commitSchema]
 }, {
