@@ -37,9 +37,11 @@ var Challenge = new Schema({
 });
 
 
-Challenge.statics.create = function (name, challenge_user_num, challenge_leader, commitCount) {
+Challenge.statics.create = function (name, challenge_start, challenge_end, challenge_user_num, challenge_leader, commitCount) {
 	const challenge = new this({
 		name,
+		challenge_start,
+		challenge_end,
 		challenge_user_num,
 		challenge_leader,
 		commitCount

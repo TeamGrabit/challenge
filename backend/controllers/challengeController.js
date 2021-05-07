@@ -5,9 +5,9 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 function CreateChallenge(req, res) {
-	const { name, challenge_user_num, challenge_leader, commitCount } = req.body;
+	const { name, challenge_start, challenge_end, challenge_user_num, challenge_leader, commitCount } = req.body;
 
-	Challenge.create(name, challenge_user_num, challenge_leader, commitCount)
+	Challenge.create(name, challenge_start, challenge_end, challenge_user_num, challenge_leader, commitCount)
 	.then(res.send(req.body))
 	.catch((err) => {
 		console.error(err);
