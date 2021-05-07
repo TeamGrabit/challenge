@@ -7,8 +7,8 @@ const commitSchema = new Schema({
 		type: String,
 	},
 	count: {
-		type: String,
-		default: "0"
+		type: Number,
+		default: 0
 	}
 });
 
@@ -24,8 +24,12 @@ var Challenge = new Schema({
 	challenge_end: {
 		type: Date
 	},
-	challenge_user_num: {
+	challenge_users: {
 		type: Array
+	},
+	challenge_user_num: {
+		type: Number,
+		default: 1
 	},
 	challenge_leader: {
 		type: String,
@@ -37,17 +41,18 @@ var Challenge = new Schema({
 });
 
 
-Challenge.statics.create = function (name, challenge_start, challenge_end, challenge_user_num, challenge_leader, commitCount) {
+Challenge.statics.create = function (name, challenge_start, challenge_end, challenge_users, challenge_leader, commitCount) {
 	const challenge = new this({
 		name,
 		challenge_start,
 		challenge_end,
-		challenge_user_num,
+		challenge_users,
 		challenge_leader,
 		commitCount
 	})
 
 	console.log("challenge 생성");
+	console.log(challenge._id);
 
 	// return the Promise
 	return challenge.save()
