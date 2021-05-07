@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Button, Tabs, Tab } from '@material-ui/core';
+import { Grid, Button, Tabs, Tab, AppBar } from '@material-ui/core';
+import ChallengeList from '../components/ChallengeList';
+
+function a11yProps(index) {
+	return {
+		id: `simple-tab-${index}`,
+		'aria-controls': `simple-tabpanel-${index}`,
+	};
+}
 
 function Main() {
-	const [ing, setIng] = useState("");
-	const [fin, setFin] = useState("");
+	const [ing, setIng] = useState(["참여1", "참여2", "참여3"]);
+	const [fin, setFin] = useState(["종료1", "종료2", "종료3"]);
+	const [value, setValue] = useState(0);
+
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
 
 	return (
 		<div className="main">
 			<div className="info">
-				<div className="tab_sel">
-					<Box className="tab_box">
-						참여중인 챌린지
-					</Box>
-				</div>
-				<Grid container spacing={3} className="cha_list">
-					<Grid item xs={3}>
-						<Box className="cha_box">
-							1일 1커밋
-						</Box>
-					</Grid>
-					<Grid item xs={3}>
-						<Box className="cha_box">
-							2일 1커밋
-						</Box>
-					</Grid>
-					<Grid item xs={3}>
-						<Box className="cha_box">
-							1일 1운동
-						</Box>
-					</Grid>
-				</Grid>
+				<Tabs className="tab_sel" value={value} onChange={handleChange} aria-label="simple tabs example">
+					<Tab label="참여중인 챌린지" {...a11yProps(0)} />
+					<Tab label="종료된 챌린지" {...a11yProps(1)} />
+				</Tabs>
+				<ChallengeList list={ing} value={value} index={0}>
+					item one
+				</ChallengeList>
+				<ChallengeList list={fin} value={value} index={1}>
+					item two
+				</ChallengeList>
 			</div>
 		</div>
 	);
