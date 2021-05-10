@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button, Tabs, Tab, AppBar } from '@material-ui/core';
+import { Grid, Button, Tabs, Tab, AppBar, Link } from '@material-ui/core';
 import ChallengeList from '../components/ChallengeList';
 
 function a11yProps(index) {
@@ -10,8 +10,19 @@ function a11yProps(index) {
 }
 
 function Main() {
-	const [ing, setIng] = useState(["참여1", "참여2", "참여3"]);
-	const [fin, setFin] = useState(["종료1", "종료2", "종료3"]);
+	const [ing, setIng] = useState([
+		{ name: "참여1", id: 1 },
+		{ name: "참여2", id: 2 },
+		{ name: "참여3", id: 3 },
+		{ name: "참여4", id: 4 },
+		{ name: "참여5", id: 5 },
+		{ name: "참여6", id: 6 },
+		{ name: "참여7", id: 7 }
+	]);
+	const [fin, setFin] = useState([
+		{ name: "종료1", id: 8 },
+		{ name: "종료2", id: 9 },
+		{ name: "종료3", id: 10 }]);
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event, newValue) => {

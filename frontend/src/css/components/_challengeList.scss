@@ -1,0 +1,21 @@
+.challengeList{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	
+	.cha_list{
+		margin-left: 5vw;
+		margin-top: 1vh;
+		width: 90vw;
+	}
+	.cha_box{
+		background-color: gray;
+		border: black 1px solid;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 2.5em;
+		width: 60%;
+		height: 10vw;
+	}
+}

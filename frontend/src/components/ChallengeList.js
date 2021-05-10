@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Box } from '@material-ui/core';
+import { Grid, Box, Link } from '@material-ui/core';
 
 function ChallengeList({ list, value, index }) {
 	return (
@@ -7,21 +7,15 @@ function ChallengeList({ list, value, index }) {
 			{value === index && (
 				<div className="challengeList">
 					<Grid container spacing={3} className="cha_list">
-						<Grid item xs={3}>
-							<Box className="cha_box">
-								{list[0]}
-							</Box>
-						</Grid>
-						<Grid item xs={3}>
-							<Box className="cha_box">
-								{list[1]}
-							</Box>
-						</Grid>
-						<Grid item xs={3}>
-							<Box className="cha_box">
-								{list[2]}
-							</Box>
-						</Grid>
+						{list.map((c) => (
+							<Grid item lg={4} md={6} xs={12}>
+								<Link className="link" href={`/challenge/info/${c.id}`}>
+									<Box className="cha_box">
+										{c.name}
+									</Box>
+								</Link>
+							</Grid>
+						))}
 					</Grid>
 				</div>
 			)}
