@@ -11,6 +11,7 @@ function CreateChallenge(req, res) {
 		.then(res.send(req.body))
 		.catch((err) => {
 			console.error(err);
+			res.send('false');
 		})
 
 }
@@ -116,7 +117,14 @@ function FixChallengeInfo(req, res) {
 						console.log(id);
 					})
 			}
-			res.send(req.body);
+			db.collection("challenges").findOne({ _id: id }) // 수정된 challenge를 반환하기 위함.
+															 // 이름만 수정되서 res로 전달, 다른 것은 이전 것이 res로 전달 됨.(??)
+				.then((result) => {
+					res.send(result)
+				})
+				.catch((err) => {
+					console.error(err);
+				})
 		} else {
 			res.send('false');
 			throw new Error('Not founded challenge');
