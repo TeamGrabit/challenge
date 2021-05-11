@@ -22,7 +22,14 @@ db.once('open', function(){
             throw err;
         }
         
-        console.log(result[0]);
+        console.log(result);
+    } )
+	db.collection("challenges").find().sort(mysort).toArray(function(err,result){
+        if(err){
+            throw err;
+        }
+        
+        console.log(result);
     } )
 });
 
