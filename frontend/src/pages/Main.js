@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button, Tabs, Tab, AppBar, Link } from '@material-ui/core';
+import { makeStyles, withStyles, Tabs, Tab } from '@material-ui/core';
 import ChallengeList from '../components/ChallengeList';
-
-function a11yProps(index) {
-	return {
-		id: `simple-tab-${index}`,
-		'aria-controls': `simple-tabpanel-${index}`,
-	};
-}
 
 function Main() {
 	const [ing, setIng] = useState([
-		{ name: "참여1", id: 1 },
+		{ name: "1일 1커밋 챌린지", id: 1 },
 		{ name: "참여2", id: 2 },
 		{ name: "참여3", id: 3 },
-		{ name: "참여4", id: 4 },
+		{ name: "이름이 굉장히 그것도 굉장히 길고 긴 챌린지", id: 4 },
 		{ name: "참여5", id: 5 },
 		{ name: "참여6", id: 6 },
 		{ name: "참여7", id: 7 }
@@ -29,13 +22,47 @@ function Main() {
 		setValue(newValue);
 	};
 
+	const AntTabs = withStyles({
+		root: {
+			flexGrow: 1,
+			borderBottom: '1px solid #000000',
+		},
+		indicator: {
+			display: 'flex',
+			backgroundColor: "#96e6b3",
+			height: 5,
+		},
+	})(Tabs);
+
+	const AntTab = withStyles((theme) => ({
+		root: {
+			textTransform: 'none',
+			fontSize: theme.typography.pxToRem(16),
+			marginRight: theme.spacing(1),
+			fontFamily: [
+				'맑은 고딕',
+				'Arial',
+				'sans-serif',
+			].join(','),
+			'&$selected': {
+				fontWeight: theme.typography.fontWeightBold,
+			},
+		},
+		selected: {},
+	}))((props) => <Tab disableRipple {...props} />);
+
 	return (
 		<div className="main">
 			<div className="info">
-				<Tabs className="tab_sel" value={value} onChange={handleChange} aria-label="simple tabs example">
-					<Tab label="참여중인 챌린지" {...a11yProps(0)} />
-					<Tab label="종료된 챌린지" {...a11yProps(1)} />
-				</Tabs>
+				<AntTabs
+					className="tab_sel"
+					value={value}
+					onChange={handleChange}
+					aria-label="ant example"
+				>
+					<AntTab label="참여중인 챌린지" />
+					<AntTab label="종료된 챌린지" />
+				</AntTabs>
 				<ChallengeList list={ing} value={value} index={0}>
 					item one
 				</ChallengeList>
