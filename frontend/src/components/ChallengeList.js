@@ -17,7 +17,7 @@ function ChallengeList({ list, value, index }) {
 											</div>
 											<div className="wheel">
 												<Link className="link" href={`/challenge/manage/${c.id}`}>
-													<img className="cha_manage" src="/image/바퀴수정.png" alt="설정" />
+													<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
 												</Link>
 											</div>
 										</Box>

@@ -47,6 +47,9 @@ function Main() {
 			'&$selected': {
 				fontWeight: theme.typography.fontWeightBold,
 			},
+			'&:hover': {
+				fontWeight: theme.typography.fontWeightBold,
+			},
 		},
 		selected: {},
 	}))((props) => <Tab disableRipple {...props} />);
