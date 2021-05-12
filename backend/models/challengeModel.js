@@ -51,9 +51,6 @@ Challenge.statics.create = function (name, challenge_start, challenge_end, chall
 		commitCount
 	})
 
-	console.log("challenge 생성");
-	console.log(challenge._id);
-
 	// return the Promise
 	return challenge.save()
 }
