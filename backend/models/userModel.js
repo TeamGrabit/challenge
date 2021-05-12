@@ -7,24 +7,21 @@ var User = new Schema({
 	user_name: {type: String, required: true, trim: true},
 	user_email: {type: String, required: true, trim: true},
 	git_id:{type: String, required: true, trim: true},
-	ch_ing:[String], //challenge 스키마 배열로 변경해도 좋을듯 
-	ch_end:[String],
+	ch_ing:{type : [String], required: true}, //challenge 스키마 배열로 변경해도 좋을듯 
+	ch_end:{type : [String], required: true},
 	in_date:{type: Date, required: false},
 	last_update:{type: Date, required: true}
 });
 
-User.statics.create = function(user_id,user_pw,user_name,user_email,git_id,ch_ing,ch_end,in_date,last_update) {
+User.statics.create = function(user_id,user_pw,user_name,user_email,git_id,in_date,last_update) {
 	const user = new this({
-		user_id,
-		user_pw,
-		email,
-		user_name,
-		user_email,
-		git_id,
-		ch_ing,
-		ch_end,
-		in_date,
-		last_update
+		user_id: user_id,
+		user_pw: user_pw,
+		user_name: user_name,
+		user_email: user_email,
+		git_id: git_id,
+		in_date: in_date,
+		last_update: last_update
 	})
 
   console.log('user만들어짐 :'+user_id);

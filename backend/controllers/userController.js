@@ -20,16 +20,17 @@ function getCurrentDate(){
 function CreateUser (req, res) {
 
     const {user_id,user_pw,user_name,user_email,git_id}=req.body;
-    let today= Date.now;
+
+    let today= getCurrentDate();
     console.log(today);
     const in_date = today;
-    const last_date = today;
+    const last_update = today;
   
     const create = (user)=>{
         if(user){
             throw new Error ('user exists')
         }else{
-            return User.create(user_id,user_pw,user_name,user_email,git_id,in_date,last_date);
+            return User.create(user_id,user_pw,user_name,user_email,git_id,in_date,last_update);
         }
     }
 
