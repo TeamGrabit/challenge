@@ -23,8 +23,8 @@
 		border-radius: 2.5em;
 	}
 	.wheel{
-		margin-left: 80%;
-		margin-bottom: 30%;
+		margin-left: 82.5%;
+		margin-bottom: 32.5%;
 		position: absolute;
 		display: flex;
 		width: 10%;
@@ -34,6 +34,17 @@
 		width: 20px;
 		height: 20px;
 		object-fit: cover;
+	}
+	.cha_make{
+		position: relative;
+		padding-top: 25%;
+		padding-bottom: 25%;
+		background-color: $green1;
+		border: black 1px dashed;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 2.5em;
 	}
 	.inner_text{
 		position: absolute;

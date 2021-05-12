@@ -25,6 +25,19 @@ function ChallengeList({ list, value, index }) {
 								</Link>
 							</Grid>
 						))}
+						{index === 0 && (
+							<Grid item lg={3} md={4} sm={6} xs={12}>
+								<Link className="link" href="/challenge/make">
+									<div className="cha_box">
+										<Box className="cha_make">
+											<div className="inner_text">
+												+ Add a new challenge
+											</div>
+										</Box>
+									</div>
+								</Link>
+							</Grid>
+						)}
 					</Grid>
 				</div>
 			)}
