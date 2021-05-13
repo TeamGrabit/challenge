@@ -33,9 +33,7 @@ function CreateUser (req, res) {
             return User.create(user_id,user_pw,user_name,user_email,git_id,in_date,last_update);
         }
     }
-
     User.findOneByUsername(user_id).then(create)
-
     res.end("result");
 }
 
