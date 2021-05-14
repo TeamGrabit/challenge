@@ -46,7 +46,7 @@ function Header() {
 			<Toolbar>
 				{
 					isLogined ?
-						<Link className="link" href="/challenge/ing">
+						<Link className="link" href="/challenge">
 							<img className="logoImg" src="/ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
