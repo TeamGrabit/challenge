@@ -33,5 +33,11 @@
         .MuiButton-label{
             font-size: 1rem;
         }
+        .MuiIconButton-colorSecondary:hover {
+            background-color: rgba(56,82,59,0.1);
+        }
+        .MuiCheckbox-colorSecondary.Mui-checked{
+            color: $green4;
+        }
     }
 }

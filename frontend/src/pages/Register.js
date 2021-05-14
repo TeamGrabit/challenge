@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Paper, Checkbox, FormGroup, FormControlLabel, Button, Link } from '@material-ui/core';
 
-const check = false;
 function Register() {
+	const [checked, setChecked] = React.useState(true);
+
+	const handleChange = (event) => {
+		setChecked(event.target.checked);
+	};
 	return (
 		<div className="register">
 			<Paper className="terms" variant="outlined">
@@ -47,7 +51,7 @@ function Register() {
 				<FormGroup row>
 					<FormControlLabel
 						className="text"
-						control={<Checkbox checked={check} name="checked" />}
+						control={<Checkbox checked={checked} onChange={handleChange} name="checked" />}
 						label="동의"
 					/>
 				</FormGroup>
