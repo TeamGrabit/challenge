@@ -1,6 +1,7 @@
 import React from 'react';
-import { Paper, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Paper, Checkbox, FormGroup, FormControlLabel, Button, Link } from '@material-ui/core';
 
+const check = false;
 function Register() {
 	return (
 		<div className="register">
@@ -42,11 +43,19 @@ function Register() {
 					대한 사람, 대한으로 길이 보전하세.
 				</div>
 			</Paper>
-			<div>
-				<Checkbox />
+			<div className="checkform">
+				<FormGroup row>
+					<FormControlLabel
+						className="text"
+						control={<Checkbox checked={check} name="checked" />}
+						label="동의"
+					/>
+				</FormGroup>
+				<Link className="link" href="/registerinput">
+					<Button className="btn" variant="contained">다음</Button>
+				</Link>
 			</div>
 		</div>
 	);
 }
-
 export default Register;

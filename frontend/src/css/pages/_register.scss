@@ -18,4 +18,20 @@
             margin-top: 5vh;
         }
     }
+    .checkform {
+        width: 80vh;
+        margin-top: 2vh;
+        display: flex;
+        justify-content: flex-end;       
+        .btn{
+            width: 5rem;
+            background-color: $green3;
+        }
+        .MuiButton-contained{
+            box-shadow: none;
+        }
+        .MuiButton-label{
+            font-size: 1rem;
+        }
+    }
 }
