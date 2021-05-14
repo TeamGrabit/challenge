@@ -1,0 +1,21 @@
+.register{
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    align-items: center;
+    height:100%;
+    .terms{
+        width: 80vh;
+        height: 40vh;
+        margin-top: 20vh;
+        overflow-y: auto; //스크롤 생성 
+        .stuff{
+            .title{
+                text-align: center; 
+                font-weight: bold;
+            }
+            margin: 2vh;
+            margin-top: 5vh;
+        }
+    }
+}
