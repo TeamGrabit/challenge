@@ -15,7 +15,7 @@ function Router() {
 				<Route exact path="/register" component={Register} />
 				<Route exact path="/" component={Intro} />
 				<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
-				<Route exact path="/nc" component={NowChallenge} />
+				<Route exact path="/challenge/info/:challengeId" component={NowChallenge} />
 			</Switch>
 		</BrowserRouter>
 	);

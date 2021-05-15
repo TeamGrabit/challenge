@@ -1,8 +1,12 @@
 import React from 'react';
-import { UserLogicProvider } from '.';
+import { UserLogicProvider, ChallengeLogicProvider } from '.';
 
-export const ViewModel = ({ children }) => (
+const ViewModel = ({ children }) => (
 	<UserLogicProvider>
-		{children}
+		<ChallengeLogicProvider>
+			{children}
+		</ChallengeLogicProvider>
 	</UserLogicProvider>
 );
+
+export default ViewModel;

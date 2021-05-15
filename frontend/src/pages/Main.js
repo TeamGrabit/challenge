@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles, Tabs, Tab } from '@material-ui/core';
 import ChallengeList from '../components/ChallengeList';
+import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function Main() {
-	const [ing, setIng] = useState([
-		{ name: "1일 1커밋 챌린지", id: 1 },
-		{ name: "참여2", id: 2 },
-		{ name: "참여3", id: 3 },
-		{ name: "이름이 굉장히 그것도 굉장히 길고 긴 챌린지", id: 4 },
-		{ name: "참여5", id: 5 },
-		{ name: "참여6", id: 6 },
-		{ name: "참여7", id: 7 }
-	]);
+	const challengeData = useChallengeState();
 	const [fin, setFin] = useState([
 		{ name: "종료1", id: 8 },
 		{ name: "종료2", id: 9 },
@@ -66,12 +59,7 @@ function Main() {
 					<AntTab label="참여중인 챌린지" />
 					<AntTab label="종료된 챌린지" />
 				</AntTabs>
-				<ChallengeList list={ing} value={value} index={0}>
-					item one
-				</ChallengeList>
-				<ChallengeList list={fin} value={value} index={1}>
-					item two
-				</ChallengeList>
+				<ChallengeList list={value === 0 ? challengeData : fin} index={value} />
 			</div>
 		</div>
 	);
