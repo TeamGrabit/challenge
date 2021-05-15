@@ -6,6 +6,7 @@ const router = require('./routes/routes');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/testDB');
+// mongoose.connect('mongodb+srv://HyunGwang:1234@cluster0.xstvm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 const db = mongoose.connection;
 
 // 연결이 안되면

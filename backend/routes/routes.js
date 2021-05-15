@@ -15,5 +15,6 @@ router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
 router.put('/challenge/:challengeId', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
 
+router.post('/login', userController.logIn);
 //router.post('/users/regist',userController.doRegistUser);
 module.exports = router;

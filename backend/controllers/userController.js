@@ -1,9 +1,8 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const db = mongoose.connection;
 const User = require('../models/userModel');
-
+const jwt = require('../modules/jwt');
 
 function getCurrentDate(){
     var date = new Date();
@@ -52,7 +51,34 @@ res.end('Delete')
 
 }
 
+async function LogIn(req, res) {
+    const id = req.body.user_id;
+    const pw = req.body.user_pw;
+    console.log("id, pw :"+id+" "+pw);
+    // DB에서 user 정보 조회 
+    const user = await User.loginCheck(id, pw);
+    // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
+    console.log("----");
+    console.log(user);
+    //같으면 jwtToken 발급 
+    
+    if (user) {
+        const jwtToken = await jwt.sign(user);
+        const token = jwtToken.token;
+        const msg = "login successfully";
+        return res.json({
+            message: msg,
+            token    
+        })
+    }
+    else 
+        return res.json({
+            message: "fail"
+        })
+    
+}
 module.exports = {
     createUser: CreateUser,
-    deleteUser: DeleteUser
+    deleteUser: DeleteUser,
+    logIn : LogIn
 };

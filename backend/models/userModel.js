@@ -37,4 +37,11 @@ User.statics.findOneByUsername = function(user_id) {
   }).exec()
 }
 
+User.statics.getUserById = function(id) {
+	return this.find({"user_id": id});
+}
+
+User.statics.loginCheck = function(id,pw) {
+	return this.findOne({"user_id": id, "user_pw": pw});
+}
 module.exports = mongoose.model('user',User);
