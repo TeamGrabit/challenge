@@ -12,6 +12,7 @@ mongoose.connect('mongodb+srv://HyunGwang:1234@cluster0.xstvm.mongodb.net/myFirs
 .catch(err => console.log(err));
 
 
+
 app.use(express.json());
 
 app.use('/',router);

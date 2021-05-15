@@ -1,6 +1,5 @@
 
 const express = require('express');
-const { areComponentsEqual } = require('react-hot-loader');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 const User = require('../models/userModel');
@@ -20,33 +19,21 @@ function getCurrentDate(){
 
 function CreateUser (req, res) {
 
-    const {User_name,User_password,email,git_account,challenge_count,in_date}=req.body;
-    let Date= getCurrentDate(in_date);
-    console.log(Date);
-    let newUser = null;
+    const {user_id,user_pw,user_name,user_email,git_id}=req.body;
+
+    let today= getCurrentDate();
+    console.log(today);
+    const in_date = today;
+    const last_update = today;
   
     const create = (user)=>{
         if(user){
             throw new Error ('user exists')
         }else{
-            return User.create(User_name,User_password,email,git_account,challenge_count,Date);
+            return User.create(user_id,user_pw,user_name,user_email,git_id,in_date,last_update);
         }
     }
-    
-
-    User.findOneByUsername(User_name)
-  .then(create)
-
-  var mysort={challenge_count:-1};
-  db.collection("users").find().sort(mysort).toArray(function(err,result){
-    if(err){
-        throw err;
-    }
-    
-    console.log(result[0]);
-   
-} )
-
+    User.findOneByUsername(user_id).then(create)
     res.end("result");
 }
 
@@ -67,7 +54,5 @@ res.end('Delete')
 
 module.exports = {
     createUser: CreateUser,
-
     deleteUser: DeleteUser
-
 };
