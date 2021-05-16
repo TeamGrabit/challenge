@@ -1,23 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
+import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
-function NowChallenge(props) {
-	const [title, setTitle] = useState("하루에 밥 한끼 먹기");
-
-	// const postId = props.match.params.postId;
-	// const variable = { postId: postId };
-	// const [Title, setTitle] = useState("");
-	// const [Nickname, setNickname] = useState("");
-	// const [Content, setContent] = useState("");
-
-	// useEffect(() => {
-	// 	axios.post('/api/postDetail', variable)
-	// 	.then(response=>{
-	// 		setTitle(response.data.title)
-	// 		setNickname(response.data.nickname)
-	// 		setContent(response.data.content)
-	// 	})
-	// }, [])
+function NowChallenge({ match }) {
+	const CId = match.params.challengeId;
+	const challengeData = useChallengeState();
+	const [title, setTitle] = useState("");
+	useEffect(() => {
+		// 추후 challengeId 넣어서 해당 정보만 받아아오기
+		console.log(challengeData[CId - 1].name);
+		setTitle(challengeData[CId - 1].name);
+	}, [CId]);
 	return (
 		<Grid className="NowChallenge">
 			<Grid className="head">
