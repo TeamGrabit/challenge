@@ -1,0 +1,46 @@
+.challengeMake{
+	display: inline;
+	flex-direction: row;
+	align-items: center;
+	overflow: hidden;
+
+    .makefield{
+        margin-left: 4vw;
+        margin-top: 6vh;
+    }
+    .name_grid{
+        margin-bottom: 5vh;
+    }
+    .linefield{
+        margin-left: 20px;
+        width: 360px;
+    }
+	.cha_name{
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+        font-size: 1.75em;
+	}
+	.name_txtfield{
+		width: 90%;
+        height: 80%;
+        padding: 2%;
+        font-size: 1.5em;
+	}
+    .category_txtfield{
+		width: 50%;
+        height: 80%;
+        padding: 2%;
+        font-size: 1.5em;
+	}
+    .date_txtfield{
+		width: 50%;
+        height: 60%;
+        padding: 2%;
+        font-size: 1.3em;
+	}
+    .intro_txtfield{
+		width: 100%;
+        height: 20vh;
+        padding: 2%;
+        font-size: 1em;
+	}
+}
