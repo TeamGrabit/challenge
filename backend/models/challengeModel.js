@@ -35,6 +35,10 @@ var Challenge = new Schema({
 		type: String,
 		required: true
 	},
+	state:{
+		type: Number,
+		default: 0
+	},
 	commitCount: [commitSchema]
 }, {
 	versionKey: false

@@ -12,7 +12,7 @@ function CreateChallenge(req, res) {
 		.then((doc) => {
 			console.log("challenge 생성");
 			console.log(doc);
-			res.send(req.body)
+			res.send(req.body);
 		})
 		.catch((err) => {
 			console.error(err);

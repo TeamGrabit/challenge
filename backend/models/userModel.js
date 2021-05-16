@@ -7,8 +7,7 @@ var User = new Schema({
 	user_name: {type: String, required: true, trim: true},
 	user_email: {type: String, required: true, trim: true},
 	git_id:{type: String, required: true, trim: true},
-	ch_ing:{type : [String], required: true}, //challenge 스키마 배열로 변경해도 좋을듯 
-	ch_end:{type : [String], required: true},
+	ch_list:{type : Array, required: true}, //challenge 스키마 배열로 변경해도 좋을듯 
 	in_date:{type: Date, required: false},
 	last_update:{type: Date, required: true}
 });

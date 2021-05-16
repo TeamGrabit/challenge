@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
 const User = require('../models/userModel');
+const Challenge = require('../models/challengeModel');
 
 
 function getCurrentDate() {
@@ -52,21 +53,30 @@ function DeleteUser(req, res) {
 
 }
 
-function GetChallengeList(req, res) {
-    const userId = req.params.user_id;
-    res.send(challenge_list);
+function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list반환.
+    const userId = req.params.userId;
 
-    //user의 ch_ing, ch_end값 반환. -> 어떻게?
-
+	User.findOneByUsername(userId)
+	.then((user) => {
+		if(user){
+			console.log("user의 challenge 정보 얻음");
+			console.log(user.ch_list);
+			res.send(user.ch_list);
+		}else{
+			throw new Error('not exist user')
+		}
+	})
 
 }
 
-function JoinChallenge(req, res) {
+function JoinChallenge(req, res) {		// user의 ch_list부분에 새로운 challengeId 추가.
     const { userId, challengeId } = req.body;
 
-    User.findOneAndUpdate({ "user_id": userId }, {
+	var chArray;
+
+	const join = () => User.findOneAndUpdate({ "user_id": userId }, {
         $set: {
-            ch_ing: ch_ing.push(challengeId)
+            ch_list: chArray
         }
     }, { new: true, useFindAndModify: false }, (err, doc) => {
         if (err) {
@@ -78,6 +88,24 @@ function JoinChallenge(req, res) {
             res.send(doc)
         }
     })
+
+	User.findOneByUsername(userId)
+	.then((user)=> {
+		chArray = user.ch_list;
+		if(chArray.indexOf(challengeId)>=0){	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
+			throw new Error('already join');
+		}
+		chArray.push(challengeId);
+		
+		Challenge.findById(challengeId)		// 해당 Id의 챌린지가 없다면 error 반환.
+		.then((challenge) => {
+			console.log(challenge)
+			if(challenge===null){
+				throw new Error('not exist challenge');
+			}
+		})
+
+	}).then(join)
 }
 
 module.exports = {
