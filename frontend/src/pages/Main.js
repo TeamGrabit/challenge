@@ -5,10 +5,6 @@ import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function Main() {
 	const challengeData = useChallengeState();
-	const [fin, setFin] = useState([
-		{ name: "종료1", id: 8 },
-		{ name: "종료2", id: 9 },
-		{ name: "종료3", id: 10 }]);
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event, newValue) => {
@@ -59,7 +55,7 @@ function Main() {
 					<AntTab label="참여중인 챌린지" />
 					<AntTab label="종료된 챌린지" />
 				</AntTabs>
-				<ChallengeList list={value === 0 ? challengeData : fin} index={value} />
+				<ChallengeList list={challengeData} index={value} />
 			</div>
 		</div>
 	);

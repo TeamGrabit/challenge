@@ -7,6 +7,7 @@ function ChallengeList({ list, index }) {
 			<div className="challengeList">
 				<Grid container spacing={3} className="cha_list">
 					{list.map((c) => (
+						index === c.isEnd &&
 						<Grid item lg={3} md={4} sm={6} xs={12}>
 							<Link className="link" href={`/challenge/info/${c.id}`}>
 								<div className="cha_box">
