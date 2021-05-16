@@ -1,5 +1,6 @@
 const express = require('express');
 const Challenge = require('../models/challengeModel');
+const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
@@ -34,14 +35,6 @@ function WhoIsKing(req, res) {
 
 }
 
-function GetChallengeList(req, res) {
-	const userId = req.params.userId;
-	res.send(challenge_list);
-
-
-	// DB user부분 가져와야함.
-}
-
 
 function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
@@ -64,24 +57,46 @@ function GetChallengeInfo(req, res) {
 function FixChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
-	const { name, challenge_start, challenge_end, challenge_user_num, challenge_leader } = req.body;
+	var { name, challenge_start, challenge_end, challenge_user_num, challenge_leader } = req.body;
 
-	Challenge.findByIdAndUpdate(id, {  // null처리 해야함
-		name: name,
-		challenge_start: challenge_start,
-		challenge_end: challenge_end,
-		challenge_user_num: challenge_user_num,
-		challenge_leader: challenge_leader
-	}, { new: true, useFindAndModify: false }, (err, doc) => {
-		if (err) {
-			console.log(err)
+	Challenge.findOneById(id).then((ch) => {
+		var preChallenge = ch;
+		if(name===undefined){
+			name = preChallenge.name;
 		}
-		else {
-			console.log("challenge 수정")
-			console.log(doc)
-			res.send(doc)
+		if(challenge_start===undefined){
+			challenge_start = preChallenge.challenge_start;
 		}
+		if(challenge_end===undefined){
+			challenge_end = preChallenge.challenge_end;
+		}
+		if(challenge_user_num===undefined){
+			challenge_user_num = preChallenge.challenge_user_num;
+		}
+		if(challenge_leader===undefined){
+			challenge_leader = preChallenge.challenge_leader;
+		}
+	}).then(() => {
+		Challenge.findByIdAndUpdate(id, {
+			$set: {
+				name: name,
+				challenge_start: challenge_start,
+				challenge_end: challenge_end,
+				challenge_user_num: challenge_user_num,
+				challenge_leader: challenge_leader
+			}
+		}, { new: true, useFindAndModify: false }, (err, doc) => {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				console.log("challenge 수정")
+				console.log(doc)
+				res.send(doc)
+			}
+		})
 	})
+	
 
 
 }
@@ -116,8 +131,8 @@ function JoinChallenge(req, res) {
 			userArray = challenge.challenge_users
 			userCount = challenge.challenge_user_num + 1
 			userArray.push(userId)
-			
-			//commitCount 항목 추가해줘야 함.
+
+			//commitCount 추가해줘야 함.
 
 			join(userArray, userCount)
 		})
@@ -147,7 +162,6 @@ function JoinChallenge(req, res) {
 module.exports = {
 	whoIsKing: WhoIsKing,
 	createChallenge: CreateChallenge,
-	getChallengeList: GetChallengeList,
 	getChallengeInfo: GetChallengeInfo,
 	fixChallengeInfo: FixChallengeInfo,
 	deleteChallenge: DeleteChallenge,

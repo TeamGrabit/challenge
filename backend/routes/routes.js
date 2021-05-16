@@ -11,11 +11,12 @@ router.post('/challenge', challengeController.createChallenge);
 router.delete('/signout/:id', userController.deleteUser);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
 
-router.get('/challenge/list/:userId', challengeController.getChallengeList);
+router.get('/challenge/list/:userId', userController.getChallengeList);
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
-router.put('/challenge/:challengeId', challengeController.fixChallengeInfo);
+router.patch('/challenge/:challengeId', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
-router.post('/challengeIn', challengeController.joinChallenge);
+router.patch('/challengeIn/challenge', challengeController.joinChallenge);
+router.patch('/challengeIn/user', userController.joinChallenge);
 
 router.post('/challenge/approve/modal', approveController.createApprove);
 router.delete('/challenge/approve/modal', approveController.deleteApprove);
