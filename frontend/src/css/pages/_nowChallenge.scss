@@ -1,0 +1,23 @@
+.NowChallenge {
+	display:flex;
+	flex-direction: column;
+	padding: 0 10%;
+
+	.head {
+		display:flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+	.headTitle {
+		font-size: 1.6rem;
+		margin-left: 5%;
+	}
+	.btnCon {
+		justify-content: space-between;
+	}
+	.btn {
+		background-color: ghostwhite !important;
+		margin-right: 1rem;
+		letter-spacing: 2px;
+	}
+}
