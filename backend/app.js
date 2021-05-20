@@ -7,16 +7,13 @@ const router = require('./routes/routes');
 const config = require('./config/key');
 
 const mongoose = require('mongoose');
-<<<<<<< Updated upstream
-mongoose.connect('mongodb://localhost:27017/testDB');
-const db = mongoose.connection;
-=======
+
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
 })
 .then(()=> console.log('MoongoDB connected'))
 .catch(err => console.log(err));
->>>>>>> Stashed changes
+
 
 // 연결이 안되면
 db.on('error',function(){
