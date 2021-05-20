@@ -23,6 +23,7 @@ db.on('error',function(){
 // 연결이 되면
 db.once('open', function(){
     console.log('Connection success!');
+
 });
 
 app.use('/',router);
