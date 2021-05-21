@@ -45,15 +45,17 @@ var Challenge = new Schema({
 });
 
 
-Challenge.statics.create = function (name, challenge_start, challenge_end, challenge_users, challenge_leader, commitCount) {
+Challenge.statics.create = function (userId, name, challenge_start, challenge_end) {
 	const challenge = new this({
 		name,
 		challenge_start,
 		challenge_end,
-		challenge_users,
-		challenge_leader,
-		commitCount
+		challenge_leader: userId
 	})
+	challenge.challenge_users.push(userId)
+	//commitCount 추가.
+
+	console.log(challenge);
 
 	// return the Promise
 	return challenge.save()
