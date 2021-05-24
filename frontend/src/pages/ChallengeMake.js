@@ -128,12 +128,14 @@ function ChallengeMake() {
 						</Grid>
 					</Grid>
 				</Grid>
-				<Button className="btn_cancel">
-					취소
-				</Button>
-				<Button className="btn_clear">
-					저장
-				</Button>
+				<div className="btn_out">
+					<Button className="btn_cancel">
+						취소
+					</Button>
+					<Button className="btn_clear">
+						저장
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

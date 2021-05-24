@@ -51,26 +51,20 @@
         padding: 2%;
         font-size: 1.1em;
 	}
+    .btn_out{
+        width: 100%;
+        margin-top: 20px;
+    }
     .btn_cancel{
-        height: 5vmin;
-        margin-top: 10px;
-        margin-left: 50%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-left: 30px;
-        padding-right: 30px;
+        margin-right: 2.5%;
+        margin-left: 450px;
+        padding: 2.5px 30px 2.5px 30px;
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
         font-size: 1.3em;
         background-color: #f200a1;
     }
     .btn_clear{
-        height: 5vmin;
-        margin-top: 10px;
-        margin-left: 2.5%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 2.5px 30px 2.5px 30px;
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
         font-size: 1.3em;
         background-color: $green3;
@@ -106,6 +100,15 @@
             height: 150px;
             padding: 2%;
             font-size: 0.8em;
+        }
+        .btn_out{
+            text-align: right;
+        }
+        .btn_cancel{
+            margin-left: 0px;
+        }
+        .btn_clear{
+            margin-right: 50px;
         }
     }
 }
