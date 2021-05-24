@@ -123,6 +123,7 @@ function JoinChallenge(req, res) {
 
 	var userArray
 	var userCount
+	var newCommitCount
 
 	Challenge.findOneById(id)
 		.then((challenge) => {
@@ -136,19 +137,24 @@ function JoinChallenge(req, res) {
 
 			userArray.push(userId)
 
-			//commitCount 추가해줘야 함.
+			//commitCount 추가
+			newCommitCount = challenge.commitCount
+			const addCommitCount = challenge.commitCount.create({ _id: userId })
 
-			join(userArray, userCount)
+			newCommitCount.push(addCommitCount)
+
+			join(userArray, userCount, newCommitCount)
 		})
 		.catch((err) => {
 			console.error(err);
 			res.send('false');
 		})
 
-	const join = (userArray, userCount) => Challenge.findByIdAndUpdate(id, {
+	const join = (userArray, userCount, newCommitCount) => Challenge.findByIdAndUpdate(id, {
 		$set: {
 			challenge_users: userArray,
-			challenge_user_num: userCount
+			challenge_user_num: userCount,
+			commitCount: newCommitCount
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {
@@ -173,6 +179,7 @@ function OutChallenge(req, res) {
 
 	var userArray
 	var userCount
+	var newCommitCount
 
 	Challenge.findOneById(id)
 		.then((challenge) => {
@@ -181,19 +188,21 @@ function OutChallenge(req, res) {
 
 			for (let i = 0; i < userArray.length; i++) {
 				if (userArray[i] === userId) {
-					userArray.pop(i);
+					userArray.pop(i)
+
+					//commitCount 삭제
+					challenge.commitCount.id(userId).remove();
+					newCommitCount = challenge.commitCount
 					return 1;
 				}
 			}
 			return 0;
 
-			//commitCount 삭제해줘야 함.
-
 		})
 		.then((state) => {
 			if (state === 0)
 				throw new Error('challenge DB에 해당 user 없음.')
-			out(userArray, userCount)
+			out(userArray, userCount, newCommitCount)
 
 		})
 		.catch((err) => {
@@ -201,10 +210,11 @@ function OutChallenge(req, res) {
 			res.send('false');
 		})
 
-	const out = (userArray, userCount) => Challenge.findByIdAndUpdate(id, {
+	const out = (userArray, userCount, newCommitCount) => Challenge.findByIdAndUpdate(id, {
 		$set: {
 			challenge_users: userArray,
-			challenge_user_num: userCount
+			challenge_user_num: userCount,
+			commitCount: newCommitCount
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {

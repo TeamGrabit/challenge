@@ -2,7 +2,7 @@ const { date } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const commitSchema = new Schema({
+const CommitSchema = new Schema({
 	_id: {
 		type: String,
 	},
@@ -39,7 +39,7 @@ var Challenge = new Schema({
 		type: Number,
 		default: 0
 	},
-	commitCount: [commitSchema]
+	commitCount: [CommitSchema]
 }, {
 	versionKey: false
 });
@@ -52,6 +52,10 @@ Challenge.statics.create = function (userId, name, challenge_start, challenge_en
 		challenge_end,
 		challenge_leader: userId
 	})
+
+	const commitCount = challenge.commitCount.create({_id: userId})
+	challenge.commitCount = commitCount
+	
 	challenge.challenge_users.push(userId)
 	//commitCount 추가.
 

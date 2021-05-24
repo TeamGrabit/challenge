@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
@@ -57,15 +56,42 @@ function DeleteUser(req, res) {
 function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list반환.
 	const userId = req.params.userId;
 
+	var challengeList = [];
+
+	function addList(id){
+		const ch_id = ObjectID(id)
+		Challenge.findById(ch_id)
+		.then((ch) => {
+			var info = {
+				id: ch._id,
+				name: ch.name,
+				state: ch.state
+			};
+			challengeList.push(info)
+			console.log(challengeList)
+		})
+	}
+
+	async function getList(list) {
+		for(let i=0; i<list.length; i++){
+			await addList(list[i]);
+		}
+		return challengeList
+	}
+
 	User.findOneByUsername(userId)
 		.then((user) => {
 			if (user) {
-				console.log("user의 challenge 정보 얻음");
-				console.log(user.ch_list);
-				res.send(user.ch_list);
+				list = user.ch_list;
+				return list
 			} else {
 				throw new Error('not exist user')
 			}
+		})
+		.then((list) => getList(list))
+		.then((challengeList) => {
+			console.log(challengeList)
+			res.send(challengeList)
 		})
 
 }
@@ -127,30 +153,25 @@ function JoinChallenge(req, res) {		// user의 ch_list부분에 새로운 challe
 
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
-	const id = ObjectID(challengeId);
 
 	var chArray
 
-	Challenge.findOneById(id)
-		.then((challenge) => {
-			userArray = challenge.challenge_users
-			userCount = challenge.challenge_user_num - 1
+	User.findOneByUsername(userId)
+		.then((user) => {
+			chArray = user.ch_list
 
-			for (let i = 0; i < userArray.length; i++) {
-				if (userArray[i] === userId) {
-					userArray.pop(i);
+			for (let i = 0; i < chArray.length; i++) {
+				if (chArray[i] === challengeId) {
+					chArray.pop(i);
 					return 1;
 				}
 			}
 			return 0;
-
-			//commitCount 삭제해줘야 함.
-
 		})
 		.then((state) => {
 			if (state === 0)
-				throw new Error('challenge DB에 해당 user 없음.')
-			out(userArray, userCount)
+				throw new Error('user DB에 해당 challenge 없음.')
+			out(chArray)
 
 		})
 		.catch((err) => {
@@ -158,10 +179,9 @@ function OutChallenge(req, res) {
 			res.send('false');
 		})
 
-	const out = (userArray, userCount) => Challenge.findByIdAndUpdate(id, {
+	const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
 		$set: {
-			challenge_users: userArray,
-			challenge_user_num: userCount
+			ch_list: chArray
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {
@@ -169,7 +189,7 @@ function OutChallenge(req, res) {
 			res.send('false')
 		}
 		else {
-			console.log("challenge에 user 삭제")
+			console.log("user의 challenge 삭제")
 			console.log(doc._id)
 			res.send('true')
 		}
