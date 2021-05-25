@@ -13,6 +13,8 @@ router.post('/challengeKing/:id', challengeController.whoIsKing);
 
 router.get('/challenge/list/:userId', userController.getChallengeList);
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
+router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
+router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
 router.patch('/challenge/:challengeId', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
 router.patch('/challengeIn/challenge', challengeController.joinChallenge);
