@@ -1,18 +1,18 @@
 import React from 'react';
-import { UserContextProvider } from './Model';
-import { ViewModel } from './ViewModel/ViewModel';
+import Model from './Model/Model';
+import ViewModel from './ViewModel/ViewModel';
 import Router from '../routes/index';
 import { Layout } from '../components';
 
 function Provider() {
 	return (
-		<UserContextProvider>
+		<Model>
 			<ViewModel>
 				<Layout>
 					<Router />
 				</Layout>
 			</ViewModel>
-		</UserContextProvider>
+		</Model>
 	);
 }
 
