@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Box, Grid, Button, TextField } from '@material-ui/core';
+import { Link, Box, Grid, Button, TextField } from '@material-ui/core';
 
 function ChallengeMake() {
 	const [Name, setName] = useState("");
@@ -61,7 +61,7 @@ function ChallengeMake() {
 		<div className="challengeMake">
 			<div className="makefield">
 				<Grid item xs={12} className="name_grid">
-					<Grid container spacing={1} alignItems="center">
+					<Grid container alignItems="center">
 						<Grid>
 							<Box className="cha_name">
 								챌린지명
@@ -73,7 +73,7 @@ function ChallengeMake() {
 					</Grid>
 				</Grid>
 				<Grid item xs={12} className="name_grid">
-					<Grid container spacing={1} alignItems="center">
+					<Grid container alignItems="center">
 						<Grid>
 							<Box className="cha_name">
 								카테고리
@@ -94,7 +94,7 @@ function ChallengeMake() {
 					</Grid>
 				</Grid>
 				<Grid item xs={12} className="name_grid">
-					<Grid container spacing={1} alignItems="center">
+					<Grid container alignItems="center">
 						<Grid>
 							<input type="checkbox" onChange={handleCheck} className="date_check" />
 						</Grid>
@@ -117,7 +117,7 @@ function ChallengeMake() {
 					</Grid>
 				</Grid>
 				<Grid item xs={12}>
-					<Grid container spacing={1}>
+					<Grid container>
 						<Grid>
 							<Box className="cha_name">
 								그룹소개
@@ -129,9 +129,11 @@ function ChallengeMake() {
 					</Grid>
 				</Grid>
 				<div className="btn_out">
-					<Button className="btn_cancel">
-						취소
-					</Button>
+					<Link className="link" href="/challenge">
+						<Button className="btn_cancel">
+							취소
+						</Button>
+					</Link>
 					<Button className="btn_clear">
 						저장
 					</Button>

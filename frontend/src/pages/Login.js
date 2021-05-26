@@ -10,7 +10,7 @@ function LogIn({ history }) {
 	const loginHandler = async () => {
 		const status = await userLogin(id, pw);
 		if (status) {
-			history.push('/challenge/ing');
+			history.push('/challenge');
 		} else {
 			alert('로그인 실패');
 		}
