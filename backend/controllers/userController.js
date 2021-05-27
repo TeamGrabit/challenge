@@ -22,10 +22,12 @@ function CreateUser(req, res) {
 
     const { user_id, user_pw, user_name, user_email, git_id } = req.body;
 
+
     let today = getCurrentDate();
     console.log(today);
     const in_date = today;
     const last_update = today;
+
 
     const create = (user) => {
         if (user) {
