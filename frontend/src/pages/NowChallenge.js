@@ -10,7 +10,7 @@ function NowChallenge({ match }) {
 		// 추후 challengeId 넣어서 해당 정보만 받아아오기
 		console.log(challengeData[CId - 1].name);
 		setTitle(challengeData[CId - 1].name);
-	}, [CId]);
+	}, [CId, challengeData]);
 	return (
 		<Grid className="NowChallenge">
 			<Grid className="head">
