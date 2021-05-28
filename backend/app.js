@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 5000;
+const bodyParser = require('body-parser')
 
 const router = require('./routes/routes');
 
@@ -13,6 +14,9 @@ mongoose.connect(config.mongoURI,{
 })
 .then(()=> console.log('MoongoDB connected'))
 .catch(err => console.log(err));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = mongoose.connection;
 
