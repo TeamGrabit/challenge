@@ -7,3 +7,4 @@ export { default as Intro } from './Intro';
 export { default as ChallengeInfoFix } from './ChallengeInfoFix';
 export { default as ChallengeMake } from './ChallengeMake';
 export { default as NowChallenge } from './NowChallenge';
+export { default as ManageChallenge } from './ManageChallenge';
