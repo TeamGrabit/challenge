@@ -32,8 +32,10 @@ function ManageChallenge({ match }) {
 
 	const ManTab = withStyles((theme) => ({
 		root: {
+			width: '220px',
+			height: '70px',
 			textTransform: 'none',
-			fontSize: theme.typography.pxToRem(16),
+			fontSize: theme.typography.pxToRem(19),
 			marginRight: theme.spacing(1),
 			backgroundColor: '#CCFCCB',
 			fontFamily: [
@@ -76,7 +78,7 @@ function ManageChallenge({ match }) {
 						<ManTab label="..." />
 						<ManTab label="챌린지 중단" />
 					</Tabs>
-					<ManageComponent value={value} index={0} />
+					<ManageComponent value={value} index={0} title={title}/>
 					<ManageComponent value={value} index={1} />
 					<ManageComponent value={value} index={2} />
 					<ManageComponent value={value} index={3} />
