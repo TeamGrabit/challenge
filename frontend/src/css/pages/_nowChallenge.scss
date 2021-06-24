@@ -7,17 +7,158 @@
 		display:flex;
 		flex-direction: row;
 		justify-content: space-between;
+		margin-top: 1rem;
+
+		.headTitle {
+			font-size: 1.6rem;
+			margin-left: 5%;
+			background-color: $green1;
+			width:50%;
+			text-align: center;
+			border-radius: 10px;
+		}
+		.btnCon {
+			justify-content: space-between;
+		}
+		.btn {
+			background-color: $green1 !important;
+			margin-right: 1rem;
+			letter-spacing: 2px;
+		}
 	}
-	.headTitle {
-		font-size: 1.6rem;
-		margin-left: 5%;
+
+	.teamGrass {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		height: 210px;
+
+		.grass{
+			width: 20px;
+			height: 20px;
+			margin: 5px;
+			border-radius: 10%;
+		}
+		.fill-grass{
+			background-color: $green3;
+		}
+		.unfill-grass{
+			background-color: antiquewhite;
+		}
 	}
-	.btnCon {
+
+	.secondGrid { // 나의 잔디, 커밋왕
+		display: flex;
 		justify-content: space-between;
+		margin-top: 1rem;
+
+		.sub-title {
+			text-align: center;
+			background-color: $green1;
+			border-radius: 10px;
+			font-size: 1.2rem;
+			margin-bottom: 0.5rem;
+		}
+		
+		.left-con{
+			width:47%;
+			.myGrass{
+				display: flex;
+				flex-direction: column;
+				flex-wrap: wrap;
+				align-content: flex-start;
+				height: 150px;
+	
+				.grass{
+					width: 15px;
+					height: 15px;
+					margin: 3px;
+					border-radius: 10%;
+				}
+				.fill-grass{
+					background-color: $green3;
+				}
+				.unfill-grass{
+					background-color: antiquewhite;
+				}
+			}
+		}
+		.right-con{
+			width: 47%;
+
+			.commitKing{
+				margin-top: 2rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: space-between;
+
+				.rank{
+					margin-bottom: 10px;
+				}
+			}
+		}
 	}
-	.btn {
-		background-color: ghostwhite !important;
-		margin-right: 1rem;
-		letter-spacing: 2px;
+
+	.lastGrid {
+		display: flex;
+		justify-content: space-between;
+		margin: 1rem 0;
+
+		.sub-title {
+			text-align: center;
+			background-color: $green1;
+			border-radius: 10px;
+			font-size: 1.2rem;
+			margin-bottom: 0.5rem;
+		}
+		
+		.left-con{
+			width:47%;
+
+			.myGrass{
+				display: flex;
+				flex-direction: column;
+				flex-wrap: wrap;
+				align-content: flex-start;
+				height: 150px;
+	
+				.grass{
+					width: 15px;
+					height: 15px;
+					margin: 3px;
+					border-radius: 10%;
+				}
+				.fill-grass{
+					background-color: $green3;
+				}
+				.unfill-grass{
+					background-color: antiquewhite;
+				}
+			}
+		}
+		.middle-con{
+			width: 23%;
+
+			.failKing{
+				margin-top: 30%;
+
+				.rank{
+					text-align: center;
+				}
+			}
+		}
+		.right-con{
+			width: 23%;
+
+			.commit-log{
+				margin-top: 30%;
+
+				.rank{
+					text-align: center;
+				}
+			}
+		}
 	}
 }
