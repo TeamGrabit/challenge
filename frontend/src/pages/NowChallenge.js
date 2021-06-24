@@ -16,6 +16,9 @@ function NowChallenge({ match }) {
 		console.log(challengeData[CId - 1].name);
 		setTitle(challengeData[CId - 1].name);
 	}, [CId, challengeData]);
+	const grassHandler = () => {
+		window.location.href = `/challenge/info/${CId}/fix`;
+	};
 	return (
 		<Grid className="NowChallenge">
 			<Grid className="head">
@@ -33,7 +36,7 @@ function NowChallenge({ match }) {
 			</Grid>
 			<Grid className="secondGrid">
 				{/* 나의 잔디, 커밋왕 */}
-				<Grid className="left-con">
+				<Grid className="left-con" style={{ cursor: 'pointer' }} onClick={grassHandler}>
 					<Typography className="sub-title">나의 잔디</Typography>
 					<Grid className="myGrass">
 						{grassInitialData.map((data) => (
