@@ -5,10 +5,11 @@ import ManageComponent from '../components/ManageComponent';
 
 function ManageChallenge({ match }) {
 	const CId = match.params.challengeId;
+	console.log(CId);
 	const challengeData = useChallengeState();
 	const [title, setTitle] = useState("");
 	useEffect(() => {
-		console.log(challengeData[CId - 1].name);
+		if (CId !== undefined) console.log(challengeData[CId - 1].name);
 		setTitle(challengeData[CId - 1].name);
 	}, [CId, challengeData]);
 
@@ -78,12 +79,12 @@ function ManageChallenge({ match }) {
 						<ManTab label="..." />
 						<ManTab label="챌린지 중단" />
 					</Tabs>
-					<ManageComponent value={value} index={0} title={title}/>
-					<ManageComponent value={value} index={1} />
-					<ManageComponent value={value} index={2} />
-					<ManageComponent value={value} index={3} />
-					<ManageComponent value={value} index={4} />
-					<ManageComponent value={value} index={5} />
+					<ManageComponent value={value} index={0} CId={CId} />
+					<ManageComponent value={value} index={1} CId={CId} />
+					<ManageComponent value={value} index={2} CId={CId} />
+					<ManageComponent value={value} index={3} CId={CId} />
+					<ManageComponent value={value} index={4} CId={CId} />
+					<ManageComponent value={value} index={5} CId={CId} />
 				</div>
 			</div>
 		</div>

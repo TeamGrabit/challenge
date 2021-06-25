@@ -1,10 +1,12 @@
 .manageComponent{
 	
+	.comp_box{
+		margin-left: 40px;
+	}
 	.title_box{
 		display: flex;
 		justify-content: space-between;
 		width: 900px;
-		margin-left: 40px;
 		border-bottom: gray 1px solid;
 	}
 	.comp_title{
@@ -16,5 +18,10 @@
 		margin-bottom: 10px;
 		background-color: $green3;
 		border: black 1px solid;
+	}
+	.txt_title{
+		margin-top: 20px;
+		width: 300px;
+		font-size: 1.3em;
 	}
 }
