@@ -47,5 +47,14 @@
     }
     .register-form{
         margin-top:10vh;
+        .wrap-form{
+            width: 400px;
+        }
+        .wrap-btn{
+            margin-top: 5vh;
+            width: 600px;
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 }

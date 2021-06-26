@@ -43,7 +43,7 @@ function RegisterForm({ changeStatus }) {
 
 	return (
 		<div className="register-form">
-			<Grid>
+			<div className="wrap-form">
 				<Box mt={2}>
 					<CssTextField
 						required
@@ -127,23 +127,24 @@ function RegisterForm({ changeStatus }) {
 						onChange={updateField}
 					/>
 				</Box>
-			</Grid>
-			<Button
-				className="btn"
-				variant="contained"
-				onClick={() => changeStatus(0)}
-				// disabled={!checked}
-			>
-				이전단계
-			</Button>
-			<Button
-				className="btn"
-				variant="contained"
+			</div>
+			<div className="wrap-btn">
+				<Button
+					className="btn"
+					variant="contained"
+					onClick={() => changeStatus(0)}
+				>
+					이전단계
+				</Button>
+				<Button
+					className="btn"
+					variant="contained"
 				// onClick={() => changeStatus(1)}
 				// disabled={!checked}
-			>
-				가입완료
-			</Button>
+				>
+					가입완료
+				</Button>
+			</div>
 		</div>
 	);
 }
