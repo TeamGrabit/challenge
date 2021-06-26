@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, withStyles, Box, Grid, Button, TextField } from '@material-ui/core';
+import { withStyles, Box, Button, TextField } from '@material-ui/core';
 
 const CssTextField = withStyles({
 	root: {

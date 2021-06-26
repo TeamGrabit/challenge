@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Paper, Checkbox, FormGroup, FormControlLabel, Button, Link } from '@material-ui/core';
+import { Paper, Checkbox, FormGroup, FormControlLabel, Button } from '@material-ui/core';
 
 function RegisterTerms({ changeStatus }) {
 	const [checked, setChecked] = React.useState(false);
