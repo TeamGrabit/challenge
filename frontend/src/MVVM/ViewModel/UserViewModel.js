@@ -31,6 +31,9 @@ export const UserLogicProvider = ({ children }) => {
 		}
 	};
 
+	const SignUp = () => {
+
+	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>

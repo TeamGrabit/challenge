@@ -6,8 +6,13 @@ function Register() {
 	const [status, setStatus] = useState(0);
 	console.log(status);
 	return (
-		status === 0 ?
-			<RegisterTerms changeStatus={setStatus} /> : <RegisterForm changeStatus={setStatus} />
+		<div className="register">
+			{status === 0 ?
+				<RegisterTerms changeStatus={setStatus} />
+				:
+				<RegisterForm changeStatus={setStatus} />}
+
+		</div>
 	);
 }
 export default Register;

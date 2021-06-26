@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Paper, Checkbox, FormGroup, FormControlLabel, Button, Link } from '@material-ui/core';
 
 function RegisterTerms({ changeStatus }) {
-	const [checked, setChecked] = React.useState(true);
+	const [checked, setChecked] = React.useState(false);
 
 	const handleChange = (event) => {
 		setChecked(event.target.checked);
 	};
 	return (
-		<div className="register-term">
+		<div className="register-terms">
 			<Paper className="terms" variant="outlined">
 				<div className="stuff">
 					<p className="title">회 원 약 관</p>
@@ -56,7 +56,14 @@ function RegisterTerms({ changeStatus }) {
 					/>
 				</FormGroup>
 				{/* <Link className="link" href="/registerinput"> */}
-				<Button className="btn" variant="contained" onClick={() => changeStatus(1)}>다음</Button>
+				<Button
+					className="btn"
+					variant="contained"
+					onClick={() => changeStatus(1)}
+					disabled={!checked}
+				>
+					다음
+				</Button>
 				{/* </Link> */}
 			</div>
 		</div>
