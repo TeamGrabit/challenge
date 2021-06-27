@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Grid, Box, Typography } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function ManageComponent({ value, index, CId }) {
@@ -24,7 +24,13 @@ function ManageComponent({ value, index, CId }) {
 						<div className="comp_title">챌린지 이름 관리</div>
 						<Button className="saveBtn">수정</Button>
 					</div>
-					<input className="txt_title" value={title} />
+					<TextField
+						variant="outlined"
+						inputProps={{ style: { fontSize: 20 } }}
+						margin="dense"
+						className="txt_title"
+						value={title}
+					/>
 				</div>
 			)}
 			{value === index && value === 1 && (

@@ -25,13 +25,20 @@
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
         word-break: keep-all;
 	}
-	.tab_sel{
-		border-bottom: black 1px solid;
-		margin-bottom: 20px;
-	}
-	.tab_box{
-		padding-bottom: 10px;
-		border-bottom: $green3 5px solid;
-		display: inline-flex;
-	}
+    .comp_all{
+        width: 70vw;
+    }
+}
+@media ( max-width: 600px ) {
+    .manageChallenge{
+        .content{
+            margin-left: 5vw;
+            margin-right: 5vw;
+        }
+        .cha_nameBox{
+            width: 90vw;
+            height: 50px;
+            padding-bottom: 3px;
+        }
+    }
 }

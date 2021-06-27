@@ -1,12 +1,12 @@
 .manageComponent{
-	
+
 	.comp_box{
+		width: 90%;
 		margin-left: 40px;
 	}
 	.title_box{
 		display: flex;
 		justify-content: space-between;
-		width: 900px;
 		border-bottom: gray 1px solid;
 	}
 	.comp_title{
@@ -24,4 +24,14 @@
 		width: 300px;
 		font-size: 1.3em;
 	}
+}
+@media ( max-width: 600px ) {
+    .manageComponent{
+		.comp_box{
+			margin-left: 10px;
+		}
+		.txt_title{
+			width: 100%;
+		}
+    }
 }
