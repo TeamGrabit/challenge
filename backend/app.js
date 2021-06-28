@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
 const port = 5000;
+const bodyParser = require('body-parser')
 
 const router = require('./routes/routes');
 
 const config = require('./config/key');
 
 const mongoose = require('mongoose');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false

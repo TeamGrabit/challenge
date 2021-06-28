@@ -17,8 +17,11 @@ router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
 router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
 router.patch('/challenge/:challengeId', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
+
 router.patch('/challengeIn/challenge', challengeController.joinChallenge);
 router.patch('/challengeIn/user', userController.joinChallenge);
+router.patch('/challengeOut/challenge', challengeController.outChallenge);
+router.patch('/challengeOut/user', userController.outChallenge);
 
 router.post('/challenge/approve/modal', approveController.createApprove);
 router.delete('/challenge/approve/modal', approveController.deleteApprove);
