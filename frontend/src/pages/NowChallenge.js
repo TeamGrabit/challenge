@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Grid, Typography } from '@material-ui/core';
 import Slider from 'react-slick';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
+import { Modal } from '../components';
 
 function NowChallenge({ match }) {
 	const CId = match.params.challengeId;
@@ -40,8 +41,13 @@ function NowChallenge({ match }) {
 	const grassHandler = () => {
 		window.location.href = `/challenge/info/${CId}/fix`;
 	};
+	const [modal, setModal] = useState(false);
 	return (
 		<Grid className="NowChallenge">
+			<Button onClick={() => setModal(true)}>modal</Button>
+			<Modal open={modal} close={() => setModal(false)} header="비회원 정보 입력">
+				hi
+			</Modal>
 			<Grid className="head">
 				<Typography className="headTitle">{title}</Typography>
 				<Grid className="btnCon">
