@@ -36,7 +36,6 @@ function CreateUser(req, res) {
 	}
 	User.findOneByUsername(user_id).then(create)
 	res.end("result");
-}
 
 function DeleteUser(req, res) {
 	var _id = req.params.id;
