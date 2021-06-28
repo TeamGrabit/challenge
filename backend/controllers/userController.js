@@ -20,9 +20,10 @@ function getCurrentDate() {
 
 function CreateUser(req, res) {
 
+    console.log(req.body);
     const { user_id, user_pw, user_name, user_email, git_id } = req.body;
 
-
+    console.log(user_id);
     let today = getCurrentDate();
     console.log(today);
     const in_date = today;
@@ -115,25 +116,28 @@ async function LogIn(req, res) {
     const pw = req.body.user_pw;
     console.log("id, pw :"+id+" "+pw);
     // DB에서 user 정보 조회 
-    const user = await User.loginCheck(id, pw);
-    // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
-    console.log("----");
-    console.log(user);
-    //같으면 jwtToken 발급 
-    
-    if (user) {
-        const jwtToken = await jwt.sign(user);
-        const token = jwtToken.token;
-        const msg = "login successfully";
-        return res.json({
-            message: msg,
-            token    
-        })
+    try {
+        const user = await User.loginCheck(id, pw);
+        // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
+        console.log("----");
+        console.log(user);
+        //같으면 jwtToken 발급 
+        
+        if (user) {
+            const token = await jwt.createToken(user);
+            res.cookie('user', token);
+            res.status(201).json({
+                result: 'ok',
+                token
+            });
+        }
+        else 
+            res.status(400).json({ error: 'invalid user' });
+    }catch (err) {
+        console.error(err);
+        next(err);
     }
-    else 
-        return res.json({
-            message: "fail"
-        })
+    
     
 }
 module.exports = {
