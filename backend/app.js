@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+const expressSession = require('express-session');
 const port = 5000;
 
 const router = require('./routes/routes');
@@ -16,6 +18,19 @@ mongoose.connect(config.mongoURI,{
 .then(()=> console.log('MoongoDB connected'))
 .catch(err => console.log(err));
 
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret : process.env.COOKIE_SECRET,
+    // cookie: {
+    //     httpOnly: true,
+    //     secure: false,
+    // }
+}))
 app.use(bodyParser.json());
 app.use('/',router);
 
