@@ -229,6 +229,10 @@ function OutChallenge(req, res) {
 	})
 }
 
+function InviteUser(req, res) {
+
+}
+
 module.exports = {
 	whoIsKing: WhoIsKing,
 	createChallenge: CreateChallenge,
@@ -236,5 +240,6 @@ module.exports = {
 	fixChallengeInfo: FixChallengeInfo,
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
-	outChallenge: OutChallenge
+	outChallenge: OutChallenge,
+	inviteUser : InviteUser
 };

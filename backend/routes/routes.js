@@ -25,5 +25,8 @@ router.post('/challenge/approve/modal', approveController.createApprove);
 router.delete('/challenge/approve/modal', approveController.deleteApprove);
 router.get('/challenge/approve/modal', approveController.getApprove);
 
+router.post('/invite/:challengeId', challengeController.inviteUser);
+
+
 //router.post('/users/regist',userController.doRegistUser);
 module.exports = router;
