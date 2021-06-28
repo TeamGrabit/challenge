@@ -19,10 +19,26 @@
 		background-color: $green3;
 		border: black 1px solid;
 	}
-	.txt_title{
+	.content_box{
 		margin-top: 20px;
+		display: flex;
+	}
+	.txt_title{
 		width: 300px;
 		font-size: 1.3em;
+	}
+	.member_box{
+		margin: 0 10% 10% 10%;
+		justify-content: center;
+	}
+	.member_inner{
+		text-align: center;
+		background-color: $green2;
+		border-radius: 1.5em;
+		padding-top: 10%;
+		padding-bottom: 10%;
+		font-size: 1.1em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
 	}
 }
 @media ( max-width: 600px ) {
