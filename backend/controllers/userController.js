@@ -2,9 +2,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const User = require('../models/userModel');
-const jwt = require('../modules/jwt');
+const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
 
+
+require("dotenv").config();
+const SecretKey = process.env.SECRET_KEY;
+const salt = process.env.SALT;
 
 function getCurrentDate() {
     var date = new Date();
@@ -18,27 +22,29 @@ function getCurrentDate() {
     return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
 }
 
-function CreateUser(req, res) {
+async function CreateUser(req, res, next) {
 
-    console.log(req.body);
-    const { user_id, user_pw, user_name, user_email, git_id } = req.body;
+    try {
+        console.log(req.body);
+        const { user_id, user_pw, user_name, user_email, git_id } = req.body;
 
-    console.log(user_id);
-    let today = getCurrentDate();
-    console.log(today);
-    const in_date = today;
-    const last_update = today;
+        let today = getCurrentDate();
+        const in_date = today;
+        const last_update = today;
 
-
-    const create = (user) => {
+        const user = await User.findOneByUsername(user_id);
         if (user) {
-            throw new Error('user exists')
+            console.log(user);
+            throw 'user exists';
         } else {
-            return User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
+            await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
         }
+        res.end("result");
+    } catch (err) {
+        res.status(401).json({ error: err});
+        next(err);
     }
-    User.findOneByUsername(user_id).then(create)
-    res.end("result");
+    
 }
 
 function DeleteUser(req, res) {
@@ -111,7 +117,7 @@ function JoinChallenge(req, res) {		// user의 ch_list부분에 새로운 challe
 	}).then(join)
 }
 
-async function LogIn(req, res) {
+async function LogIn(req, res, next) {
     const id = req.body.user_id;
     const pw = req.body.user_pw;
     console.log("id, pw :"+id+" "+pw);
@@ -124,7 +130,15 @@ async function LogIn(req, res) {
         //같으면 jwtToken 발급 
         
         if (user) {
-            const token = await jwt.createToken(user);
+            // const token = jwt.createToken(user);
+            const token = jwt.sign({
+                    user_id: user.user_id,
+                    git_id: user.git_id,
+                }
+                , SecretKey, {
+                    expiresIn: '1h'
+                }
+            );
             res.cookie('user', token);
             res.status(201).json({
                 result: 'ok',
@@ -134,16 +148,32 @@ async function LogIn(req, res) {
         else 
             res.status(400).json({ error: 'invalid user' });
     }catch (err) {
+        res.status(401).json({ error: 'invalid user' });
         console.error(err);
         next(err);
     }
-    
-    
+}
+
+function VerifyToken(req, res, next) {
+    try {
+        const clientToken = req.cookies.user;
+        const decoded = jwt.verify(clientToken, SecretKey);
+        if (decoded) {
+            res.locals.userId = decoded.user_id;
+            next();
+        }
+        else {
+            res.status(401).json({ error: 'unauthorized' });
+        }
+    } catch(err) {
+        res.status(401).json({ error: 'token expired' });
+    }
 }
 module.exports = {
     createUser: CreateUser,
     deleteUser: DeleteUser,
     logIn : LogIn,
     getChallengeList: GetChallengeList,
-    joinChallenge: JoinChallenge
+    joinChallenge: JoinChallenge,
+    verifyToken: VerifyToken,
 };
