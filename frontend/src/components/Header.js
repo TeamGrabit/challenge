@@ -75,7 +75,7 @@ function Header() {
 					isLogined ?
 						<>
 							<IconButton onClick={handleClick}>
-								<img src={`https://github.com/${git}.png`} alt={`${git}`} className="profileImg" />
+								<img src={`https://github.com/${userState.gitId}.png`} alt={`${userState.gitId}`} className="profileImg" />
 							</IconButton>
 							<Popover
 								id={id}
