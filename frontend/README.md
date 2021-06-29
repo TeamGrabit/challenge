@@ -26,7 +26,6 @@
 	* pages ( 페이지 전환 )
 	* routes ( routing 정보 저장 )
 	* css
-	설명중
 
 ## 모달 사용법
 
