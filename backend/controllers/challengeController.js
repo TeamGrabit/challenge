@@ -6,9 +6,9 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 function CreateChallenge(req, res) {
-	const { userId, name, challenge_start, challenge_end } = req.body;
+	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
 
-	Challenge.create(userId, name, challenge_start, challenge_end)
+	Challenge.create(userId, name, challenge_start, challenge_end, private_key)
 		.then((doc) => {
 			console.log("challenge 생성");
 			console.log(doc._id);
@@ -233,6 +233,38 @@ function InviteUser(req, res) {
 
 }
 
+function ChangeKey(req, res) {
+	const { userId, private_key } = req.body;
+	const challengeId = req.params.challengeId;
+
+	Challenge.findOneById(id)
+	.then((ch) => {
+		if (userId === ch.challenge_leader){
+			changePrivateKey();
+		}
+	})
+
+	const changePrivateKey = () => {
+		Challenge.findByIdAndUpdate(id, {
+			$set: {
+				private_key: private_key
+			}
+		}, { new: true, useFindAndModify: false }, (err, doc) => {
+			if (err) {
+				console.log(err)
+				res.send('false')
+			}
+			else {
+				console.log("private_key 변경")
+				console.log(doc._id)
+				res.send('true')
+			}
+		})
+	}
+
+	
+}
+
 module.exports = {
 	whoIsKing: WhoIsKing,
 	createChallenge: CreateChallenge,
@@ -241,5 +273,6 @@ module.exports = {
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
-	inviteUser : InviteUser
+	inviteUser : InviteUser,
+	changeKey: ChangeKey
 };

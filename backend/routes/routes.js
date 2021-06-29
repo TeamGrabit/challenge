@@ -15,6 +15,7 @@ router.get('/challenge/list/:userId', userController.getChallengeList);
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
 router.patch('/challenge/:challengeId', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
+router.patch('/keyChange/:challengeId', challengeController.changeKey)
 
 router.patch('/challengeIn/challenge', challengeController.joinChallenge);
 router.patch('/challengeIn/user', userController.joinChallenge);

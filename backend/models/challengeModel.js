@@ -15,7 +15,8 @@ const CommitSchema = new Schema({
 var Challenge = new Schema({
 	name: {
 		type: String,
-		required: true
+		required: true,
+		trim: true
 	},
 	challenge_start: {
 		type: Date,
@@ -39,18 +40,23 @@ var Challenge = new Schema({
 		type: Number,
 		default: 0
 	},
+	private_key:{
+		type: String,
+		trim: true
+	},
 	commitCount: [CommitSchema]
 }, {
 	versionKey: false
 });
 
 
-Challenge.statics.create = function (userId, name, challenge_start, challenge_end) {
+Challenge.statics.create = function (userId, name, challenge_start, challenge_end, private_key) {
 	const challenge = new this({
 		name,
 		challenge_start,
 		challenge_end,
-		challenge_leader: userId
+		challenge_leader: userId,
+		private_key
 	})
 
 	const commitCount = challenge.commitCount.create({_id: userId})
