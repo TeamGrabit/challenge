@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const port = 5000;
 const bodyParser = require('body-parser')
+const cors = require('cors');
+const expressSession = require('express-session');
 
 const router = require('./routes/routes');
 
@@ -11,6 +13,7 @@ const mongoose = require('mongoose');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const bodyParser = require('body-parser');
 
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
@@ -19,6 +22,20 @@ mongoose.connect(config.mongoURI,{
 .catch(err => console.log(err));
 
 
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
+app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret : process.env.COOKIE_SECRET,
+    // cookie: {
+    //     httpOnly: true,
+    //     secure: false,
+    // }
+}))
+app.use(bodyParser.json());
 app.use('/',router);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
