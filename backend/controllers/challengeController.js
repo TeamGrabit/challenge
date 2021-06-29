@@ -7,14 +7,13 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 function CreateChallenge(req, res) {
-	const { name, challenge_start, challenge_end, challenge_users, challenge_leader, commitCount } = req.body;
+	const { userId, name, challenge_start, challenge_end } = req.body;
 
-
-	Challenge.create(name, challenge_start, challenge_end, challenge_users, challenge_leader, commitCount)
+	Challenge.create(userId, name, challenge_start, challenge_end)
 		.then((doc) => {
 			console.log("challenge 생성");
-			console.log(doc);
-			res.send(req.body);
+			console.log(doc._id);
+			res.send('true');
 		})
 		.catch((err) => {
 			console.error(err);
@@ -69,7 +68,7 @@ function GetChallengeInfo(req, res) {
 		}
 		else {
 			console.log("challengeInfo 받음");
-			console.log(doc)
+			console.log(doc._id)
 			res.send(doc)
 		}
 	})
@@ -80,23 +79,20 @@ function GetChallengeInfo(req, res) {
 function FixChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
-	var { name, challenge_start, challenge_end, challenge_user_num, challenge_leader } = req.body;
+	var { name, challenge_start, challenge_end, challenge_leader } = req.body;
 
 	Challenge.findOneById(id).then((ch) => {
 		var preChallenge = ch;
-		if(name===undefined){
+		if (name === undefined) {
 			name = preChallenge.name;
 		}
-		if(challenge_start===undefined){
+		if (challenge_start === undefined) {
 			challenge_start = preChallenge.challenge_start;
 		}
-		if(challenge_end===undefined){
+		if (challenge_end === undefined) {
 			challenge_end = preChallenge.challenge_end;
 		}
-		if(challenge_user_num===undefined){
-			challenge_user_num = preChallenge.challenge_user_num;
-		}
-		if(challenge_leader===undefined){
+		if (challenge_leader === undefined) {
 			challenge_leader = preChallenge.challenge_leader;
 		}
 	}).then(() => {
@@ -105,21 +101,21 @@ function FixChallengeInfo(req, res) {
 				name: name,
 				challenge_start: challenge_start,
 				challenge_end: challenge_end,
-				challenge_user_num: challenge_user_num,
 				challenge_leader: challenge_leader
 			}
 		}, { new: true, useFindAndModify: false }, (err, doc) => {
 			if (err) {
 				console.log(err)
+				res.send('false')
 			}
 			else {
 				console.log("challenge 수정")
-				console.log(doc)
-				res.send(doc)
+				console.log(doc._id)
+				res.send('true')
 			}
 		})
 	})
-	
+
 
   res.end("success");
 }
@@ -131,11 +127,12 @@ function DeleteChallenge(req, res) {
 	Challenge.findByIdAndDelete(id, (err, doc) => {
 		if (err) {
 			console.log(err)
+			res.send('false')
 		}
 		else {
 			console.log("challenge 삭제")
-			console.log(doc)
-			res.send(doc)
+			console.log(doc._id)
+			res.send('true')
 		}
 	})
 
@@ -149,38 +146,110 @@ function JoinChallenge(req, res) {
 
 	var userArray
 	var userCount
+	var newCommitCount
 
 	Challenge.findOneById(id)
 		.then((challenge) => {
 			userArray = challenge.challenge_users
 			userCount = challenge.challenge_user_num + 1
+
+			for (let i = 0; i < userArray.length; i++) {
+				if (userArray[i] === userId)
+					throw new Error('이미 가입되어 있음')
+			}
+
 			userArray.push(userId)
 
-			//commitCount 추가해줘야 함.
+			//commitCount 추가
+			newCommitCount = challenge.commitCount
+			const addCommitCount = challenge.commitCount.create({ _id: userId })
 
-			join(userArray, userCount)
+			newCommitCount.push(addCommitCount)
+
+			join(userArray, userCount, newCommitCount)
 		})
 		.catch((err) => {
 			console.error(err);
 			res.send('false');
 		})
 
-	const join = (userArray, userCount) => Challenge.findByIdAndUpdate(id, {
+	const join = (userArray, userCount, newCommitCount) => Challenge.findByIdAndUpdate(id, {
 		$set: {
 			challenge_users: userArray,
-			challenge_user_num: userCount
+			challenge_user_num: userCount,
+			commitCount: newCommitCount
+		}
+	}, { new: true, useFindAndModify: false }, (err, doc) => {
+		if (err) {
+			throw new Error('challenge DB에 user추가 오류')
+		}
+		else {
+			console.log("challenge에 user 추가")
+			console.log(doc._id)
+			res.send('true')
+		}
+	})
+		.catch((err) => {
+			console.error(err);
+			res.send('false');
+		})
+
+}
+
+function OutChallenge(req, res) {
+	const { userId, challengeId } = req.body;
+	const id = ObjectID(challengeId);
+
+	var userArray
+	var userCount
+	var newCommitCount
+
+	Challenge.findOneById(id)
+		.then((challenge) => {
+			userArray = challenge.challenge_users
+			userCount = challenge.challenge_user_num - 1
+
+			for (let i = 0; i < userArray.length; i++) {
+				if (userArray[i] === userId) {
+					userArray.pop(i)
+
+					//commitCount 삭제
+					challenge.commitCount.id(userId).remove();
+					newCommitCount = challenge.commitCount
+					return 1;
+				}
+			}
+			return 0;
+
+		})
+		.then((state) => {
+			if (state === 0)
+				throw new Error('challenge DB에 해당 user 없음.')
+			out(userArray, userCount, newCommitCount)
+
+		})
+		.catch((err) => {
+			console.error(err);
+			res.send('false');
+		})
+
+	const out = (userArray, userCount, newCommitCount) => Challenge.findByIdAndUpdate(id, {
+		$set: {
+			challenge_users: userArray,
+			challenge_user_num: userCount,
+			commitCount: newCommitCount
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {
 			console.log(err)
+			res.send('false')
 		}
 		else {
-			console.log("challenge에 user 추가")
-			console.log(doc)
-			res.send(doc)
+			console.log("challenge에 user 삭제")
+			console.log(doc._id)
+			res.send('true')
 		}
 	})
-
 }
 
 module.exports = {
@@ -190,5 +259,6 @@ module.exports = {
 	getChallengeInfo: GetChallengeInfo,
 	fixChallengeInfo: FixChallengeInfo,
 	deleteChallenge: DeleteChallenge,
-	joinChallenge: JoinChallenge
+	joinChallenge: JoinChallenge,
+	outChallenge: OutChallenge
 };

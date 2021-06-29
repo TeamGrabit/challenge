@@ -35,6 +35,7 @@ User.statics.create = function(user_id,user_pw,user_name,user_email,git_id,in_da
 		user_pw: user_pw,
 		user_name: user_name,
 		user_email: user_email,
+		ch_list: [],
 		git_id: git_id,
 		in_date: in_date,
 		last_update: last_update

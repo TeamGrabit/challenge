@@ -18,37 +18,34 @@ function CreateApprove(req, res) {
 
 function DeleteApprove(req, res) {
 	const { approve_id } = req.body;
-	const id = ObjectID(approveId);
+	const id = ObjectID(approve_id);
 
-	const removeApprove = (approve) => {
-		if (approve) {
-			db.collection("approves").deleteOne({ _id: id })
-				.then((res) => {
-					console.log("approve 삭제");
-					console.log(id);
-				}).then(res.send(approve));
-		} else {
-			res.send('false');
-			throw new Error('Not founded approve');
+	Approve.findByIdAndDelete(id, (err, doc) => {
+		if (err) {
+			console.log(err)
 		}
-	}
-
-	Approve.findOneById(id)
-		.then(removeApprove)
+		else {
+			console.log("approve 삭제")
+			console.log(doc)
+			res.send(doc)
+		}
+	})
 
 }
 
 function GetApprove(req, res) {
 	const { ch_id } = req.body;
 
-	db.collection("approves").find({ch_id: ch_id}).sort({user_id: -1}).toArray(function(err,result){
-        if(err){
-            throw err;
-        }
-        
-        console.log(result);
-		res.send(result);
-    } )
+	Approve.find({ ch_id: ch_id }).sort({ _id: -1 })
+		.then((docs) => {
+			console.log("approve 목록 받음")
+			console.log(docs)
+			res.send(docs)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
 }
 
 module.exports = {

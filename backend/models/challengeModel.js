@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const commitSchema = new Schema({
+const CommitSchema = new Schema({
 	_id: {
 		type: String,
 	},
@@ -40,21 +40,27 @@ var Challenge = new Schema({
 		type: Number,
 		default: 0
 	},
-	commitCount: [commitSchema]
+	commitCount: [CommitSchema]
 }, {
 	versionKey: false
 });
 
 
-Challenge.statics.create = function (name, challenge_start, challenge_end, challenge_users, challenge_leader, commitCount) {
+Challenge.statics.create = function (userId, name, challenge_start, challenge_end) {
 	const challenge = new this({
 		name,
 		challenge_start,
 		challenge_end,
-		challenge_users,
-		challenge_leader,
-		commitCount
+		challenge_leader: userId
 	})
+
+	const commitCount = challenge.commitCount.create({_id: userId})
+	challenge.commitCount = commitCount
+	
+	challenge.challenge_users.push(userId)
+	//commitCount 추가.
+
+	console.log(challenge);
 
 	// return the Promise
 	return challenge.save()
