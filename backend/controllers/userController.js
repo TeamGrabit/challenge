@@ -83,7 +83,7 @@ function JoinChallenge(req, res) {		// user의 ch_list부분에 새로운 challe
 
 	var chArray;
 
-	const join = () => User.findOneAndUpdate({"user_id": userId }, {
+	const join = () => User.findOneAndUpdate({ "user_id": userId }, {
         $set: {
             ch_list: chArray
         }
@@ -118,8 +118,8 @@ function JoinChallenge(req, res) {		// user의 ch_list부분에 새로운 challe
 }
 
 async function LogIn(req, res, next) {
-    const id = req.body.userId;
-    const pw = req.body.userPw;
+    const id = req.body.user_id;
+    const pw = req.body.user_pw;
     console.log("id, pw :"+id+" "+pw);
     // DB에서 user 정보 조회 
     try {
@@ -154,47 +154,26 @@ async function LogIn(req, res, next) {
     }
 }
 
-function LogOut(req, res, next) {
-    try{
-        console.log("logout");
-        res.cookie("user", "").json({logoutSuccess: true});
-    }catch (err) {
-        res.status(401).json({ error: 'error' });
-        console.error(err);
-        next(err);
-    }
-}
 function VerifyToken(req, res, next) {
     try {
-        console.log("verify Token");
-        // console.log(req.cookies);
-        // console.log(req.cookies.user);
         const clientToken = req.cookies.user;
-        
         const decoded = jwt.verify(clientToken, SecretKey);
-        console.log(decoded);
         if (decoded) {
-            // console.log(decoded);
-            // res.locals.userId = decoded.user_id;
-            res.status(201).json({userId: decoded.user_id, gitId: decoded.git_id});
+            res.locals.userId = decoded.user_id;
             next();
         }
         else {
             res.status(401).json({ error: 'unauthorized' });
         }
     } catch(err) {
-        // console.log(err);
         res.status(401).json({ error: 'token expired' });
     }
 }
-
 module.exports = {
     createUser: CreateUser,
     deleteUser: DeleteUser,
     logIn : LogIn,
-    logOut : LogOut,
     getChallengeList: GetChallengeList,
     joinChallenge: JoinChallenge,
     verifyToken: VerifyToken,
-    
 };
