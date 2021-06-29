@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Button, TextField, Typography } from '@material-ui/core';
+import DatePicker from 'react-datepicker';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function ManageComponent({ value, index, CId }) {
@@ -63,26 +64,16 @@ function ManageComponent({ value, index, CId }) {
 						<Button className="saveBtn">저장</Button>
 					</div>
 					<div className="content_box">
-						<div>
-							{sDate.getFullYear()}
-							년
-							{" "}
-							{sDate.getMonth()}
-							월
-							{" "}
-							{sDate.getDate()}
-							일
-						</div>
-						<div>
-							{eDate.getFullYear()}
-							년
-							{" "}
-							{eDate.getMonth()}
-							월
-							{" "}
-							{eDate.getDate()}
-							일
-						</div>
+						<Typography>시작 날짜</Typography>
+						<DatePicker
+							selected={sDate}
+							onChange={(date) => setsDate(date)}
+						/>
+						<Typography>종료 날짜</Typography>
+						<DatePicker
+							selected={eDate}
+							onChange={(date) => seteDate(date)}
+						/>
 					</div>
 				</div>
 			)}
