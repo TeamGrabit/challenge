@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const port = 5000;
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const expressSession = require('express-session');
 
@@ -11,9 +12,8 @@ const config = require('./config/key');
 
 const mongoose = require('mongoose');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-const bodyParser = require('body-parser');
+require("dotenv").config();
+const cookieSecret = process.env.COOKIE_SECRET;
 
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
@@ -29,13 +29,14 @@ app.use(cors({
 app.use(expressSession({
     resave: false,
     saveUninitialized: false,
-    secret : process.env.COOKIE_SECRET,
-    // cookie: {
-    //     httpOnly: true,
-    //     secure: false,
-    // }
+    secret : cookieSecret,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    }
 }))
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use('/',router);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
