@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button, TextField, Typography } from '@material-ui/core';
+import { Grid, Box, Button, TextField, Typography, Modal, Fade, Backdrop } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
+import ExpelMember from './ExpelMember';
 
 function ManageComponent({ value, index, CId }) {
 	console.log(CId);
@@ -10,6 +11,16 @@ function ManageComponent({ value, index, CId }) {
 	const [user, setUser] = useState("");
 	const [sDate, setsDate] = useState("");
 	const [eDate, seteDate] = useState("");
+	const [open, setopen] = useState(false);
+	const [expel, setExpel] = useState("");
+	const handleOpen = () => {
+		setopen(true);
+		setExpel("");
+	};
+	const handleClose = () => {
+		setopen(false);
+		setExpel("");
+	};
 	useEffect(() => {
 		setTitle(challengeData[CId - 1].name);
 		setUser(challengeData[CId - 1].user);
@@ -47,9 +58,9 @@ function ManageComponent({ value, index, CId }) {
 							{user.map((c) => (
 								<Grid item lg={3} md={4} sm={6} xs={12}>
 									<div className="member_box">
-										<div className="member_inner">
+										<Box className="member_inner" onClick={handleOpen}>
 											{c}
-										</div>
+										</Box>
 									</div>
 								</Grid>
 							))}
@@ -63,16 +74,22 @@ function ManageComponent({ value, index, CId }) {
 						<div className="comp_title">챌린지 날짜 관리</div>
 						<Button className="saveBtn">저장</Button>
 					</div>
-					<div className="content_box">
-						<Typography>시작 날짜</Typography>
+					<div className="date_box">
+						<Typography className="date_name">시작 날짜 :</Typography>
 						<DatePicker
+							className="date_pick"
 							selected={sDate}
 							onChange={(date) => setsDate(date)}
+							dateFormat="yyyy. MM. dd"
 						/>
-						<Typography>종료 날짜</Typography>
+					</div>
+					<div className="date_box">
+						<Typography className="date_name">종료 날짜 :</Typography>
 						<DatePicker
+							className="date_pick"
 							selected={eDate}
 							onChange={(date) => seteDate(date)}
+							dateFormat="yyyy. MM. dd"
 						/>
 					</div>
 				</div>
@@ -83,10 +100,29 @@ function ManageComponent({ value, index, CId }) {
 						<div className="comp_title">챌린지 중단</div>
 					</div>
 					<div className="content_box">
-						<Typography>정말 중단하시겠습니까?</Typography>
+						<div className="quit_box">
+							<Typography className="quit_msg">정말 중단하시겠습니까?</Typography>
+							<Button className="quitBtn">중단</Button>
+						</div>
 					</div>
 				</div>
 			)}
+			<Modal
+				className="modal"
+				open={open}
+				onClose={handleClose}
+				closeAfterTransition
+				BackdropComponent={Backdrop}
+				BackdropProps={{
+					timeout: 500,
+				}}
+			>
+				<Fade in={open}>
+					<div>
+						<ExpelMember onClose={handleClose} member={expel} />
+					</div>
+				</Fade>
+			</Modal>
 		</div>
 	);
 }
