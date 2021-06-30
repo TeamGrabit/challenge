@@ -58,6 +58,27 @@ function WhoIsPoor(req, res) {
 	})
 }
 
+function DelUserInchallege(req,res){
+	const challengeId = req.params.challengeId;
+	const userId = req.params.userId;
+
+	const id = ObjectID(challengeId);
+
+	Challenge.findOneById(id).then((ch)=>{
+		const preUser=ch.challenge_users;
+		console.log(preUser);
+		preuser.splice(preUser.indexOf(userId),1);
+		console.log(preUser);
+	}, (err,doc) =>{
+		if(err){
+			console.log(err);
+		}else{
+			console.log("Update =>"+perUser);
+		}
+	})
+
+}
+
 
 function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
@@ -190,5 +211,6 @@ module.exports = {
 	getChallengeInfo: GetChallengeInfo,
 	fixChallengeInfo: FixChallengeInfo,
 	deleteChallenge: DeleteChallenge,
-	joinChallenge: JoinChallenge
+	joinChallenge: JoinChallenge,
+	delUserInchallege:DelUserInchallege
 };
