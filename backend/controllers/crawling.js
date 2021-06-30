@@ -1,9 +1,9 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const crawlingModule = async (gitId) => {
+const crawlingModule = async (gitId, from, to) => {
 	let result = [];
-	await axios.get(`https://github.com/${gitId}`)
+	await axios.get(`https://github.com/${gitId}?tab=overview&from=${from}&to=${to}`)
 	.then(html => {
 		$ = cheerio.load(html.data);
     	const crawl = $('svg > g > g > rect');
@@ -15,12 +15,12 @@ const crawlingModule = async (gitId) => {
 				count: crawl[i].attribs['data-count']
 			})
 		}
-		return result;
     })
 	.catch((e) => {
 		console.log("error");
 		console.log(e);
 	})
+	return result;
 };
 
 module.exports = {

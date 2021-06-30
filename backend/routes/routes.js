@@ -22,6 +22,7 @@ router.post('/auth/jwtvalidcheck', userController.verifyToken);
 
 // <-- gitCrawlData
 router.post('/grass', commitDataController.createInitData);
+router.get('/grass', commitDataController.getData);
 // gitCrawlData -->
 
 router.post('/challenge', challengeController.createChallenge);

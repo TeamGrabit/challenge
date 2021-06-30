@@ -14,9 +14,14 @@ commitData.statics.create = function(user_id, git_id, commit_data) {
 		git_id: git_id,
 		commit_data: commit_data
 	})
-	console.log(commit_data);
 	// return the Promise
 	return user.save()
 }
+
+commitData.statics.findOneByUsername = function(user_id) {
+	return this.findOne({
+		  user_id
+	}).exec()
+  }
 
 module.exports = mongoose.model('commitData',commitData);
