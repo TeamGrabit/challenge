@@ -22,9 +22,11 @@ router.patch('/challengeIn/user', userController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
 router.patch('/challengeOut/user', userController.outChallenge);
 
-router.post('/challenge/approve/modal', approveController.createApprove);
-router.delete('/challenge/approve/modal', approveController.deleteApprove);
-router.get('/challenge/approve/modal', approveController.getApprove);
+router.post('/approve', approveController.createApprove);
+router.delete('/approve/:approveId', approveController.deleteApprove);
+router.get('/approve/:approveId', approveController.getApproveInfo);
+router.patch('/approve/:approveId', approveController.confirmApprove);
+router.get('/approve/list/:ch_id', approveController.getApproveList);
 
 router.post('/invite/:challengeId', challengeController.inviteUser);
 

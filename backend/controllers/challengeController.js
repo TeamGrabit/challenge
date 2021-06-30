@@ -40,15 +40,15 @@ function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
 
-	Challenge.findById(id, (err, doc) => {
-		if (err) {
-			console.log(err)
-		}
-		else {
-			console.log("challengeInfo 받음");
-			console.log(doc._id)
-			res.send(doc)
-		}
+	Challenge.findById(id)
+	.then((doc) => {
+		console.log("challengeInfo 받음");
+		console.log(doc._id)
+		res.send(doc)
+	})
+	.catch((err) => {
+		console.log(err)
+		res.send(err)
 	})
 
 }
@@ -237,15 +237,21 @@ function ChangeKey(req, res) {
 	const { userId, private_key } = req.body;
 	const challengeId = req.params.challengeId;
 
-	Challenge.findOneById(id)
+	Challenge.findOneById(challengeId)
 	.then((ch) => {
 		if (userId === ch.challenge_leader){
 			changePrivateKey();
+		}else{
+			throw new Error('leader가 아님.')
 		}
+	})
+	.catch((err) => {
+		console.error(err);
+		res.send('false')
 	})
 
 	const changePrivateKey = () => {
-		Challenge.findByIdAndUpdate(id, {
+		Challenge.findByIdAndUpdate(challengeId, {
 			$set: {
 				private_key: private_key
 			}
