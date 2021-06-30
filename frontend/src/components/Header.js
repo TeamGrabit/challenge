@@ -11,16 +11,20 @@ import {
 } from '@material-ui/core';
 
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useLogoutUser } from '../MVVM/ViewModel/UserViewModel';
+import { useLogoutUser, useVerifyUser } from '../MVVM/ViewModel/UserViewModel';
 
 function Header() {
 	const userState = useUserState();
 	const userlogout = useLogoutUser();
+	const userVerify = useVerifyUser();
 	const git = "MOBUMIN";
 
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 
+	useEffect(() => {
+		userVerify();
+	}, [userVerify]);
 	useEffect(() => {
 		if (userState.auth === "user") setIsLogined(true);
 	}, [userState]);
@@ -33,8 +37,14 @@ function Header() {
 		setAnchorEl(null);
 	};
 
-	const logout = () => {
-		userlogout();
+	const logout = async () => {
+		await userlogout().then((result) => {
+			console.log(result);
+			if (result) {
+				alert('로그아웃 성공');
+				window.location.href = '/';
+			} else alert('로그아웃 실패');
+		});
 		setIsLogined(false);
 	};
 
@@ -65,7 +75,7 @@ function Header() {
 					isLogined ?
 						<>
 							<IconButton onClick={handleClick}>
-								<img src={`https://github.com/${git}.png`} alt={`${git}`} className="profileImg" />
+								<img src={`https://github.com/${userState.gitId}.png`} alt={`${userState.gitId}`} className="profileImg" />
 							</IconButton>
 							<Popover
 								id={id}
