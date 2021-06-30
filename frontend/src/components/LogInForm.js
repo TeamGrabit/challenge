@@ -22,15 +22,15 @@ const CssTextField = withStyles({
 	},
 })(TextField);
 
-function LogInForm({ loginHandler, id, setId, pw, setPw }) {
+function LogInForm({ loginHandler }) {
 	return (
 		<div className="form">
 			<Grid>
 				<Box mt={2}>
-					<CssTextField variant="outlined" label="ID" placeholder="아이디를 입력하세요" value={id} onChange={(e) => setId(e.target.value)} />
+					<CssTextField variant="outlined" label="ID" placeholder="아이디를 입력하세요" />
 				</Box>
 				<Box mt={2}>
-					<CssTextField variant="outlined" label="PW" type="password" placeholder="비밀번호를 입력하세요" value={pw} onChange={(e) => setPw(e.target.value)} />
+					<CssTextField variant="outlined" label="PW" type="password" placeholder="비밀번호를 입력하세요" />
 				</Box>
 			</Grid>
 			<Button className="loginBtn" variant="contained" onClick={loginHandler}>LogIn</Button>

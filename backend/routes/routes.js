@@ -27,8 +27,5 @@ router.post('/challenge/approve/modal', approveController.createApprove);
 router.delete('/challenge/approve/modal', approveController.deleteApprove);
 router.get('/challenge/approve/modal', approveController.getApprove);
 
-router.post('/login', userController.logIn);
-router.post('/logout', userController.logOut);
-router.post('/auth/jwtvalidcheck', userController.verifyToken);
 //router.post('/users/regist',userController.doRegistUser);
 module.exports = router;
