@@ -44,7 +44,7 @@ async function CreateUser(req, res, next) {
         res.status(401).json({ error: err});
         next(err);
     }
-    
+}    
 function DeleteUser(req, res) {
 	var _id = req.params.id;
 
