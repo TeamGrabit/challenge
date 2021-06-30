@@ -1,12 +1,13 @@
 
 const express = require('express');
 const router = express.Router();
+
+const userController = require('../controllers/userController');
+const commitDataController = require('../controllers/commitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
 
 // <-- userCon
-
-const userController = require('../controllers/userController');
 router.post('/users', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
 router.get('/challenge/list/:userId', userController.getChallengeList);
@@ -18,6 +19,10 @@ router.post('/auth/jwtvalidcheck', userController.verifyToken);
 //router.post('/users/regist',userController.doRegistUser);
 
 // userCon -->
+
+// <-- gitCrawlData
+router.post('/grass', commitDataController.createInitData);
+// gitCrawlData -->
 
 router.post('/challenge', challengeController.createChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
