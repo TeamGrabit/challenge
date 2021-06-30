@@ -25,6 +25,8 @@
 @import './components/manageComponent';
 @import './components/expelMember';
 
-// datepicker
+// library
+@import "~slick-carousel/slick/slick.css"; 
+@import "~slick-carousel/slick/slick-theme.css";
 @import "react-datepicker/dist/react-datepicker.css";
 @import 'react-datepicker/dist/react-datepicker-cssmodules.min.css';

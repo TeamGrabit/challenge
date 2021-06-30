@@ -8,8 +8,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "mobx": "^6.1.8",
-    "mobx-react": "^7.1.0",
+    "axios": "^0.21.1",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-datepicker": "^4.1.1",
@@ -17,6 +16,8 @@
     "react-responsive-carousel": "^3.2.18",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-slick": "^0.28.1",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
