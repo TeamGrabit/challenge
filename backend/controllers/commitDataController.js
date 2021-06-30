@@ -4,7 +4,7 @@ const { crawlingModule } = require('./crawling');
 
 async function CreateInitData(req, res, next) {
     try {
-        const { user_id, from, to } = req.body;
+        const { user_id } = req.body;
 
         const user = await User.findOneByUsername(user_id);
         if (user) {
@@ -13,7 +13,7 @@ async function CreateInitData(req, res, next) {
 			if(grass) throw 'grass already exists'
 
 			// 깃 크롤링
-			const commit_data = await crawlingModule(user.git_id, from, to);
+			const commit_data = await crawlingModule(user.git_id);
 			await CommitData.create(user_id, user.git_id, commit_data);
         } else {
 			throw 'user not exists';
@@ -31,7 +31,7 @@ async function GetData(req, res, next) {
 
 		const grass = await CommitData.findOneByUsername(user_id)
         if (grass) {
-			res.status(200).json(grass);
+			res.status(200).json(grass.commit_data);
         } else {
 			throw 'grass not exists';
         }
@@ -42,7 +42,39 @@ async function GetData(req, res, next) {
     }
 }
 
+async function DeleteData(req, res, next) {
+    try {
+        const { user_id } = req.body;
+		const grass = await CommitData.findOneByUsername(user_id);
+		if(!grass) throw 'grass not exists already'
+		await CommitData.deleteOne(grass);
+    } catch (err) {
+        res.status(401).json({ error: err });
+        next(err);
+    }
+	res.end("success");
+}
+
+
+async function PutData(req, res, next) {
+    try {
+        const { user_id } = req.body;
+
+		const grass = await CommitData.findOneByUsername(user_id)
+        if (grass) {
+			await DeleteData(req, res, next);
+        }
+		await CreateInitData(req, res, next);
+    } catch (err) {
+        res.status(401).json({ error: err });
+        next(err);
+    }
+	res.end("success");
+}
+
 module.exports = {
     createInitData: CreateInitData,
 	getData: GetData,
+	deleteData: DeleteData,
+	putData: PutData,
 };
