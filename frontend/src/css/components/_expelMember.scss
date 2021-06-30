@@ -1,0 +1,30 @@
+.expelMember{
+    height: 120px;
+	width: 280px;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	justify-content: center;
+	background-color: $ghost-white;
+    border-radius: 10px;
+
+    .doubleCheck{
+        font-size: 1.1em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn{
+        margin-top: 20px;
+    }
+    .expelBtn{
+        background-color: #f44;
+        color: white;
+        margin-right: 10px;
+    }
+    .cancelBtn{
+        background-color: gray;
+        color: white;
+    }
+}

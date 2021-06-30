@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Button, TextField, Typography, Modal, Fade, Backdrop } from '@material-ui/core';
+import { Grid, Box, Button, TextField, Typography, Modal, Fade } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import ExpelMember from './ExpelMember';
 
 function ManageComponent({ value, index, CId }) {
-	console.log(CId);
 	const challengeData = useChallengeState();
 	const [title, setTitle] = useState("");
 	const [user, setUser] = useState("");
@@ -13,13 +12,13 @@ function ManageComponent({ value, index, CId }) {
 	const [eDate, seteDate] = useState("");
 	const [open, setopen] = useState(false);
 	const [expel, setExpel] = useState("");
-	const handleOpen = () => {
+	const handleOpen = (c) => {
+		console.log(c);
 		setopen(true);
-		setExpel("");
+		setExpel(c);
 	};
 	const handleClose = () => {
 		setopen(false);
-		setExpel("");
 	};
 	useEffect(() => {
 		setTitle(challengeData[CId - 1].name);
@@ -58,7 +57,7 @@ function ManageComponent({ value, index, CId }) {
 							{user.map((c) => (
 								<Grid item lg={3} md={4} sm={6} xs={12}>
 									<div className="member_box">
-										<Box className="member_inner" onClick={handleOpen}>
+										<Box className="member_inner" value={c} onClick={() => handleOpen(c)}>
 											{c}
 										</Box>
 									</div>
@@ -111,16 +110,9 @@ function ManageComponent({ value, index, CId }) {
 				className="modal"
 				open={open}
 				onClose={handleClose}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}
 			>
 				<Fade in={open}>
-					<div>
-						<ExpelMember onClose={handleClose} member={expel} />
-					</div>
+					<ExpelMember onClose={handleClose} member={expel} />
 				</Fade>
 			</Modal>
 		</div>
