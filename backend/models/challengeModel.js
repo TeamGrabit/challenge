@@ -10,6 +10,10 @@ const CommitSchema = new Schema({
 	count: {
 		type: Number,
 		default: 0
+	},
+	join_time: {
+		type: Date,
+		default: Date.now
 	}
 });
 
