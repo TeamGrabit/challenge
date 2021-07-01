@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowChallenge, ChallengeMake } from "../pages";
+import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowChallenge, ChallengeMake, ManageChallenge } from "../pages";
 
 import '../css/main.scss';
 
@@ -17,6 +17,7 @@ function Router() {
 				<Route exact path="/" component={Intro} />
 				<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
 				<Route exact path="/challenge/info/:challengeId" component={NowChallenge} />
+				<Route exact path="/challenge/manage/:challengeId" component={ManageChallenge} />
 			</Switch>
 		</BrowserRouter>
 	);
