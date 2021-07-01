@@ -6,9 +6,9 @@ const userController = require('../controllers/userController');
 const commitDataController = require('../controllers/commitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
-
+const mailContriller = require('../controllers/mailController');
 // <-- userCon
-router.post('/users', userController.createUser);
+router.post('/signup', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
 router.get('/challenge/list/:userId', userController.getChallengeList);
 router.patch('/challengeIn/user', userController.joinChallenge);
@@ -16,9 +16,11 @@ router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
-//router.post('/users/regist',userController.doRegistUser);
-
 // userCon -->
+
+// <-- mailCon
+router.post('/authmail/send', mailContriller.sendAuthMail);
+// mailCon --> 
 
 // <-- gitCrawlData
 router.post('/grass', commitDataController.createInitData);

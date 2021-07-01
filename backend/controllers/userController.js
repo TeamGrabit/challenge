@@ -1,5 +1,3 @@
-const express = require('express');
-const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
@@ -23,11 +21,9 @@ function getCurrentDate() {
 }
 
 async function CreateUser(req, res, next) {
-
     try {
         console.log(req.body);
         const { user_id, user_pw, user_name, user_email, git_id } = req.body;
-
         let today = getCurrentDate();
         const in_date = today;
         const last_update = today;
@@ -44,7 +40,8 @@ async function CreateUser(req, res, next) {
         res.status(401).json({ error: err});
         next(err);
     }
-}    
+}   
+
 function DeleteUser(req, res) {
 	var _id = req.params.id;
 
