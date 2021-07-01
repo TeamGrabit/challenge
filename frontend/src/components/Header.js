@@ -17,7 +17,7 @@ function Header() {
 	const userState = useUserState();
 	const userlogout = useLogoutUser();
 	const userVerify = useVerifyUser();
-	const git = "MOBUMIN";
+	// const git = "MOBUMIN";
 
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);

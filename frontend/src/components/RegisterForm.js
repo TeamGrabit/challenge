@@ -20,12 +20,13 @@ const CssTextField = withStyles({
 	},
 })(TextField);
 
-function RegisterForm({ changeStatus }) {
-	const isEmail = (email) => {
-		const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+const isEmail = (email) => {
+	const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
 
-		return emailRegex.test(email);
-	};
+	return emailRegex.test(email);
+};
+
+function RegisterForm({ changeStatus }) {
 	const [userInfo, setUserInfo] = useState({
 		name: "",
 		email: "",
@@ -33,14 +34,49 @@ function RegisterForm({ changeStatus }) {
 		pw: "",
 		githubId: "",
 	});
-	const [validPw, setValidPw] = useState("");
+	const [isSend, setIsSend] = useState(false); // 이메일 인증 메일이 발송되었는지 여부
+	const [isMailAuth, setisMailAuth] = useState(false); // 이메일 인증 완료 여부
+	const [validPw, setValidPw] = useState(""); // 비밀번호 확인 란 value 담는 state
+	const [isIdUnique, setIsIdUnique] = useState(false); // ID 중복 확인 여부
 	const updateField = (e) => {
 		setUserInfo({
 			...userInfo,
 			[e.target.name]: e.target.value
 		});
 	};
+	const idCheckHandler = () => { // ID 중복 체크 확인
+		setIsIdUnique(true);
+	};
+	const mailAuthHandler = () => { // email 인증번호 맞게 입력했는지 확인
+		setisMailAuth(true);
+	};
+	const check = () => {
+		let message = "";
+		// 이메일 인증 완료 확인
+		if (!isMailAuth) message = "이메일 인증을 완료해주세요";
+		// ID 중복 확인
+		if (!isIdUnique) message = "ID 중복 확인을 완료해주세요";
+		// pw 두개 똑같이 입력했는지 확인
+		if (!(validPw === userInfo.pw)) message = "비밀번호, 비밀번호 확인란을 동일하게 입력해주세요";
+		// 이메일 양식 확인
+		if (!isEmail(userInfo.email)) message = "이메일을 올바르게 입력해주세요";
+		// 폼이 다 채워졌는지 확인
+		if (Object.keys(userInfo).find((key) => userInfo[key] === "")) message = "입력 란을 모두 채워주세요";
 
+		return message;
+	};
+	const submitHandler = () => {
+		console.log("submit");
+		// 폼이 다 채워졌는지 확인
+		const message = check();
+		if (message === "") {
+			// 회원가입 back api 호출
+			// 응답 받아서 회원가입 성공했으면 완료 페이지로 보내기
+			changeStatus(2);
+		} else {
+			alert(message);
+		}
+	};
 	return (
 		<div className="register-form">
 			<div className="wrap-form">
@@ -67,13 +103,40 @@ function RegisterForm({ changeStatus }) {
 						error={!isEmail(userInfo.email)}
 						// helperText="이메일 형식을 맞춰주세요"
 					/>
-					<Button
-						className="btn"
-						variant="contained"
-					>
-						인증하기
-					</Button>
+					{!isSend ?
+						<Button
+							className="btn"
+							variant="contained"
+							onClick={() => setIsSend(true)}
+						>
+							인증 하기
+						</Button>
+						:
+						null}
 				</Box>
+				{isSend ?
+					<Box mt={2}>
+						<CssTextField
+							required
+							name="email"
+							variant="outlined"
+							label="인증번호"
+							placeholder="인증번호를 입력하세요"
+							helperText="이메일로 전송된 인증번호를 입력하세요"
+							// value={""}
+						/>
+						<Button
+							className="btn-nextHelper"
+							variant="contained"
+							onClick={mailAuthHandler}
+							// onClick={}
+						>
+							인증 완료
+						</Button>
+					</Box>
+					:
+					null}
+
 				<Box mt={2}>
 					<CssTextField
 						required
@@ -87,8 +150,9 @@ function RegisterForm({ changeStatus }) {
 					<Button
 						className="btn"
 						variant="contained"
+						onClick={idCheckHandler}
 					>
-						중복확인
+						중복 확인
 					</Button>
 				</Box>
 				<Box mt={2}>
@@ -139,7 +203,7 @@ function RegisterForm({ changeStatus }) {
 				<Button
 					className="btn"
 					variant="contained"
-				// onClick={() => changeStatus(1)}
+					onClick={submitHandler}
 				// disabled={!checked}
 				>
 					가입완료
