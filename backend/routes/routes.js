@@ -11,7 +11,7 @@ router.post('/challenge', challengeController.createChallenge);
 router.delete('/signout/:id', userController.deleteUser);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
 router.patch('/challegeOut/challenge', challengeController.delUserInchallege);
-router.patch('/challegeOut/user', userController.delchallengeInuser);
+router.patch('/challegeOut/user', userController.delchInUser);
 
 router.get('/challenge/list/:userId', userController.getChallengeList);
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);

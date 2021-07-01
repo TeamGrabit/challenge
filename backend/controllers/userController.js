@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const db = mongoose.connection;
+const { ObjectID } = require('bson');
 const User = require('../models/userModel');
 const Challenge = require('../models/challengeModel');
 
@@ -40,6 +41,26 @@ function CreateUser(req, res) {
     res.end("result");
 }
 
+function DelchInUser(req,res){
+	const challengeId = req.params.challengeId;
+	const userId = req.params.userId;
+
+	const id = ObjectID(challengeId);
+
+	User.findOneById(id).then((user)=>{
+		const prech=user.chArray;
+		console.log(prech);
+		prech.splice(preUser.indexOf(id),1);
+        user.chArray=prech;
+		console.log(preUser);
+	}, (err,doc) =>{
+		if(err){
+			console.log(err);
+		}else{
+			console.log("Update =>"+perUser);
+		}
+	})
+}
 function DeleteUser(req, res) {
     var _id = req.params.id;
 
@@ -114,5 +135,6 @@ module.exports = {
     createUser: CreateUser,
     deleteUser: DeleteUser,
     getChallengeList: GetChallengeList,
-    joinChallenge: JoinChallenge
+    joinChallenge: JoinChallenge,
+    delchInUser:DelchInUser
 };

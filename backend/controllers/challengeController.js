@@ -40,6 +40,7 @@ function WhoIsKing(req, res) {
 		}
 	})
 }
+
 function WhoIsPoor(req, res) {
 	const challengeId= req.params.challengeId;
 	const id = ObjectID(challengeId);
@@ -76,7 +77,6 @@ function DelUserInchallege(req,res){
 			console.log("Update =>"+perUser);
 		}
 	})
-
 }
 
 
