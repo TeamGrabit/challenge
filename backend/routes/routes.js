@@ -1,17 +1,35 @@
 
 const express = require('express');
 const router = express.Router();
+
 const userController = require('../controllers/userController');
+const commitDataController = require('../controllers/commitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
 
-
+// <-- userCon
 router.post('/users', userController.createUser);
-router.post('/challenge', challengeController.createChallenge);
 router.delete('/signout/:id', userController.deleteUser);
+router.get('/challenge/list/:userId', userController.getChallengeList);
+router.patch('/challengeIn/user', userController.joinChallenge);
+router.patch('/challengeOut/user', userController.outChallenge);
+router.post('/login', userController.logIn);
+router.post('/logout', userController.logOut);
+router.post('/auth/jwtvalidcheck', userController.verifyToken);
+//router.post('/users/regist',userController.doRegistUser);
+
+// userCon -->
+
+// <-- gitCrawlData
+router.post('/grass', commitDataController.createInitData);
+router.get('/grass', commitDataController.getData);
+router.delete('/grass', commitDataController.deleteData);
+router.put('/grass', commitDataController.putData);
+// gitCrawlData -->
+
+router.post('/challenge', challengeController.createChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
 
-router.get('/challenge/list/:userId', userController.getChallengeList);
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
 router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
 router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
@@ -20,9 +38,7 @@ router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
 router.patch('/keyChange/:challengeId', challengeController.changeKey)
 
 router.patch('/challengeIn/challenge', challengeController.joinChallenge);
-router.patch('/challengeIn/user', userController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
-router.patch('/challengeOut/user', userController.outChallenge);
 
 router.post('/approve', approveController.createApprove);
 router.delete('/approve/:approveId', approveController.deleteApprove);
@@ -33,8 +49,4 @@ router.get('/approve/list/:ch_id', approveController.getApproveList);
 router.post('/invite/:challengeId', challengeController.inviteUser);
 
 
-router.post('/login', userController.logIn);
-router.post('/logout', userController.logOut);
-router.post('/auth/jwtvalidcheck', userController.verifyToken);
-//router.post('/users/regist',userController.doRegistUser);
 module.exports = router;
