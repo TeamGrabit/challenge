@@ -1,10 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const db = mongoose.connection;
 const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
 const { ObjectID } = require('bson');
 
+
+require("dotenv").config();
+const SecretKey = process.env.SECRET_KEY;
+const salt = process.env.SALT;
 
 function getCurrentDate() {
 	var date = new Date();
@@ -18,25 +22,29 @@ function getCurrentDate() {
 	return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
 }
 
-function CreateUser(req, res) {
+async function CreateUser(req, res, next) {
 
-	const { user_id, user_pw, user_name, user_email, git_id } = req.body;
+    try {
+        console.log(req.body);
+        const { user_id, user_pw, user_name, user_email, git_id } = req.body;
 
-	let today = getCurrentDate();
-	console.log(today);
-	const in_date = today;
-	const last_update = today;
+        let today = getCurrentDate();
+        const in_date = today;
+        const last_update = today;
 
-	const create = (user) => {
-		if (user) {
-			throw new Error('user exists')
-		} else {
-			return User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
-		}
-	}
-	User.findOneByUsername(user_id).then(create)
-	res.end("result");
-
+        const user = await User.findOneByUsername(user_id);
+        if (user) {
+            console.log(user);
+            throw 'user exists';
+        } else {
+            await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
+        }
+        res.end("result");
+    } catch (err) {
+        res.status(401).json({ error: err});
+        next(err);
+    }
+}    
 function DeleteUser(req, res) {
 	var _id = req.params.id;
 
@@ -195,10 +203,84 @@ function OutChallenge(req, res) {
 	})
 }
 
+async function LogIn(req, res, next) {
+    const id = req.body.userId;
+    const pw = req.body.userPw;
+    console.log("id, pw :"+id+" "+pw);
+    // DB에서 user 정보 조회 
+    try {
+        const user = await User.loginCheck(id, pw);
+        // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
+        console.log("----");
+        console.log(user);
+        //같으면 jwtToken 발급 
+        
+        if (user) {
+            // const token = jwt.createToken(user);
+            const token = jwt.sign({
+                    user_id: user.user_id,
+                    git_id: user.git_id,
+                }
+                , SecretKey, {
+                    expiresIn: '1h'
+                }
+            );
+            res.cookie('user', token);
+            res.status(201).json({
+                result: 'ok',
+                token
+            });
+        }
+        else 
+            res.status(400).json({ error: 'invalid user' });
+    }catch (err) {
+        res.status(401).json({ error: 'invalid user' });
+        console.error(err);
+        next(err);
+    }
+}
+
+function LogOut(req, res, next) {
+    try{
+        console.log("logout");
+        res.cookie("user", "").json({logoutSuccess: true});
+    }catch (err) {
+        res.status(401).json({ error: 'error' });
+        console.error(err);
+        next(err);
+    }
+}
+function VerifyToken(req, res, next) {
+    try {
+        console.log("verify Token");
+        // console.log(req.cookies);
+        // console.log(req.cookies.user);
+        const clientToken = req.cookies.user;
+        
+        const decoded = jwt.verify(clientToken, SecretKey);
+        console.log(decoded);
+        if (decoded) {
+            // console.log(decoded);
+            // res.locals.userId = decoded.user_id;
+            res.status(201).json({userId: decoded.user_id, gitId: decoded.git_id});
+            next();
+        }
+        else {
+            res.status(401).json({ error: 'unauthorized' });
+        }
+    } catch(err) {
+        // console.log(err);
+        res.status(401).json({ error: 'token expired' });
+    }
+}
+
 module.exports = {
-	createUser: CreateUser,
-	deleteUser: DeleteUser,
-	getChallengeList: GetChallengeList,
-	joinChallenge: JoinChallenge,
+    createUser: CreateUser,
+    deleteUser: DeleteUser,
+    logIn : LogIn,
+    logOut : LogOut,
+    getChallengeList: GetChallengeList,
+    joinChallenge: JoinChallenge,
+    verifyToken: VerifyToken,
 	outChallenge: OutChallenge
 };
