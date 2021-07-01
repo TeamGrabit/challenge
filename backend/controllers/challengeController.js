@@ -7,9 +7,9 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 function CreateChallenge(req, res) {
-	const { userId, name, challenge_start, challenge_end } = req.body;
+	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
 
-	Challenge.create(userId, name, challenge_start, challenge_end)
+	Challenge.create(userId, name, challenge_start, challenge_end, private_key)
 		.then((doc) => {
 			console.log("challenge 생성");
 			console.log(doc._id);
@@ -62,15 +62,15 @@ function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
 
-	Challenge.findById(id, (err, doc) => {
-		if (err) {
-			console.log(err)
-		}
-		else {
-			console.log("challengeInfo 받음");
-			console.log(doc._id)
-			res.send(doc)
-		}
+	Challenge.findById(id)
+	.then((doc) => {
+		console.log("challengeInfo 받음");
+		console.log(doc._id)
+		res.send(doc)
+	})
+	.catch((err) => {
+		console.log(err)
+		res.send(err)
 	})
 
 }
@@ -252,6 +252,48 @@ function OutChallenge(req, res) {
 	})
 }
 
+function InviteUser(req, res) {
+
+}
+
+function ChangeKey(req, res) {
+	const { userId, private_key } = req.body;
+	const challengeId = req.params.challengeId;
+
+	Challenge.findOneById(challengeId)
+	.then((ch) => {
+		if (userId === ch.challenge_leader){
+			changePrivateKey();
+		}else{
+			throw new Error('leader가 아님.')
+		}
+	})
+	.catch((err) => {
+		console.error(err);
+		res.send('false')
+	})
+
+	const changePrivateKey = () => {
+		Challenge.findByIdAndUpdate(challengeId, {
+			$set: {
+				private_key: private_key
+			}
+		}, { new: true, useFindAndModify: false }, (err, doc) => {
+			if (err) {
+				console.log(err)
+				res.send('false')
+			}
+			else {
+				console.log("private_key 변경")
+				console.log(doc._id)
+				res.send('true')
+			}
+		})
+	}
+
+	
+}
+
 module.exports = {
 	whoIsKing: WhoIsKing,
 	whoIsPoor:WhoIsPoor,
@@ -260,5 +302,7 @@ module.exports = {
 	fixChallengeInfo: FixChallengeInfo,
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
-	outChallenge: OutChallenge
+	outChallenge: OutChallenge,
+	inviteUser : InviteUser,
+	changeKey: ChangeKey
 };

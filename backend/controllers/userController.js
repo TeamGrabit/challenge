@@ -65,26 +65,31 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 	var challengeList = [];
 
-	function addList(id){
-		const ch_id = ObjectID(id)
-		Challenge.findById(ch_id)
-		.then((ch) => {
-			var info = {
-				id: ch._id,
-				name: ch.name,
-				state: ch.state
-			};
-			challengeList.push(info)
-			console.log(challengeList)
+	const addChallenge = (ch_id) => {
+		const challengeId = ObjectID(ch_id)
+		return new Promise((resolve) => {
+			Challenge.findById(challengeId)
+			.then((Info) => resolve(Info));
 		})
-	}
+	  }
 
-	async function getList(list) {
-		for(let i=0; i<list.length; i++){
-			await addList(list[i]);
-		}
+	const getList = async (list) => {
+		const promises = list.map(async ch_id => {
+		  return await addChallenge(ch_id)
+			.then(Info => Info)
+		})
+		
+		const results = await Promise.all(promises)
+		results.forEach(Info => {
+			var infoList = {
+				name: Info.name,
+				state: Info.state,
+				challenge_id: Info._id
+			}
+			challengeList.push(infoList)
+		})
 		return challengeList
-	}
+	  }
 
 	User.findOneByUsername(userId)
 		.then((user) => {
