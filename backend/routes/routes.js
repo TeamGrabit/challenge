@@ -13,6 +13,8 @@ router.post('/challengeKing/:id', challengeController.whoIsKing);
 
 router.get('/challenge/list/:userId', userController.getChallengeList);
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
+router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
+router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
 router.patch('/challenge/:challengeId', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
 router.patch('/keyChange/:challengeId', challengeController.changeKey)
@@ -31,5 +33,8 @@ router.get('/approve/list/:ch_id', approveController.getApproveList);
 router.post('/invite/:challengeId', challengeController.inviteUser);
 
 
+router.post('/login', userController.logIn);
+router.post('/logout', userController.logOut);
+router.post('/auth/jwtvalidcheck', userController.verifyToken);
 //router.post('/users/regist',userController.doRegistUser);
 module.exports = router;

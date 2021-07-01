@@ -1,4 +1,5 @@
 const express = require('express');
+
 const Challenge = require('../models/challengeModel');
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
@@ -22,17 +23,38 @@ function CreateChallenge(req, res) {
 }
 
 function WhoIsKing(req, res) {
-	var _id = req.params.id;
+	const challengeId= req.params.challengeId;
+	const id = ObjectID(challengeId);
 
-	Challenge.findById(_id, function (err, docs) {
-		if (err) {
+
+	Challenge.findById(id).then((chcommit) => {
+		var commit=chcommit.commitCount;
+		commit.sort(1);
+	}, (err,doc) => {
+		if(err){
 			console.log(err);
-		}
-		else {
-			console.log("Result : ", docs);
+		}else{
+			console.log("Challengekig :"+commit[1]);
+			res.send(commit[1]);
 		}
 	})
+}
+function WhoIsPoor(req, res) {
+	const challengeId= req.params.challengeId;
+	const id = ObjectID(challengeId);
 
+
+	Challenge.findById(id).then((chcommit) => {
+		var commit=chcommit.commitCount;
+		commit.sort(-1);
+	}, (err,doc) => {
+		if(err){
+			console.log(err);
+		}else{
+			console.log("Challengekig :"+commit[1]);
+			res.send(commit[1]);
+		}
+	})
 }
 
 
@@ -95,7 +117,7 @@ function FixChallengeInfo(req, res) {
 	})
 
 
-
+  res.end("success");
 }
 
 function DeleteChallenge(req, res) {
@@ -113,6 +135,7 @@ function DeleteChallenge(req, res) {
 			res.send('true')
 		}
 	})
+
 
 
 }
@@ -273,6 +296,7 @@ function ChangeKey(req, res) {
 
 module.exports = {
 	whoIsKing: WhoIsKing,
+	whoIsPoor:WhoIsPoor,
 	createChallenge: CreateChallenge,
 	getChallengeInfo: GetChallengeInfo,
 	fixChallengeInfo: FixChallengeInfo,
