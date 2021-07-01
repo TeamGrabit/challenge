@@ -53,6 +53,9 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
+	const SignUp = () => {
+
+	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
