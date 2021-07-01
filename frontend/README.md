@@ -26,4 +26,25 @@
 	* pages ( 페이지 전환 )
 	* routes ( routing 정보 저장 )
 	* css
-	설명중
+
+## 모달 사용법
+
+mypage.js 참조
+```react
+<Modal
+	className="modal"
+	open={open}
+	onClose={handleClose}
+	closeAfterTransition
+	BackdropComponent={Backdrop}
+	BackdropProps={{
+		timeout: 500,
+	}}
+>
+	<Fade in={open}>
+		<div className="modalPaper">
+			<ChangePassword onClose={handleClose} />
+		</div>
+	</Fade>
+</Modal>
+```

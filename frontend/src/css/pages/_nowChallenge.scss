@@ -87,16 +87,11 @@
 		.right-con{
 			width: 47%;
 
-			.commitKing{
-				margin-top: 2rem;
+			.commit-log{
+				height: 60%;
 				display: flex;
-				flex-direction: column;
+				justify-content: center;
 				align-items: center;
-				justify-content: space-between;
-
-				.rank{
-					margin-bottom: 10px;
-				}
 			}
 		}
 	}
@@ -118,7 +113,7 @@
 			width:47%;
 
 			.myGrass{
-				display: flex;
+				display: flex !important;
 				flex-direction: column;
 				flex-wrap: wrap;
 				align-content: flex-start;
@@ -152,13 +147,22 @@
 		.right-con{
 			width: 23%;
 
-			.commit-log{
-				margin-top: 30%;
+			.commitKing{
+				margin-top: 2rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: space-between;
 
 				.rank{
-					text-align: center;
+					margin-bottom: 10px;
 				}
 			}
 		}
+	}
+
+	// slick 조정
+	.slick-prev:before, .slick-next:before {
+		color: $green4 !important;
 	}
 }
