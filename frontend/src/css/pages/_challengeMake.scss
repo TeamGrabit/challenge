@@ -8,42 +8,46 @@
         margin-left: 4vw;
         margin-top: 6vh;
     }
-    .name_grid{
+    .info_grid{
         margin-bottom: 5vh;
+        display: flex;
+        align-items: center;
     }
-    .linefield{
-        margin-left: 20px;
-        width: 360px;
+    .intro_grid{
+        display: flex;
     }
-	.cha_name{
+	.info_title{
 		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
         font-size: 1.75em;
+        margin-right: 40px;
 	}
-	.name_txtfield{
-        margin-left: 50px;
-        padding: 2%;
-        font-size: 1.5em;
+	.name_txt{
+		width: 300px;
+		font-size: 1.3em;
 	}
-    .category_txtfield{
-        margin-left: 50px;
-        vertical-align: middle;
-        padding: 3%;
-        font-size: 1.5em;
+    .category_txt{
+        width: 300px;
+        font-size: 1.3em;
 	}
     .category_selfield{
         margin-left: 30px;
         padding: 5%;
         font-size: 1.5em;
 	}
+    .date_field{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .date_check{
         margin-right: 10px;
     }
-    .date_txtfield{
-        margin-left: 30px;
-        margin-right: 50px;
-        padding: 2%;
-        font-size: 1.3em;
-	}
+    .date_pick{
+        text-align: center;
+        width: 140px;
+        margin-right: 30px;
+        font-size: 1.1em;
+    }
     .intro_txtfield{
         margin-left: 50px;
 		width: 500px;
@@ -61,7 +65,7 @@
         padding: 2.5px 30px 2.5px 30px;
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
         font-size: 1.3em;
-        background-color: #f200a1;
+        background-color: lightgray;
     }
     .btn_clear{
         padding: 2.5px 30px 2.5px 30px;
@@ -88,11 +92,6 @@
             margin-left: 20px;
             padding: 5%;
             font-size: 1em;
-        }
-        .date_txtfield{
-            margin-left: 5px;
-            margin-right: 20px;
-            font-size: 0.8em;
         }
         .intro_txtfield{
             margin-left: 10px;
