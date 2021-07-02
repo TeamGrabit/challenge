@@ -1,8 +1,12 @@
 import React from "react";
-import Provider from "./MVVM/Provider";
+import Router from "./routes";
 
 function App() {
-	return <Provider />;
+	return (
+		<>
+			<Router />
+		</>
+	);
 }
 
 export default App;
