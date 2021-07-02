@@ -1,6 +1,6 @@
-const CommitData = require('../models/commitDataModel');
+const gitData = require('../models/gitDataModel');
 const User = require('../models/userModel');
-const { crawlingModule } = require('./crawling');
+const { crawlingModule, getCommitDate } = require('../functions/crawling');
 
 async function CreateInitData(req, res, next) {
     try {
@@ -9,12 +9,12 @@ async function CreateInitData(req, res, next) {
         const user = await User.findOneByUsername(user_id);
         if (user) {
 			// 이미 생성된 grass가 있는지?
-			const grass = await CommitData.findOneByUsername(user_id)
+			const grass = await gitData.findOneByUserId(user_id)
 			if(grass) throw 'grass already exists'
 
 			// 깃 크롤링
 			const commit_data = await crawlingModule(user.git_id);
-			await CommitData.create(user_id, user.git_id, commit_data);
+			await gitData.create(user_id, user.git_id, commit_data);
         } else {
 			throw 'user not exists';
         }
@@ -29,8 +29,12 @@ async function GetData(req, res, next) {
     try {
         const { user_id } = req.body;
 
-		const grass = await CommitData.findOneByUsername(user_id)
+		const grass = await gitData.findOneByUserId(user_id)
         if (grass) {
+			// <-- getCommitDate 테스트 부분, 추후 삭제
+			const datee = await getCommitDate(grass.commit_data, 2021, 7);
+			console.log(datee);
+			// getCommitDate 테스트 부분, 추후 삭제 -->
 			res.status(200).json(grass.commit_data);
         } else {
 			throw 'grass not exists';
@@ -45,9 +49,9 @@ async function GetData(req, res, next) {
 async function DeleteData(req, res, next) {
     try {
         const { user_id } = req.body;
-		const grass = await CommitData.findOneByUsername(user_id);
+		const grass = await gitData.findOneByUsername(user_id);
 		if(!grass) throw 'grass not exists already'
-		await CommitData.deleteOne(grass);
+		await gitData.deleteOne(grass);
     } catch (err) {
         res.status(401).json({ error: err });
         next(err);
@@ -60,7 +64,7 @@ async function PutData(req, res, next) {
     try {
         const { user_id } = req.body;
 
-		const grass = await CommitData.findOneByUsername(user_id)
+		const grass = await gitData.findOneByUsername(user_id)
         if (grass) {
 			await DeleteData(req, res, next);
         }
