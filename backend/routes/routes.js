@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controllers/userController');
-const commitDataController = require('../controllers/commitDataController');
+const gitDataController = require('../controllers/gitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
 
@@ -21,10 +21,10 @@ router.post('/auth/jwtvalidcheck', userController.verifyToken);
 // userCon -->
 
 // <-- gitCrawlData
-router.post('/grass', commitDataController.createInitData);
-router.get('/grass', commitDataController.getData);
-router.delete('/grass', commitDataController.deleteData);
-router.put('/grass', commitDataController.putData);
+router.post('/grass', gitDataController.createInitData);
+router.get('/grass', gitDataController.getData);
+router.delete('/grass', gitDataController.deleteData);
+router.put('/grass', gitDataController.putData);
 // gitCrawlData -->
 
 router.post('/challenge', challengeController.createChallenge);
