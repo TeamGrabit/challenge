@@ -49,7 +49,7 @@ async function GetData(req, res, next) {
 async function DeleteData(req, res, next) {
     try {
         const { user_id } = req.body;
-		const grass = await gitData.findOneByUsername(user_id);
+		const grass = await gitData.findOneByUserId(user_id);
 		if(!grass) throw 'grass not exists already'
 		await gitData.deleteOne(grass);
     } catch (err) {
@@ -64,7 +64,7 @@ async function PutData(req, res, next) {
     try {
         const { user_id } = req.body;
 
-		const grass = await gitData.findOneByUsername(user_id)
+		const grass = await gitData.findOneByUserId(user_id)
         if (grass) {
 			await DeleteData(req, res, next);
         }
