@@ -1,6 +1,7 @@
 import React, { useContext, createContext } from 'react';
 import axios from 'axios';
 import { useUserState, useUserDispatch } from '../Model/UserModel';
+import { API_URL } from '../../CommonVariable';
 
 const LoginUserContext = createContext((id, pw) => {});
 const LogoutUserContext = createContext(() => {});
@@ -11,7 +12,7 @@ export const UserLogicProvider = ({ children }) => {
 	const userDispatch = useUserDispatch();
 
 	const VerifyUser = async () => {
-		await axios.post("http://localhost:5000/auth/jwtvalidcheck", {}, {
+		await axios.post(`${API_URL}/jwtvalidcheck`, {}, {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data);
@@ -25,7 +26,7 @@ export const UserLogicProvider = ({ children }) => {
 	const LoginUser = async (id, pw) => {
 		let flag = false;
 		console.log("Dddddddddddd");
-		await axios.post('http://localhost:5000/login', { userId: id, userPw: pw }, {
+		await axios.post(`${API_URL}/login`, { userId: id, userPw: pw }, {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data.result);
@@ -44,7 +45,7 @@ export const UserLogicProvider = ({ children }) => {
 		// 	console.log("로그아웃 성공");
 		// }
 		let flag = false;
-		await axios.post('http://localhost:5000/logout', {}, {
+		await axios.post(`${API_URL}/logout`, {}, {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data.logoutSuccess);
