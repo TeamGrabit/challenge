@@ -37,7 +37,7 @@ function DeleteApprove(req, res) {
 function GetApproveList(req, res) {
 	const ch_id = req.params.ch_id;
 
-	Approve.find({ $and:[{ ch_id: ch_id }, {state: false}]}).sort({ _id: -1 })
+	Approve.find({ $and: [{ ch_id: ch_id }, { state: false }] }).sort({ _id: -1 })
 		.then((docs) => {
 			console.log("approve 목록 받음")
 			console.log(docs)
@@ -49,23 +49,15 @@ function GetApproveList(req, res) {
 		})
 }
 
-function ConfirmApprove(req, res) {
+async function ConfirmApprove(req, res) {
 	const approve_id = req.params.approveId;
 	const Id = ObjectID(approve_id)
 	const { user_id, ch_id } = req.body;
 
-	const getInfo = async () => {
-		ch = await Challenge.findById(ch_id).then((ch) => { return ch.challenge_user_num })
-		ap = await Approve.findOneById(Id).then((ap) => {return ap})
-		let Info = Promise.all([ch, ap])
-		console.log(Info)
-		console.log("111")
-		return Info
-	}
+	const ch = await Challenge.findById(ch_id)
 
 	Approve.findOneById(Id).then((ap) => {
 		userArray = ap.approve_user
-		const info = getInfo()
 
 		for (let i = 0; i < userArray.length; i++) {
 			if (userArray[i] === user_id)
@@ -75,8 +67,11 @@ function ConfirmApprove(req, res) {
 		userCnt = ap.approve_cnt + 1;
 		approveState = 0;
 
-		_entireCnt = Challenge.findById(ch_id).then((ch) => { return ch.challenge_user_num })
-		if (userCnt / _entireCnt >= 0.5) { approveState = 1; }
+		_entireCnt = ch.challenge_user_num
+
+		if (userCnt / _entireCnt >= 0.5) {
+			approveState = 1;
+		}
 
 		_confirm(userArray, userCnt, approveState)
 
@@ -114,15 +109,15 @@ function GetApproveInfo(req, res) {
 	const id = ObjectID(approve_id);
 
 	Approve.findOneById(id)
-	.then((ap) => {
-		console.log("approve 받음")
-		console.log(ap)
-		res.send(ap)
-	})
-	.catch((err) => {
-		console.log(err)
-		res.send(err)
-	})
+		.then((ap) => {
+			console.log("approve 받음")
+			console.log(ap)
+			res.send(ap)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
 }
 
 module.exports = {
