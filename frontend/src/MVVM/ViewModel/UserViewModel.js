@@ -12,7 +12,7 @@ export const UserLogicProvider = ({ children }) => {
 	const userDispatch = useUserDispatch();
 
 	const VerifyUser = async () => {
-		await axios.post(`${API_URL}/jwtvalidcheck`, {}, {
+		await axios.post(`${API_URL}/auth/jwtvalidcheck`, {}, {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data);
