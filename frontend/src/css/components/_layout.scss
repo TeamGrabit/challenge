@@ -1,0 +1,62 @@
+.layout{
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+#wrap{
+	padding: 0em;
+	height: 100%;
+}
+.MuiTypography-colorPrimary {
+	color: black !important;
+}
+.MuiLink-underlineHover {
+	text-decoration: none !important;
+}
+.header {
+	color: black !important;
+	background-color: $green2 !important;
+	box-shadow: none !important;
+	
+	.logoImg {
+		width: 2rem;
+		margin-right: 1rem;
+		@include mobile {
+			width: 3rem;
+		}
+	}
+	.link {
+		color: black !important;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	.link:hover {
+		text-decoration: none !important;
+	}
+	.title {
+		font-size: 2rem;
+		font-weight: bold;
+		@include mobile {
+			font-size: 1rem;
+			@media (max-width: 450px){
+				display:none;
+			}
+		}
+	}
+	.grow {
+		flex-grow: 1;
+	}
+	.profileImg {
+		width: 2rem;
+		border-radius: 50%;
+	}
+	.profileBtn {
+		background-color: $green3 !important;
+		width: 5rem;
+	}
+	.loginBtn {
+		margin-right: 1rem;
+	}
+}

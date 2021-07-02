@@ -1,5 +1,20 @@
-.cssTest{
-	.pTest{
-		font-size: 5rem;
+.main{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	overflow: hidden;
+
+	.info{
+		margin-left: 20px;
+		margin-top: 20px;
+	}
+	.tab_sel{
+		border-bottom: black 1px solid;
+		margin-bottom: 20px;
+	}
+	.tab_box{
+		padding-bottom: 10px;
+		border-bottom: $green3 5px solid;
+		display: inline-flex;
 	}
 }
