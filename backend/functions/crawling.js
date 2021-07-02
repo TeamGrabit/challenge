@@ -123,6 +123,16 @@ const make3MonthsDate = (year, month) => {
 	return result;
 }
 
+/*
+	isLastDay(date)
+	매개변수는 이름은 안 맞춰도 되고, 순서와 형식만 맞춰서 보내주면 됨.
+	input
+	date 형식
+	2021-05-15
+
+	output
+	false
+*/
 const isLastDay = (date) => {
 	var lastDate = new Date(date.substring(0,4), date.substring(5,7), 0).getDate();
 	if(date.substring(8,10) == lastDate) return true;
