@@ -37,7 +37,7 @@ function DeleteApprove(req, res) {
 function GetApproveList(req, res) {
 	const ch_id = req.params.ch_id;
 
-	Approve.find({ ch_id: ch_id }).sort({ _id: -1 })
+	Approve.find({ $and:[{ ch_id: ch_id }, {state: false}]}).sort({ _id: -1 })
 		.then((docs) => {
 			console.log("approve 목록 받음")
 			console.log(docs)
@@ -54,8 +54,18 @@ function ConfirmApprove(req, res) {
 	const Id = ObjectID(approve_id)
 	const { user_id, ch_id } = req.body;
 
+	const getInfo = async () => {
+		ch = await Challenge.findById(ch_id).then((ch) => { return ch.challenge_user_num })
+		ap = await Approve.findOneById(Id).then((ap) => {return ap})
+		let Info = Promise.all([ch, ap])
+		console.log(Info)
+		console.log("111")
+		return Info
+	}
+
 	Approve.findOneById(Id).then((ap) => {
 		userArray = ap.approve_user
+		const info = getInfo()
 
 		for (let i = 0; i < userArray.length; i++) {
 			if (userArray[i] === user_id)
