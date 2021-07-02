@@ -1,0 +1,18 @@
+{
+	"name": "root",
+	"version": "1.0.0",
+	"main": "app.js",
+	"scripts": {
+		"frontend": "npm run start --prefix frontend",
+		"backend": "npm run start --prefix backend",
+		"dev": "concurrently \"npm run backend\" \"npm run start --prefix frontend\"",
+		"heroku-postbuild": "npm install --prefix frontend && npm run build --prefix frontend"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"concurrently": "^6.2.0",
+		"rand-token": "^1.0.1"
+	},
+	"description": ""
+}
