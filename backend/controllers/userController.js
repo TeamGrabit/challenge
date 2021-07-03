@@ -175,7 +175,7 @@ async function LogIn(req, res, next) {
                     expiresIn: '1h'
                 }
             );
-            res.cookie('user', token);
+            res.cookie('user', token, { sameSite:'none', secure: true });
             res.status(201).json({
                 result: 'ok',
                 token
@@ -193,7 +193,7 @@ async function LogIn(req, res, next) {
 function LogOut(req, res, next) {
     try{
         console.log("logout");
-        res.cookie("user", "").json({logoutSuccess: true});
+        res.cookie("user", "", { sameSite:'none', secure: true }).json({logoutSuccess: true});
     }catch (err) {
         res.status(401).json({ error: 'error' });
         console.error(err);
