@@ -24,7 +24,7 @@ mongoose.connect(config.mongoURI,{
 .catch(err => console.log(err));
 
 app.use(cors({
-    origin: true,
+    origin: process.env.CORSORIGIN,
     credentials: true,
 }));
 app.use(expressSession({
@@ -38,6 +38,7 @@ app.use(expressSession({
 }))
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.get('/', (req,res)=>{res.send('hi')})
 app.use('/',router);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))
