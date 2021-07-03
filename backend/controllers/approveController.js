@@ -1,5 +1,6 @@
 const express = require('express');
 const Approve = require('../models/approveModel');
+const Challenge = require('../models/challengeModel');
 const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
@@ -17,42 +18,107 @@ function CreateApprove(req, res) {
 }
 
 function DeleteApprove(req, res) {
-	const { approve_id } = req.body;
-	const id = ObjectID(approveId);
+	const approve_id = req.params.approveId;
+	const id = ObjectID(approve_id);
 
-	const removeApprove = (approve) => {
-		if (approve) {
-			db.collection("approves").deleteOne({ _id: id })
-				.then((res) => {
-					console.log("approve 삭제");
-					console.log(id);
-				}).then(res.send(approve));
-		} else {
-			res.send('false');
-			throw new Error('Not founded approve');
+	Approve.findByIdAndDelete(id, (err, doc) => {
+		if (err) {
+			console.log(err)
 		}
-	}
-
-	Approve.findOneById(id)
-		.then(removeApprove)
+		else {
+			console.log("approve 삭제")
+			console.log(doc)
+			res.send(doc)
+		}
+	})
 
 }
 
-function GetApprove(req, res) {
-	const { ch_id } = req.body;
+function GetApproveList(req, res) {
+	const ch_id = req.params.ch_id;
 
-	db.collection("approves").find({ch_id: ch_id}).sort({user_id: -1}).toArray(function(err,result){
-        if(err){
-            throw err;
-        }
-        
-        console.log(result);
-		res.send(result);
-    } )
+	Approve.find({ ch_id: ch_id }).sort({ _id: -1 })
+		.then((docs) => {
+			console.log("approve 목록 받음")
+			console.log(docs)
+			res.send(docs)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
+}
+
+function ConfirmApprove(req, res) {
+	const approve_id = req.params.approveId;
+	const Id = ObjectID(approve_id)
+	const { user_id, ch_id } = req.body;
+
+	Approve.findOneById(Id).then((ap) => {
+		userArray = ap.approve_user
+
+		for (let i = 0; i < userArray.length; i++) {
+			if (userArray[i] === user_id)
+				throw new Error('이미 허용 눌렀음')
+		}
+		userArray.push(user_id)
+		userCnt = ap.approve_cnt + 1;
+		approveState = 0;
+
+		_entireCnt = Challenge.findById(ch_id).then((ch) => { return ch.challenge_user_num })
+		if (userCnt / _entireCnt >= 0.5) { approveState = 1; }
+
+		_confirm(userArray, userCnt, approveState)
+
+	})
+		.catch((err) => {
+			console.error(err);
+			res.send('false')
+		})
+
+	const _confirm = (userArray, userCnt, approveState) => Approve.findByIdAndUpdate(Id, {
+		$set: {
+			approve_user: userArray,
+			approve_cnt: userCnt,
+			state: approveState
+		}
+	}, { new: true, useFindAndModify: false }, (err, doc) => {
+		if (err) {
+			throw new Error('approve 승인 오류')
+		}
+		else {
+			console.log("approve 승인")
+			console.log(doc._id)
+			res.send('true')
+		}
+	})
+		.catch((err) => {
+			console.error(err);
+			res.send('false');
+		})
+
+}
+
+function GetApproveInfo(req, res) {
+	const approve_id = req.params.approveId;
+	const id = ObjectID(approve_id);
+
+	Approve.findOneById(id)
+	.then((ap) => {
+		console.log("approve 받음")
+		console.log(ap)
+		res.send(ap)
+	})
+	.catch((err) => {
+		console.log(err)
+		res.send(err)
+	})
 }
 
 module.exports = {
 	createApprove: CreateApprove,
 	deleteApprove: DeleteApprove,
-	getApprove: GetApprove
+	getApproveList: GetApproveList,
+	confirmApprove: ConfirmApprove,
+	getApproveInfo: GetApproveInfo
 };
