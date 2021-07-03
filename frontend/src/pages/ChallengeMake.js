@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link, Button, TextField, Select, MenuItem } from '@material-ui/core';
+import { Link, Button, TextField, Select, MenuItem, useMediaQuery } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
 
-function ChallengeMake() {
+function ChallengeMake({ history }) {
 	const [Name, setName] = useState("");
 	const [Password, setPassword] = useState("");
+	const [PWcheck, setPWcheck] = useState("");
 	const [Category, setCategory] = useState("");
 	const [CateSel, setCateSel] = useState("notsel");
 	const [sDate, setsDate] = useState("");
@@ -12,9 +13,16 @@ function ChallengeMake() {
 	const [Intro, setIntro] = useState("");
 	const [dateRef, setDateRef] = useState(true);
 	const [selRef, setSelRef] = useState(true);
+	const [Nameerror, setNameerror] = useState(false);
+	const [Namehint, setNamehint] = useState("");
+	const [PWerror, setPWerror] = useState(false);
+	const [PWhint, setPWhint] = useState("");
 
 	const changePassword = (e) => {
 		setPassword(e.currentTarget.value);
+	};
+	const changePWcheck = (e) => {
+		setPWcheck(e.currentTarget.value);
 	};
 	const changeName = (e) => {
 		setName(e.currentTarget.value);
@@ -42,6 +50,26 @@ function ChallengeMake() {
 			setDateRef(true);
 		}
 	};
+	const handleMake = () => {
+		if (Password === PWcheck) {
+			setPWerror(false);
+			setPWhint("");
+		} else {
+			setPWerror(true);
+			setPWhint("비밀번호가 일치하지 않습니다.");
+		}
+		if (Name === "") {
+			setNameerror(true);
+			setNamehint("챌린지명을 입력하십시오.");
+		} else {
+			setNameerror(false);
+			setNamehint("");
+		}
+		if (Name !== "" && Password === PWcheck) {
+			history.push('/challenge');
+		}
+	};
+	const isMobile = useMediaQuery("(max-width: 550px)");
 
 	return (
 		<div className="challengeMake">
@@ -53,22 +81,43 @@ function ChallengeMake() {
 					<TextField
 						className="name_txt"
 						variant="outlined"
-						inputProps={{ style: { fontSize: 20 } }}
+						inputProps={isMobile ? { style: { fontSize: 16 } } : { style: { fontSize: 20 } }}
 						margin="dense"
 						onChange={changeName}
+						error={Nameerror}
+						helperText={Namehint}
 					/>
 				</div>
-				<div className="info_grid">
-					<div className="info_title">
-						비밀번호
+				<div className="pw_grid">
+					<div className="info_grid">
+						<div className="info_title">
+							비밀번호
+						</div>
+						<TextField
+							className="name_txt"
+							variant="outlined"
+							type="Password"
+							inputProps={isMobile ? { style: { fontSize: 16 } } : { style: { fontSize: 20 } }}
+							margin="dense"
+							onChange={changePassword}
+						/>
 					</div>
-					<TextField
-						className="name_txt"
-						variant="outlined"
-						inputProps={{ style: { fontSize: 20 } }}
-						margin="dense"
-						onChange={changePassword}
-					/>
+					<div className="pw_between" />
+					<div className="info_grid">
+						<div className="info_title">
+							비밀번호 확인
+						</div>
+						<TextField
+							className="name_txt"
+							variant="outlined"
+							type="Password"
+							inputProps={isMobile ? { style: { fontSize: 16 } } : { style: { fontSize: 20 } }}
+							margin="dense"
+							onChange={changePWcheck}
+							error={PWerror}
+							helperText={PWhint}
+						/>
+					</div>
 				</div>
 				<div className="info_grid">
 					<div className="info_title">
@@ -77,72 +126,84 @@ function ChallengeMake() {
 					<TextField
 						className="category_txt"
 						variant="outlined"
-						inputProps={{ style: { fontSize: 20 } }}
+						inputProps={isMobile ? { style: { fontSize: 16 } } : { style: { fontSize: 20 } }}
 						disabled={selRef}
 						value={Category}
 						margin="dense"
 						onChange={changeCategory}
 					/>
-					<Select
-						className="category_selfield"
-						value={CateSel}
-						onChange={changeCateSel}
-					>
-						<MenuItem value="커밋">커밋</MenuItem>
-						<MenuItem value="운동">운동</MenuItem>
-						<MenuItem value="공부">공부</MenuItem>
-						<MenuItem value="기타">기타</MenuItem>
-						<MenuItem value="직접입력">직접입력</MenuItem>
-					</Select>
+					<div className="category_selbox">
+						<Select
+							className="category_sel"
+							value={CateSel}
+							onChange={changeCateSel}
+						>
+							<MenuItem value="커밋">커밋</MenuItem>
+							<MenuItem value="운동">운동</MenuItem>
+							<MenuItem value="공부">공부</MenuItem>
+							<MenuItem value="기타">기타</MenuItem>
+							<MenuItem value="직접입력">직접입력</MenuItem>
+						</Select>
+					</div>
 				</div>
-				<div className="info_grid">
-					<input className="date_check" type="checkbox" onChange={handleCheck} />
-					<div className="info_title">
-						시작날짜
+				<div className="date_grid">
+					<div className="date_alltitle">
+						<input className="date_check" type="checkbox" onChange={handleCheck} />
+						<div>시작 - 종료</div>
 					</div>
-					<DatePicker
-						disabled={dateRef}
-						className="date_pick"
-						selected={sDate}
-						onChange={(date) => setsDate(date)}
-						dateFormat="yyyy. MM. dd"
-					/>
-					<div className="info_title">
-						종료날짜
+					<div className="date_all">
+						<div className="date_field">
+							<div className="date_title">
+								시작날짜
+							</div>
+							<DatePicker
+								disabled={dateRef}
+								className="date_pick"
+								selected={sDate}
+								onChange={(date) => setsDate(date)}
+								dateFormat="yyyy. MM. dd"
+							/>
+						</div>
+						<div className="date_between" />
+						<div className="date_field">
+							<div className="date_title">
+								종료날짜
+							</div>
+							<DatePicker
+								disabled={dateRef}
+								className="date_pick"
+								selected={eDate}
+								onChange={(date) => seteDate(date)}
+								dateFormat="yyyy. MM. dd"
+							/>
+						</div>
 					</div>
-					<DatePicker
-						disabled={dateRef}
-						className="date_pick"
-						selected={eDate}
-						onChange={(date) => seteDate(date)}
-						dateFormat="yyyy. MM. dd"
-					/>
 				</div>
 				<div className="intro_grid">
-					<div className="info_title">
+					<div className="intro_title">
 						그룹소개
 					</div>
 					<TextField
-						className="intro_txtfield"
+						className="intro_txt"
 						value={Intro}
 						onChange={changeIntro}
 						variant="outlined"
-						inputProps={{ style: { fontSize: 16 } }}
+						inputProps={isMobile ? { style: { fontSize: 14 } } : { style: { fontSize: 16 } }}
 						margin="dense"
 						multiline
 						rows={6}
 					/>
 				</div>
-				<div className="btn_out">
-					<Link className="link" href="/challenge">
-						<Button className="btn_cancel">
-							취소
-						</Button>
-					</Link>
-					<Button className="btn_clear">
-						저장
+			</div>
+			<div className="btn">
+				<Link className="link" href="/challenge">
+					<Button className="btn_cancel">
+						취소
 					</Button>
-				</div>
+				</Link>
+				<Button className="btn_clear" onClick={handleMake}>
+					생성
+				</Button>
 			</div>
 		</div>
 	);
