@@ -108,61 +108,6 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 }
 
-function JoinChallenge(req, res) {		// user의 ch_list부분에 새로운 challengeId 추가.
-	const { userId, challengeId } = req.body;
-	const ch_id = ObjectID(challengeId)
-
-	User.findOneByUsername(userId)
-		.then((user) => {
-			if (user === null) {
-				throw new Error('user가 존재하지 않음.');
-			} else {
-				return user;
-			}
-		})
-		.then((user) => {
-			var chArray;
-			Challenge.findById(ch_id)		// 해당 Id의 챌린지가 없다면 error 반환.
-				.then((challenge) => {
-					if (challenge === null) {
-						throw new Error('not exist challenge');
-					}
-				})
-				.then(() => {
-					chArray = user.ch_list
-					if (chArray.indexOf(challengeId) >= 0) {	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
-						throw new Error('already join');
-					}
-					chArray.push(challengeId);
-					join(chArray)
-				})
-		})
-		.catch((err) => {
-			console.error(err);
-			res.send('false');
-		})
-
-	const join = (chArray) => User.findOneAndUpdate({ "user_id": userId }, {
-		$set: {
-			ch_list: chArray,
-		}
-	}, { new: true, useFindAndModify: false }, (err, doc) => {
-		if (err) {
-			throw new Error('user DB에 ch_list 추가 오류')
-		}
-		else {
-			console.log("user에 challenge 추가")
-			console.log(doc)
-			res.send('true')
-		}
-	})
-		.catch((err) => {
-			console.error(err);
-			res.send('false');
-		})
-
-}
-
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
 
@@ -285,7 +230,6 @@ module.exports = {
     logIn : LogIn,
     logOut : LogOut,
     getChallengeList: GetChallengeList,
-    joinChallenge: JoinChallenge,
     verifyToken: VerifyToken,
 	outChallenge: OutChallenge
 };

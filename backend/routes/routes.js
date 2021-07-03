@@ -11,7 +11,6 @@ const approveController = require('../controllers/approveController');
 router.post('/users', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
 router.get('/challenge/list/:userId', userController.getChallengeList);
-router.patch('/challengeIn/user', userController.joinChallenge);
 router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
