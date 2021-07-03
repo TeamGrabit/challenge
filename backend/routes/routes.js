@@ -6,7 +6,7 @@ const userController = require('../controllers/userController');
 const commitDataController = require('../controllers/commitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
-const mailContriller = require('../controllers/mailController');
+const mailContriller = require('../controllers/authMailController');
 // <-- userCon
 router.post('/signup', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
@@ -20,6 +20,7 @@ router.post('/auth/jwtvalidcheck', userController.verifyToken);
 
 // <-- mailCon
 router.post('/authmail/send', mailContriller.sendAuthMail);
+router.get('/authmail/check', mailContriller.checkAuthNum);
 // mailCon --> 
 
 // <-- gitCrawlData
