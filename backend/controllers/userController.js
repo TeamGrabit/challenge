@@ -46,7 +46,7 @@ async function CreateUser(req, res, next) {
     }
 }    
 function DeleteUser(req, res) {
-	var _id = req.params.id;
+	var id = req.params.id;
 
 	User.findByIdAndDelete(_id, function (err, docs) {
 		if (err) {

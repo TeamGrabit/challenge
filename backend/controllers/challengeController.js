@@ -6,52 +6,78 @@ const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
-function CreateChallenge(req, res) {
+async function CreateChallenge(req, res) {
 	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
 
 	Challenge.create(userId, name, challenge_start, challenge_end, private_key)
 		.then((doc) => {
 			console.log("challenge 생성");
 			console.log(doc._id);
-			res.send('true');
+			return doc._id
 		})
 		.catch((err) => {
 			console.error(err);
 			res.send('false');
 		})
+		.then(async (ch_id) => {
+			_user = await User.findOneByUsername(userId)
+			var chArray;
+			chArray = _user.ch_list
+			_challenge = await Challenge.findById(ch_id)
+			chArray.push(_challenge._id);
+			join(chArray)
+		})
 
+	const join = (chArray) => User.findOneAndUpdate({ "user_id": userId }, {
+		$set: {
+			ch_list: chArray,
+		}
+	}, { new: true, useFindAndModify: false }, (err, doc) => {
+		if (err) {
+			throw new Error('user DB에 ch_list 추가 오류')
+		}
+		else {
+			console.log("user에 challenge 추가")
+			console.log(doc)
+			res.send('true')
+		}
+	})
+		.catch((err) => {
+			console.error(err);
+			res.send('false');
+		})
 }
 
 function WhoIsKing(req, res) {
-	const challengeId= req.params.challengeId;
+	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
 
 
 	Challenge.findById(id).then((chcommit) => {
-		var commit=chcommit.commitCount;
+		var commit = chcommit.commitCount;
 		commit.sort(1);
-	}, (err,doc) => {
-		if(err){
+	}, (err, doc) => {
+		if (err) {
 			console.log(err);
-		}else{
-			console.log("Challengekig :"+commit[1]);
+		} else {
+			console.log("Challengekig :" + commit[1]);
 			res.send(commit[1]);
 		}
 	})
 }
 function WhoIsPoor(req, res) {
-	const challengeId= req.params.challengeId;
+	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
 
 
 	Challenge.findById(id).then((chcommit) => {
-		var commit=chcommit.commitCount;
+		var commit = chcommit.commitCount;
 		commit.sort(-1);
-	}, (err,doc) => {
-		if(err){
+	}, (err, doc) => {
+		if (err) {
 			console.log(err);
-		}else{
-			console.log("Challengekig :"+commit[1]);
+		} else {
+			console.log("Challengekig :" + commit[1]);
 			res.send(commit[1]);
 		}
 	})
@@ -63,15 +89,15 @@ function GetChallengeInfo(req, res) {
 	const id = ObjectID(challengeId);
 
 	Challenge.findById(id)
-	.then((doc) => {
-		console.log("challengeInfo 받음");
-		console.log(doc._id)
-		res.send(doc)
-	})
-	.catch((err) => {
-		console.log(err)
-		res.send(err)
-	})
+		.then((doc) => {
+			console.log("challengeInfo 받음");
+			console.log(doc._id)
+			res.send(doc)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
 
 }
 
@@ -117,7 +143,7 @@ function FixChallengeInfo(req, res) {
 	})
 
 
-  res.end("success");
+	res.end("success");
 }
 
 function DeleteChallenge(req, res) {
@@ -261,17 +287,17 @@ function ChangeKey(req, res) {
 	const challengeId = req.params.challengeId;
 
 	Challenge.findOneById(challengeId)
-	.then((ch) => {
-		if (userId === ch.challenge_leader){
-			changePrivateKey();
-		}else{
-			throw new Error('leader가 아님.')
-		}
-	})
-	.catch((err) => {
-		console.error(err);
-		res.send('false')
-	})
+		.then((ch) => {
+			if (userId === ch.challenge_leader) {
+				changePrivateKey();
+			} else {
+				throw new Error('leader가 아님.')
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			res.send('false')
+		})
 
 	const changePrivateKey = () => {
 		Challenge.findByIdAndUpdate(challengeId, {
@@ -291,18 +317,18 @@ function ChangeKey(req, res) {
 		})
 	}
 
-	
+
 }
 
 module.exports = {
 	whoIsKing: WhoIsKing,
-	whoIsPoor:WhoIsPoor,
+	whoIsPoor: WhoIsPoor,
 	createChallenge: CreateChallenge,
 	getChallengeInfo: GetChallengeInfo,
 	fixChallengeInfo: FixChallengeInfo,
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
-	inviteUser : InviteUser,
+	inviteUser: InviteUser,
 	changeKey: ChangeKey
 };
