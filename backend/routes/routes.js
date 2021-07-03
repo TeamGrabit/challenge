@@ -11,7 +11,6 @@ const approveController = require('../controllers/approveController');
 router.post('/users', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
 router.get('/challenge/list/:userId', userController.getChallengeList);
-router.patch('/challengeIn/user', userController.joinChallenge);
 router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
@@ -29,7 +28,6 @@ router.put('/grass', gitDataController.putData);
 
 router.post('/challenge', challengeController.createChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
-
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
 router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
 router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
@@ -39,6 +37,15 @@ router.patch('/keyChange/:challengeId', challengeController.changeKey)
 
 router.patch('/challengeIn/challenge', challengeController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
+router.post('/invite/:challengeId', challengeController.inviteUser);
+
+router.post('/approve', approveController.createApprove);
+router.delete('/approve/:approveId', approveController.deleteApprove);
+router.get('/approve/:approveId', approveController.getApproveInfo);
+router.patch('/approve/:approveId', approveController.confirmApprove);
+router.get('/approve/list/:ch_id', approveController.getApproveList);
+
+
 
 router.post('/approve', approveController.createApprove);
 router.delete('/approve/:approveId', approveController.deleteApprove);

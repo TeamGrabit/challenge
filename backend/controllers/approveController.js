@@ -37,7 +37,7 @@ function DeleteApprove(req, res) {
 function GetApproveList(req, res) {
 	const ch_id = req.params.ch_id;
 
-	Approve.find({ ch_id: ch_id }).sort({ _id: -1 })
+	Approve.find({ $and: [{ ch_id: ch_id }, { state: false }] }).sort({ _id: -1 })
 		.then((docs) => {
 			console.log("approve 목록 받음")
 			console.log(docs)
@@ -49,10 +49,15 @@ function GetApproveList(req, res) {
 		})
 }
 
-function ConfirmApprove(req, res) {
+
+async function ConfirmApprove(req, res) {
+
 	const approve_id = req.params.approveId;
 	const Id = ObjectID(approve_id)
 	const { user_id, ch_id } = req.body;
+
+	const ch = await Challenge.findById(ch_id)
+
 
 	Approve.findOneById(Id).then((ap) => {
 		userArray = ap.approve_user
@@ -65,8 +70,12 @@ function ConfirmApprove(req, res) {
 		userCnt = ap.approve_cnt + 1;
 		approveState = 0;
 
-		_entireCnt = Challenge.findById(ch_id).then((ch) => { return ch.challenge_user_num })
-		if (userCnt / _entireCnt >= 0.5) { approveState = 1; }
+		_entireCnt = ch.challenge_user_num
+
+		if (userCnt / _entireCnt >= 0.5) {
+			approveState = 1;
+		}
+
 
 		_confirm(userArray, userCnt, approveState)
 
@@ -102,8 +111,8 @@ function ConfirmApprove(req, res) {
 function GetApproveInfo(req, res) {
 	const approve_id = req.params.approveId;
 	const id = ObjectID(approve_id);
-
 	Approve.findOneById(id)
+
 	.then((ap) => {
 		console.log("approve 받음")
 		console.log(ap)
