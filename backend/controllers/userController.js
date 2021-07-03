@@ -22,6 +22,29 @@ function getCurrentDate() {
 	return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
 }
 
+function DelchInUser(req,res){
+    const challengeId = req.params.challengeId;
+    const userId = req.params.userId;
+
+    const id = ObjectID(challengeId);
+
+    User.findOneById(id).then((user)=>{
+        const prech=user.chArray;
+        console.log(prech);
+        prech.splice(preUser.indexOf(id),1);
+        user.chArray=prech;
+        console.log(preUser);
+    }, (err,doc) =>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log("Update =>"+perUser);
+        }
+    })
+}
+
+
+
 async function CreateUser(req, res, next) {
 
     try {
@@ -287,5 +310,6 @@ module.exports = {
     getChallengeList: GetChallengeList,
     joinChallenge: JoinChallenge,
     verifyToken: VerifyToken,
-	outChallenge: OutChallenge
+	outChallenge: OutChallenge,
+	delchInUser:DelchInUser
 };

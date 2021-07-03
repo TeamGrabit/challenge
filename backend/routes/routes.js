@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 
@@ -28,7 +27,7 @@ router.put('/grass', gitDataController.putData);
 // gitCrawlData -->
 
 router.post('/challenge', challengeController.createChallenge);
-router.post('/challengeKing/:id', challengeController.whoIsKing);
+
 
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
 router.get('/challengeKing/:challengeId', challengeController.whoIsKing);

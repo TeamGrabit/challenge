@@ -22,39 +22,103 @@ function CreateChallenge(req, res) {
 
 }
 
-function WhoIsKing(req, res) {
-	const challengeId= req.params.challengeId;
-	const id = ObjectID(challengeId);
+function DelUserInchallege(req,res){
+    const challengeId = req.params.challengeId;
+    const userId = req.params.userId;
 
+    const id = ObjectID(challengeId);
 
-	Challenge.findById(id).then((chcommit) => {
-		var commit=chcommit.commitCount;
-		commit.sort(1);
-	}, (err,doc) => {
-		if(err){
-			console.log(err);
-		}else{
-			console.log("Challengekig :"+commit[1]);
-			res.send(commit[1]);
-		}
-	})
+    Challenge.findOneById(id).then((ch)=>{
+        const preUser=ch.challenge_users;
+        console.log(preUser);
+        preuser.splice(preUser.indexOf(userId),1);
+        console.log(preUser);
+    }, (err,doc) =>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log("Update =>"+perUser);
+        }
+    })
 }
-function WhoIsPoor(req, res) {
+
+
+
+async function WhoIsKing(req, res) {
 	const challengeId= req.params.challengeId;
 	const id = ObjectID(challengeId);
+	let usercommit=[];
+	
+	await Challenge.findOneById(id).then(async (challenge)=> {
+		
+		var commit =challenge.commitCount;
+		console.log(commit);
 
+		commit.sort(function(a, b) { // 내림차순
+			return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
+			// 광희, 명수, 재석, 형돈
+		});
 
-	Challenge.findById(id).then((chcommit) => {
-		var commit=chcommit.commitCount;
-		commit.sort(-1);
+		for(let i=0;i<3;i++){
+			await User.findById(commit[i]._id).then((user)=> {
+				
+				usercommit.push(user);
+				
+			},(err,doc)=>{
+				if(err){
+					console.log(err);
+				}else{
+					console.log(doc);
+				}
+			});
+		}
+	}),(err,doc)=>{
+		if(err){
+			console.log(err);
+		}else{
+			
+			return doc;
+		}
+	}
+
+	res.send(usercommit);
+	res.end;
+}
+async function WhoIsPoor(req, res) {
+	const challengeId= req.params.challengeId;
+	const id = ObjectID(challengeId);
+	var Puser =[];
+
+	await Challenge.findById(id).then(async (chcommit) => {
+		commit=chcommit.commitCount;
+		
+
+		commit.sort(function(a, b) { // 내림차순
+		return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
+	})
+	
+	await User.findById(commit[0]._id).then((user) =>{
+		Puser=user;
+
+	}, (err,doc) => {
+		if(err){
+			console.log(err);
+			res.send(err);
+		}else{
+			console.log(Puser);
+		}
+	})
+	console.log(commit[0]);
 	}, (err,doc) => {
 		if(err){
 			console.log(err);
 		}else{
-			console.log("Challengekig :"+commit[1]);
-			res.send(commit[1]);
+		
 		}
 	})
+	
+	res.send(Puser);
+	res.end;
 }
 
 
@@ -304,5 +368,6 @@ module.exports = {
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
 	inviteUser : InviteUser,
-	changeKey: ChangeKey
+	changeKey: ChangeKey,
+	delUserInChallenge:DelUserInchallege
 };
