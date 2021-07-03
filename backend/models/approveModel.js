@@ -28,8 +28,8 @@ var Approve = new Schema({
     approve_cnt:{
         type: Number,
         default: 0
-    },
-    state:{
+    }, 
+    state:{ 
         type: Boolean,
         default: false
     }
@@ -58,5 +58,16 @@ Approve.statics.findOneById = function (id) {
 	}).exec()
 }
 
+Approve.statics.findByUserChallangeMonth =async function(user_id, ch_id, year, month) {
+    // const KR_TIME_DIFF = 9 * 60 * 60 * 1000;
+    // const today = new Date();
+    // console.log(new Date(today + (KR_TIME_DIFF)));
+    const start = new Date(year, month-1);
+    const end = new Date(year, month);
+    const result = await this.find({"user_id": user_id, "ch_id": ch_id, "type": 0, "state": true,
+                            "date": {"$gte": start, "$lte": end} //두 날짜 사이에 있는 값 가져옴     
+                        });
 
+    console.log(result);
+}
 module.exports = mongoose.model('approves', Approve);
