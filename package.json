@@ -1,0 +1,14 @@
+{
+	"name": "root",
+	"version": "1.0.0",
+	"main": "app.js",
+	"scripts": {
+		"start": "node backend/app.js",
+		"backend": "node --watch backend/app.js",
+		"heroku-postbuild": "npm install --prefix backend"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {},
+	"description": ""
+}
