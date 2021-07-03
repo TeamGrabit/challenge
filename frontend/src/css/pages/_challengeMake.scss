@@ -5,63 +5,105 @@
 	overflow: hidden;
 
     .makefield{
-        margin-left: 4vw;
-        margin-top: 6vh;
-    }
-    .name_grid{
-        margin-bottom: 5vh;
-    }
-    .linefield{
-        margin-left: 20px;
-        width: 360px;
-    }
-	.cha_name{
-		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
-        font-size: 1.75em;
-	}
-	.name_txtfield{
-        margin-left: 50px;
-        padding: 2%;
-        font-size: 1.5em;
-	}
-    .category_txtfield{
-        margin-left: 50px;
-        vertical-align: middle;
-        padding: 3%;
-        font-size: 1.5em;
-	}
-    .category_selfield{
-        margin-left: 30px;
-        padding: 5%;
-        font-size: 1.5em;
-	}
-    .date_check{
-        margin-right: 10px;
-    }
-    .date_txtfield{
-        margin-left: 30px;
-        margin-right: 50px;
-        padding: 2%;
-        font-size: 1.3em;
-	}
-    .intro_txtfield{
-        margin-left: 50px;
-		width: 500px;
-        height: 200px;
-        padding: 2%;
-        font-size: 1.1em;
-	}
-    .btn_out{
-        width: 100%;
+        margin-left: 40px;
         margin-top: 20px;
     }
+    .info_grid, .date_grid{
+        margin-bottom: 25px;
+        display: flex;
+        height: 60px;
+    }
+    .date_grid{
+        align-items: center;
+    }
+    .intro_grid{
+        display: flex;
+    }
+	.info_title, .date_alltitle{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 150px;
+        text-align: center;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+        font-size: 1.5em;
+        margin-right: 40px;
+    }
+    .intro_title{
+        width: 150px;
+        text-align: center;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+        font-size: 1.5em;
+        margin-top: 7.5px;
+        margin-right: 40px;
+	}
+    .pw_grid{
+        display: flex;
+    }
+    .pw_between{
+        width: 30px;
+    }
+	.name_txt{
+		width: 300px;
+		font-size: 1.3em;
+	}
+    .category_txt{
+        width: 300px;
+        font-size: 1.3em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+    .category_selbox{
+        display: flex;
+        align-items: center;
+    }
+    .category_sel{
+        text-align: center;
+        margin-left: 30px;
+        width: 120px;
+        letter-spacing: 1px;
+        font-size: 1.2em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+    .date_all{
+        display: flex;
+        align-items: center;
+    }
+    .date_field{
+        display: flex;
+    }
+    .date_check{
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+    .date_title{
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+        font-size: 1.2em;
+        margin-right: 15px;
+    }
+    .date_pick{
+        text-align: center;
+        width: 140px;
+        font-size: 1.1em;
+    }
+    .date_between{
+        width: 30px;
+    }
+    .intro_txt{
+		width: 500px;
+        font-size: 1.1em;
+	}
+    .btn{
+        margin-top: 40px;
+        width: 100%;
+    }
     .btn_cancel{
-        margin-right: 2.5%;
-        margin-left: 450px;
+        margin-right: 25px;
+        margin-left: 750px;
         padding: 2.5px 30px 2.5px 30px;
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
         font-size: 1.3em;
-        background-color: #f200a1;
+        background-color: lightgray;
     }
     .btn_clear{
         padding: 2.5px 30px 2.5px 30px;
@@ -70,45 +112,111 @@
         background-color: $green3;
     }
 }
-@media ( max-width: 500px ) {
+@media ( max-width: 1050px ) {
     .challengeMake{
-        
-        .cha_name{
-            font-size: 1.25em;
+        .pw_grid{
+            display: inline;
         }
-        .name_txtfield{
-            margin-left: 20px;
-            font-size: 1em;
+        .pw_between{
+            width: 0px;
         }
-        .category_txtfield{
-            margin-left: 20px;
-            font-size: 1em;
+        .btn{
+            margin-top: 15px;
         }
-        .category_selfield{
-            margin-left: 20px;
-            padding: 5%;
-            font-size: 1em;
+        .btn_cancel{
+            margin-left: 550px;
         }
-        .date_txtfield{
-            margin-left: 5px;
-            margin-right: 20px;
-            font-size: 0.8em;
+    }
+}
+@media ( max-width: 800px ) {
+    .challengeMake{
+        .pw_grid{
+            display: inline;
         }
-        .intro_txtfield{
-            margin-left: 10px;
+        .date_grid{
+            height: 70px;
+        }
+        .date_all{
+            display: inline;
+        }
+        .date_between{
+            width: 0px;
+            height: 20px;
+        }
+        .intro_txt{
             width: 300px;
-            height: 150px;
-            padding: 2%;
+        }
+        .name_txt{
+            width: 210px;
+        }
+        .category_txt{
+            width: 160px;
+        }
+        .category_sel{
+            width: 100px;
+            font-size: 1.1em;
+        }
+        .btn_cancel{
+            margin-left: 300px;
+        }
+    }
+}
+@media ( max-width: 550px ) {
+    .challengeMake{
+        .makefield{
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+        .info_grid, .date_grid{
+            margin-bottom: 15px;
+        }
+        .info_grid{
+            height: 50px;
+        }
+        .info_title, .date_alltitle{
+            font-size: 1.1em;
+            width: 80px;
+            word-break: keep-all;
+            margin-right: 20px;
+        }
+        .date_alltitle{
+            display: inline;
+        }
+        .intro_title{
+            font-size: 1.1em;
+            width: 80px;
+            margin-right: 20px;
+        }
+        .category_txt{
+            width: 140px;
+        }
+        .category_sel{
+            margin-left: 10px;
+            font-size: 1.1em;
+        }
+        .intro_txt{
+            width: 240px;
             font-size: 0.8em;
         }
-        .btn_out{
-            text-align: right;
+        .date_check{
+            width: 15px;
+            height: 15px;
+            margin-right: 0px;
+        }
+        .date_title{
+            font-size: 1em;
+        }
+        .date_between{
+            height: 10px;
+        }
+        .btn{
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .btn_cancel{
             margin-left: 0px;
-        }
-        .btn_clear{
-            margin-right: 50px;
         }
     }
 }
