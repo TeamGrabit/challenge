@@ -1,0 +1,71 @@
+.challengeList{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	
+	.cha_list{
+		margin-left: 5vw;
+		margin-top: 1vh;
+		width: 90vw;
+	}
+	.cha_box{
+		width: 80%;
+	}
+	.cha_inner{
+		position: relative;
+		padding-top: 25%;
+		padding-bottom: 25%;
+		background-color: $green3;
+		border: black 1px solid;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 2.5em;
+	}
+	.cha_inner:hover{
+		background-color: $green4;
+		transition-duration: 0.4s;
+	}
+	.wheel{
+		margin-left: 82.5%;
+		margin-bottom: 32.5%;
+		position: absolute;
+		display: flex;
+		width: 10%;
+		height: 10%;
+	}
+	.cha_manage{
+		position: absolute;
+		width: 20px;
+		height: 20px;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+	.cha_manage:hover{
+		transition-duration: 0.4s;
+		background-color: white;
+	}
+	.cha_make{
+		position: relative;
+		padding-top: 25%;
+		padding-bottom: 25%;
+		background-color: $green1;
+		border: black 1px dashed;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 2.5em;
+	}
+	.cha_make:hover{
+		transition-duration: 0.4s;
+		background-color: $green2;
+	}
+	.inner_text{
+		position: absolute;
+		padding-right: 5%;
+		padding-left: 5%;
+		text-align: center;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+		font-size: 1.25em;
+	}
+}
