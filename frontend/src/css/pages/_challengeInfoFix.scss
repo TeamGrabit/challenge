@@ -9,7 +9,7 @@
 	.title{
 		margin-top: 10vh;
 		margin-bottom: 5vh;
-		font-size: 4vmax;
+		font-size: 40px;
 		font-weight: 500;
 		font-family: 'Courier New', Courier, monospace;
 	}
@@ -19,11 +19,42 @@
 	.box{
 		display: flex;
 		border: 1px solid black;
-		height: 50vh;
-		width: 70vw;
+		width: 1000px;
+		height: 400px;
 		justify-content: center;
 		align-items: center;
 		margin-bottom: 5vh;
+
+		.left-con{
+			width: 100%;
+	
+			.myGrass{
+				display: flex !important;
+				flex-direction: column;
+				flex-wrap: wrap;
+				align-content: center;
+				height: 350px;
+
+				.setBtn{
+					background-color: white;
+					border: none;
+					color: white;
+					
+					.grass{
+						width: 40px;
+						height: 40px;
+						margin: 5px;
+						border-radius: 10%;
+					}
+					.fill-grass{
+						background-color: $green3;
+					}
+					.unfill-grass{
+						background-color: antiquewhite;
+					}
+				}
+			}
+		}
 	}
 	.Btn{
 		font-size: 3vmin;
@@ -39,4 +70,5 @@
 		width: 70vw;
 		height: 7vh;
 	}
+	
 }
