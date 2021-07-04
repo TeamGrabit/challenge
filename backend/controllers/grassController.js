@@ -1,6 +1,7 @@
 const gitData = require('../models/gitDataModel');
 const crawling = require('../functions/crawling');
 const Approve = require('../models/approveModel');
+const { CreateGitData } = require('../functions/crawling');
 
 function dateToString(date) { // 시간 빼고 오직 년월일만 
 	var year = date.getFullYear();
@@ -26,7 +27,11 @@ async function GetPersonalGrass(req, res){
         console.log(approve);
 
         // 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
-        const gitAll = await gitData.findOneByUserId(user_id);
+        var gitAll = await gitData.findOneByUserId(user_id);
+		if(gitAll === null){
+			await CreateGitData(user_id);
+			gitAll = await gitData.findOneByUserId(user_id);
+		}
         const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
         console.log(git);
 

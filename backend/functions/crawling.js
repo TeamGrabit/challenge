@@ -3,6 +3,9 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+const gitData = require('../models/gitDataModel');
+const User = require('../models/userModel');
+
 /*
 	getDate()
 	result에 2021년부터 현재년도까지 담음.
@@ -139,7 +142,24 @@ const isLastDay = (date) => {
 	else return false;
 }
 
+/* 유저의 깃 데이터가 없을 때 처리해주는 함수 */
+async function CreateGitData(userId) {
+	const user = await User.findOneByUsername(userId);
+	if (user) {
+		// 이미 생성된 grass가 있는지?
+		const grass = await gitData.findOneByUserId(userId)
+		if(grass) throw 'grass already exists'
+
+		// 깃 크롤링
+		const commit_data = await crawlingModule(user.git_id);
+		await gitData.create(userId, user.git_id, commit_data);
+	} else {
+		throw 'user not exists';
+	}
+}
+
 module.exports = {
 	crawlingModule: crawlingModule,
-	getCommitDate: getCommitDate
+	getCommitDate: getCommitDate,
+	CreateGitData: CreateGitData
 }
