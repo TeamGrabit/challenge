@@ -2,6 +2,7 @@ import React, { useContext, createContext } from 'react';
 import axios from 'axios';
 import { useUserState, useUserDispatch } from '../Model/UserModel';
 import { API_URL } from '../../CommonVariable';
+import { useGetChallenge } from './ChallengeViewModel';
 
 const LoginUserContext = createContext((id, pw) => {});
 const LogoutUserContext = createContext(() => {});
@@ -20,6 +21,7 @@ export const UserLogicProvider = ({ children }) => {
 				...res.data,
 				auth: "user"
 			});
+			sessionStorage.setItem("isLogined", true);
 		});
 		console.log(user);
 	};
@@ -30,7 +32,7 @@ export const UserLogicProvider = ({ children }) => {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data.result);
-			if (res.data.result === "ok") flag = true;
+			if (res.data.result) flag = true;
 		});
 		await VerifyUser();
 		return flag;
