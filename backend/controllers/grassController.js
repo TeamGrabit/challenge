@@ -39,16 +39,26 @@ async function GetPersonalGrass(req, res){
         const dates = Array.from(new Set(approve.concat(git))).sort();
         console.log(dates);
 
-        // 세달동안 , 1~마지막일 까지의 커밋 여부를 true, false 배열로 만들기 
-        const dateCount = new Date(year, month-2, 0).getDate()+new Date(year, month-1, 0).getDate()+new Date(year, month, 0).getDate();
-        const isCommitedList = new Array(dateCount).fill(false); // 우선 전부 다 false
-       
-        var tempDate = new Date(year, month-3); 
-        for(var i=0; i< dateCount;i++){
-            if (dates.find(element => element == dateToString(tempDate)) !== undefined)
-                isCommitedList[i] = true;
-            tempDate.setDate(tempDate.getDate()+1);
-        }
+        // 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 true, false 배열로 만들기 
+        const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
+        const isCommitedList = []; 
+        var tempDate = new Date(year, month-3);
+        dateCounts.forEach(dateCount => {
+            var monthList = new Array(dateCount).fill(false);
+            for(var i=0; i< dateCount;i++){
+                if (dates.find(element => element == dateToString(tempDate)) !== undefined)
+                    monthList[i] = true;
+                tempDate.setDate(tempDate.getDate()+1);
+            }
+            isCommitedList.push(monthList);
+        });
+        console.log(isCommitedList);
+        // var tempDate = new Date(year, month-3); 
+        // for(var i=0; i< dateCount;i++){
+        //     if (dates.find(element => element == dateToString(tempDate)) !== undefined)
+        //         isCommitedList[i] = true;
+        //     tempDate.setDate(tempDate.getDate()+1);
+        // }
         // console.log(isCommitedList);
         res.status(201).json({isCommitedList: isCommitedList});
     }catch(err) {
