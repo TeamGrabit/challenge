@@ -5,6 +5,8 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
+const bcrypt = require('bcrypt');
+const { checkPreferences } = require('joi');
 
 async function CreateChallenge(req, res) {
 	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
@@ -89,15 +91,15 @@ function GetChallengeInfo(req, res) {
 	const id = ObjectID(challengeId);
 
 	Challenge.findById(id)
-	.then((doc) => {
-		console.log("challengeInfo 받음");
-		console.log(doc._id)
-		res.send(doc)
-	})
-	.catch((err) => {
-		console.log(err)
-		res.send(err)
-	})
+		.then((doc) => {
+			console.log("challengeInfo 받음");
+			console.log(doc._id)
+			res.send(doc)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
 
 }
 
@@ -167,7 +169,7 @@ function DeleteChallenge(req, res) {
 }
 
 async function JoinChallenge(req, res) {
-	const { userId, challengeId } = req.body;
+	const { userId, challengeId, private_key } = req.body;
 	const id = ObjectID(challengeId);
 
 	var userArray
@@ -213,47 +215,60 @@ async function JoinChallenge(req, res) {
 			res.send('false');
 		})
 
-	challenge = await Challenge.findOneById(id)
-	if (challenge === null) {
-		res.send('false')
-		throw new Error('not exist challenge');
-	}
-
-	userArray = challenge.challenge_users
-	userCount = challenge.challenge_user_num + 1
-
-	for (let i = 0; i < userArray.length; i++) {
-		if (userArray[i] === userId) {
+	const join = async () => {
+		challenge = await Challenge.findOneById(id)
+		if (challenge === null) {
+			console.log('not exist challenge')
 			res.send('false')
-			throw new Error('이미 가입되어 있음')
 		}
+
+		userArray = challenge.challenge_users
+		userCount = challenge.challenge_user_num + 1
+
+		for (let i = 0; i < userArray.length; i++) {
+			if (userArray[i] === userId) {
+				console.log('이미 가입되어 있음')
+				res.send('false')
+			}
+		}
+		userArray.push(userId)
+
+		//commitCount 추가
+		newCommitCount = challenge.commitCount
+		const addCommitCount = challenge.commitCount.create({ _id: userId })
+		newCommitCount.push(addCommitCount)
+
+		join_ch(userArray, userCount, newCommitCount)
+
+		user = await User.findOneByUsername(userId)
+		if (user === null) {
+			console.log('user가 존재하지 않음.')
+			res.send('false')
+		}
+		var chArray;
+		chArray = user.ch_list
+		if (chArray.indexOf(challengeId) >= 0) {	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
+			console.log('already join')
+			res.send('false')
+		}
+		chArray.push(challengeId);
+
+		join_user(chArray)
 	}
-	userArray.push(userId)
 
-	//commitCount 추가
-	newCommitCount = challenge.commitCount
-	const addCommitCount = challenge.commitCount.create({ _id: userId })
-	newCommitCount.push(addCommitCount)
-
-	join_ch(userArray, userCount, newCommitCount)
-
-	user = await User.findOneByUsername(userId)
-	if (user === null) {
-		res.send('false')
-		throw new Error('user가 존재하지 않음.');
-	}
-	var chArray;
-	chArray = user.ch_list
-	if (chArray.indexOf(challengeId) >= 0) {	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
-		res.send('false')
-		throw new Error('already join');
-	}
-	chArray.push(challengeId);
-	
-	join_user(chArray)
-
-
-
+	const hashKey = await Challenge.findById(id).then((ch) => { return ch.private_key })
+	bcrypt.compare(private_key, hashKey, function (err, check) {
+		if (err) {
+			console.log(err)
+			res.send('false')
+		} else {
+			if (check) join()
+			else {
+				console.log('private_key different!')
+				res.send('false')
+			}
+		}
+	})
 }
 
 function OutChallenge(req, res) {
@@ -312,31 +327,40 @@ function OutChallenge(req, res) {
 	})
 }
 
-function InviteUser(req, res) {
-
-}
-
-function ChangeKey(req, res) {
+async function ChangeKey(req, res) {
 	const { userId, private_key } = req.body;
 	const challengeId = req.params.challengeId;
+	const ch_id = ObjectID(challengeId)
 
-	Challenge.findOneById(challengeId)
-	.then((ch) => {
-		if (userId === ch.challenge_leader){
-			changePrivateKey();
-		}else{
-			throw new Error('leader가 아님.')
-		}
-	})
-	.catch((err) => {
-		console.error(err);
-		res.send('false')
-	})
+	Challenge.findOneById(ch_id)
+		.then((ch) => {
+			if (userId === ch.challenge_leader) {
+				bcrypt.genSalt(10, (err, salt) => {
+					if (err) {
+						console.error(err);
+						res.send('false')
+					}
+					bcrypt.hash(private_key, salt, (err, hash) => {
+						if (err) {
+							console.error(err);
+							res.send('false')
+						}
+						changePrivateKey(hash)
+					})
+				})
+			} else {
+				throw new Error('leader가 아님.')
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			res.send('false')
+		})
 
-	const changePrivateKey = () => {
+	const changePrivateKey = (hash_key) => {
 		Challenge.findByIdAndUpdate(challengeId, {
 			$set: {
-				private_key: private_key
+				private_key: hash_key
 			}
 		}, { new: true, useFindAndModify: false }, (err, doc) => {
 			if (err) {
@@ -350,6 +374,9 @@ function ChangeKey(req, res) {
 			}
 		})
 	}
+}
+
+function InviteUser(req, res) {
 
 }
 
