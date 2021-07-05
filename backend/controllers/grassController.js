@@ -53,13 +53,7 @@ async function GetPersonalGrass(req, res){
             isCommitedList.push(monthList);
         });
         console.log(isCommitedList);
-        // var tempDate = new Date(year, month-3); 
-        // for(var i=0; i< dateCount;i++){
-        //     if (dates.find(element => element == dateToString(tempDate)) !== undefined)
-        //         isCommitedList[i] = true;
-        //     tempDate.setDate(tempDate.getDate()+1);
-        // }
-        // console.log(isCommitedList);
+      
         res.status(201).json({isCommitedList: isCommitedList});
     }catch(err) {
         console.log(err);
