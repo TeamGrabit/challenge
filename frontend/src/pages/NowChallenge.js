@@ -3,16 +3,17 @@ import { Button, Grid, Typography, Modal, Fade, Backdrop, TextField, IconButton 
 import AddIcon from '@material-ui/icons/Add';
 import Slider from 'react-slick';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
-import { useLogoutUser, useVerifyUser } from '../MVVM/ViewModel/UserViewModel';
+import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function NowChallenge({ match }) {
-	const userVerify = useVerifyUser();
-	useEffect(() => {
-		userVerify();
-	}, []);
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
-	console.log(challengeData);
+	const [detailData, setDetailData] = useState();
+	useEffect(() => {
+		setDetailData(challengeData);
+		const key = new Date();
+	}, [challengeData]);
+	if (detailData) console.log(detailData[CId].name);
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
 	const [admitOpen, setAdmitOpen] = useState(false);
@@ -45,13 +46,6 @@ function NowChallenge({ match }) {
 		className: 'grass-slider'
 	};
 	// grass carousel setting -->
-	useEffect(() => {
-		// 추후 challengeId 넣어서 해당 정보만 받아아오기
-		if (challengeData[CId] !== null) {
-			console.log(challengeData[CId].name);
-			setTitle(challengeData[CId].name);
-		}
-	}, [CId, challengeData]);
 	const grassHandler = () => {
 		window.location.href = `/challenge/info/${CId}/fix`;
 	};

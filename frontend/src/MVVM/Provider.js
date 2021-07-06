@@ -8,9 +8,7 @@ function Provider() {
 	return (
 		<Model>
 			<ViewModel>
-				<Layout>
-					<Router />
-				</Layout>
+				<Router />
 			</ViewModel>
 		</Model>
 	);

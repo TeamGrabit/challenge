@@ -18,10 +18,11 @@ export const ChallengeLogicProvider = ({ children }) => {
 		if (user.userId !== undefined) getChallenge();
 	}, [user]);
 	const getChallenge = async () => {
-		console.log(user);
-		await axios.get(`${API_URL}/challenge/list/${user.userId}`).then((res) => {
+		axios.get(`${API_URL}/challenge/list/${user.userId}`).then((res) => {
 			challengeDispatch(res.data);
-		});
+			console.log(res.data);
+		})
+			.catch((error) => { console.log(error); });
 	};
 	const saveChallenge = () => {
 
