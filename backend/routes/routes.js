@@ -6,7 +6,9 @@ const userController = require('../controllers/userController');
 const gitDataController = require('../controllers/gitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
+const grassController = require('../controllers/grassController');
 const mailContriller = require('../controllers/authMailController');
+
 // <-- userCon
 router.post('/signup', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
@@ -29,6 +31,10 @@ router.get('/grass', gitDataController.getData);
 router.delete('/grass', gitDataController.deleteData);
 router.put('/grass', gitDataController.putData);
 // gitCrawlData -->
+
+// <-- grassController 
+router.get('/grass/personal', grassController.getPersonalGrass);
+// grassController -->
 
 router.post('/challenge', challengeController.createChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
