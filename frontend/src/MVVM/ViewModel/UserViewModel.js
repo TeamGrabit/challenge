@@ -66,15 +66,11 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const CheckAuthMail = async (Email, AuthNum) => {
-		try {
-			await axios.get(`${API_URL}/authmail/check`, { email: Email, authNum: AuthNum })
-				.then((res) => { console.log(res.error); });
-			return false;
-		} catch (e) {
-			console.log(e);
-		}
-		return false;
+	const CheckAuthMail = async (email, authNum) => {
+		let flag = false;
+		await axios.post(`${API_URL}/authmail/check`, { email, authNum })
+			.then((res) => { flag = res.data.result; });
+		return flag;
 	};
 	const SignUp = async () => {
 

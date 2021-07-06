@@ -41,6 +41,7 @@ function RegisterForm({ changeStatus }) {
 	const [isIdUnique, setIsIdUnique] = useState(false); // ID 중복 확인 여부
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
+	console.log(isMailAuth);
 	const updateField = (e) => {
 		setUserInfo({
 			...userInfo,
@@ -57,8 +58,9 @@ function RegisterForm({ changeStatus }) {
 		setIsSend(result);
 	};
 	const authMailCheckHandler = async () => { // email 인증번호 맞게 입력했는지 확인
-		const result = await authMailCheck(authNum);
+		const result = await authMailCheck(userInfo.email, authNum);
 		if (result) { alert('인증에 성공했습니다.'); } else { alert('인증번호가 올바르지 않습니다. 다시 한 번 확인해주세요'); }
+		console.log(result);
 		setisMailAuth(result);
 	};
 	const check = () => {
@@ -111,6 +113,7 @@ function RegisterForm({ changeStatus }) {
 						placeholder="email을 입력하세요"
 						value={userInfo.email}
 						onChange={updateField}
+						disabled={isMailAuth}
 						error={!isEmail(userInfo.email)}
 						// helperText="이메일 형식을 맞춰주세요"
 					/>
@@ -135,12 +138,14 @@ function RegisterForm({ changeStatus }) {
 							placeholder="인증번호를 입력하세요"
 							helperText="이메일로 전송된 인증번호를 입력하세요"
 							value={authNum}
+							disabled={isMailAuth}
 							onChange={(e) => setAuthNum(e.target.value)}
 						/>
 						<Button
 							className="btn-nextHelper"
 							variant="contained"
 							onClick={authMailCheckHandler}
+							disabled={isMailAuth}
 						>
 							인증 완료
 						</Button>
