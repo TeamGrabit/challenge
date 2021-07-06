@@ -20,7 +20,7 @@ var Approve = new Schema({
     },
     date:{
         type: Date,
-        default: Date.now
+        default: new Date()
     },
     approve_user:{
         type: Array,

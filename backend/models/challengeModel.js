@@ -2,6 +2,7 @@ const { date } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
+const { ObjectID } = require('mongodb');
 
 
 const CommitSchema = new Schema({
@@ -14,7 +15,7 @@ const CommitSchema = new Schema({
 	},
 	join_time: {
 		type: Date,
-		default: Date.now
+		default: new Date()
 	}
 });
 
@@ -26,7 +27,7 @@ var Challenge = new Schema({
 	},
 	challenge_start: {
 		type: Date,
-		default: Date.now,
+		default: new Date(),
 	},
 	challenge_end: {
 		type: Date
@@ -56,20 +57,6 @@ var Challenge = new Schema({
 	versionKey: false
 });
 
-Challenge.pre("save", function (next) {
-	var challenge = this;
-	if (challenge.isModified("private_key")) {
-		bcrypt.genSalt(10, (err, salt) => {
-			if (err) return next(err);
-			bcrypt.hash(challenge.private_key, salt, (err, hash) => {
-				if (err) return next(err)
-				challenge.private_key = hash;
-				next();
-			})
-		})
-	}
-})
-
 Challenge.statics.create = function (userId, name, challenge_start, challenge_end, private_key) {
 	const challenge = new this({
 		name,
@@ -91,23 +78,10 @@ Challenge.statics.create = function (userId, name, challenge_start, challenge_en
 	return challenge.save()
 }
 
-
 Challenge.statics.findOneById = function (id) {
 	return this.findOne({
 		_id: id
 	}).exec()
-}
-
-Challenge.statics.privateCheck = async function(ch_id, key){
-	const challenge = await this.findOne({"_id":ch_id});
-
-	bcrypt.compare(key, challenge.private_key, (err, res) => {
-		if (err){
-			return false;
-		}
-		if (res) return true;
-		else return false
-	})
 }
 
 module.exports = mongoose.model('challenges', Challenge);

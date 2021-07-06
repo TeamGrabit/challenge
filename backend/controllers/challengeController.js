@@ -215,8 +215,7 @@ async function JoinChallenge(req, res) {
 			res.send('false');
 		})
 
-	const join = async () => {
-		challenge = await Challenge.findOneById(id)
+	const join = async (challenge) => {
 		if (challenge === null) {
 			console.log('not exist challenge')
 			res.send('false')
@@ -256,19 +255,12 @@ async function JoinChallenge(req, res) {
 		join_user(chArray)
 	}
 
-	const hashKey = await Challenge.findById(id).then((ch) => { return ch.private_key })
-	bcrypt.compare(private_key, hashKey, function (err, check) {
-		if (err) {
-			console.log(err)
-			res.send('false')
-		} else {
-			if (check) join()
-			else {
-				console.log('private_key different!')
-				res.send('false')
-			}
-		}
-	})
+	const challenge = await Challenge.findById(id)
+	if (challenge.private_key === private_key) join(challenge)
+	else {
+		console.log('private_key different!')
+		res.send('false')
+	}
 }
 
 function OutChallenge(req, res) {
@@ -335,18 +327,20 @@ async function ChangeKey(req, res) {
 	Challenge.findOneById(ch_id)
 		.then((ch) => {
 			if (userId === ch.challenge_leader) {
-				bcrypt.genSalt(10, (err, salt) => {
+				Challenge.findByIdAndUpdate(challengeId, {
+					$set: {
+						private_key: hash_key
+					}
+				}, { new: true, useFindAndModify: false }, (err, doc) => {
 					if (err) {
-						console.error(err);
+						console.log(err)
 						res.send('false')
 					}
-					bcrypt.hash(private_key, salt, (err, hash) => {
-						if (err) {
-							console.error(err);
-							res.send('false')
-						}
-						changePrivateKey(hash)
-					})
+					else {
+						console.log("private_key 변경")
+						console.log(doc._id)
+						res.send('true')
+					}
 				})
 			} else {
 				throw new Error('leader가 아님.')
@@ -357,23 +351,6 @@ async function ChangeKey(req, res) {
 			res.send('false')
 		})
 
-	const changePrivateKey = (hash_key) => {
-		Challenge.findByIdAndUpdate(challengeId, {
-			$set: {
-				private_key: hash_key
-			}
-		}, { new: true, useFindAndModify: false }, (err, doc) => {
-			if (err) {
-				console.log(err)
-				res.send('false')
-			}
-			else {
-				console.log("private_key 변경")
-				console.log(doc._id)
-				res.send('true')
-			}
-		})
-	}
 }
 
 function InviteUser(req, res) {

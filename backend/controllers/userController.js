@@ -91,6 +91,28 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 		return challengeList
 	  }
 
+	const checkDate = async (id) => {
+		const changeState = () => {
+			Challenge.findByIdAndUpdate(id, {
+				$set: {
+					state: 1
+				}
+			}, { new: true, useFindAndModify: false }, (err, doc) => {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					console.log("challenge state 수정")
+					console.log(doc._id)
+				}
+			})
+		}
+		const challenge = await Challenge.findById(id)
+		const currentDate = new Date()
+		if (challenge.challenge_end !== undefined && challenge.challenge_end.valueOf() < currentDate.valueOf())
+			changeState()
+	}
+
 	User.findOneByUsername(userId)
 		.then((user) => {
 			if (user) {
@@ -102,6 +124,9 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 		})
 		.then((list) => getList(list))
 		.then((challengeList) => {
+			for (let i=0; i<challengeList.length; i++){
+				checkDate(challengeList[i])
+			}
 			console.log(challengeList)
 			res.send(challengeList)
 		})
