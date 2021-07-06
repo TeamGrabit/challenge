@@ -72,6 +72,7 @@ async function CheckAuthNum(req, res) {
             res.status(201).json({result: false});
         }
     } catch(e) {
+        console.log(e);
         res.status(401).json({ error: e});
     }
 }
