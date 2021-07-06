@@ -6,6 +6,8 @@ import { API_URL } from '../../CommonVariable';
 const LoginUserContext = createContext((id, pw) => {});
 const LogoutUserContext = createContext(() => {});
 const VerifyUserContext = createContext(() => {});
+const SendAuthMailContext = createContext((email) => {});
+const CheckAuthMailContext = createContext((email, authNum) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -54,14 +56,38 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SignUp = () => {
+	const SendAuthMail = async (eMail) => {
+		let flag = false;
+		await axios.post(`${API_URL}/authmail/send`, { email: eMail })
+			.then((res) => {
+				console.log(res);
+				if (res.data.result === "success") flag = true;
+			});
+		return flag;
+	};
+
+	const CheckAuthMail = async (Email, AuthNum) => {
+		try {
+			await axios.get(`${API_URL}/authmail/check`, { email: Email, authNum: AuthNum })
+				.then((res) => { console.log(res.error); });
+			return false;
+		} catch (e) {
+			console.log(e);
+		}
+		return false;
+	};
+	const SignUp = async () => {
 
 	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
 				<VerifyUserContext.Provider value={VerifyUser}>
-					{children}
+					<SendAuthMailContext.Provider value={SendAuthMail}>
+						<CheckAuthMailContext.Provider value={CheckAuthMail}>
+							{children}
+						</CheckAuthMailContext.Provider>
+					</SendAuthMailContext.Provider>
 				</VerifyUserContext.Provider>
 			</LogoutUserContext.Provider>
 		</LoginUserContext.Provider>
@@ -80,5 +106,15 @@ export function useLogoutUser() {
 
 export function useVerifyUser() {
 	const context = useContext(VerifyUserContext);
+	return context;
+}
+
+export function useSendAuthMail() {
+	const context = useContext(SendAuthMailContext);
+	return context;
+}
+
+export function useCheckAuthMail() {
+	const context = useContext(CheckAuthMailContext);
 	return context;
 }
