@@ -1,8 +1,6 @@
 const AuthMail = require('../models/authMailModel')
 const nodemailer = require('nodemailer');
 
-require("dotenv").config();
-
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     host: "smtp.gmail.com", // gmail로 host 설정
@@ -13,11 +11,6 @@ let transporter = nodemailer.createTransport({
         user: process.env.NODEMAILER_USER,
         // Gmail 패스워드 입력
         pass: process.env.NODEMAILER_PASS,
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFERSH_TOKEN,
-        accessToken: process.env.ACCESS_TOKEN,
-        expire: 3600,
     },
 });
 
