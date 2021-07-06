@@ -80,15 +80,17 @@ function NowChallenge({ match }) {
 						</Grid>
 					</Grid>
 					<Grid className="right-con">
-						<Typography className="sub-title">최근 커밋 로그</Typography>
-						<Grid className="commit-log">
+						<Typography className="sub-title">이달의 커밋왕</Typography>
+						<Grid className="commitKing">
 							{/* 백엔드에서 내용 불러오기 */}
-							<p className="rank">log</p>
+							<p className="rank">1등: 이현광</p>
+							<p className="rank">2등: 김수빈</p>
+							<p className="rank">3등: 차현철</p>
 						</Grid>
 					</Grid>
 				</Grid>
 				<Grid className="lastGrid">
-					{/* 팀원 잔디, 실패왕, 최근커밋로그 */}
+					{/* 팀원 잔디, 실패왕 */}
 					<Grid className="left-con">
 						<Typography className="sub-title">다른 잔디</Typography>
 						<Slider {...settings}>
@@ -108,15 +110,6 @@ function NowChallenge({ match }) {
 						<Grid className="failKing">
 							{/* 백엔드에서 내용 불러오기 */}
 							<p className="rank">김바다</p>
-						</Grid>
-					</Grid>
-					<Grid className="right-con">
-						<Typography className="sub-title">이달의 커밋왕</Typography>
-						<Grid className="commitKing">
-							{/* 백엔드에서 내용 불러오기 */}
-							<p className="rank">1등: 이현광</p>
-							<p className="rank">2등: 김수빈</p>
-							<p className="rank">3등: 차현철</p>
 						</Grid>
 					</Grid>
 				</Grid>
