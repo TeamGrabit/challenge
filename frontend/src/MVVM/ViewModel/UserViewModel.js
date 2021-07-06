@@ -8,6 +8,7 @@ const LogoutUserContext = createContext(() => {});
 const VerifyUserContext = createContext(() => {});
 const SendAuthMailContext = createContext((email) => {});
 const CheckAuthMailContext = createContext((email, authNum) => {});
+const CheckUniqueIdContext = createContext((id) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -72,6 +73,13 @@ export const UserLogicProvider = ({ children }) => {
 			.then((res) => { flag = res.data.result; });
 		return flag;
 	};
+
+	const CheckUniqueId = async (id) => {
+		let flag = false;
+		await axios.get(`${API_URL}/user/uniqueid/${id}`)
+			.then((res) => { flag = !res.data.duplicate; console.log(res.data.duplicate); });
+		return flag;
+	};
 	const SignUp = async () => {
 
 	};
@@ -81,7 +89,9 @@ export const UserLogicProvider = ({ children }) => {
 				<VerifyUserContext.Provider value={VerifyUser}>
 					<SendAuthMailContext.Provider value={SendAuthMail}>
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
-							{children}
+							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
+								{children}
+							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
 					</SendAuthMailContext.Provider>
 				</VerifyUserContext.Provider>
@@ -112,5 +122,10 @@ export function useSendAuthMail() {
 
 export function useCheckAuthMail() {
 	const context = useContext(CheckAuthMailContext);
+	return context;
+}
+
+export function useCheckUniqueId() {
+	const context = useContext(CheckUniqueIdContext);
 	return context;
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { withStyles, Box, Button, TextField } from '@material-ui/core';
-import { useSendAuthMail, useCheckAuthMail } from '../MVVM/ViewModel/UserViewModel';
+import { useSendAuthMail, useCheckAuthMail, useCheckUniqueId } from '../MVVM/ViewModel/UserViewModel';
 
 const CssTextField = withStyles({
 	root: {
@@ -41,15 +41,18 @@ function RegisterForm({ changeStatus }) {
 	const [isIdUnique, setIsIdUnique] = useState(false); // ID 중복 확인 여부
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
-	console.log(isMailAuth);
+	const uniqueIdCheck = useCheckUniqueId();
+
 	const updateField = (e) => {
 		setUserInfo({
 			...userInfo,
 			[e.target.name]: e.target.value
 		});
 	};
-	const idCheckHandler = () => { // ID 중복 체크 확인
-		setIsIdUnique(true);
+	const idCheckHandler = async () => { // ID 중복 체크 확인
+		const result = await uniqueIdCheck(userInfo.id);
+		if (result) { alert('사용 가능한 id입니다.'); } else { alert('이미 존재하는 id입니다. 새로 입력해주세요'); }
+		setIsIdUnique(result);
 	};
 	const authMailSendHandler = async () => { // mail 전송
 		const result = await authMailSend(userInfo.email);
@@ -162,11 +165,13 @@ function RegisterForm({ changeStatus }) {
 						placeholder="아이디를 입력하세요"
 						value={userInfo.id}
 						onChange={updateField}
+						disabled={isIdUnique}
 					/>
 					<Button
 						className="btn"
 						variant="contained"
 						onClick={idCheckHandler}
+						disabled={isIdUnique}
 					>
 						중복 확인
 					</Button>
