@@ -6,17 +6,21 @@ import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function NowChallenge({ match }) {
+	console.log(match);
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
-	const [detailData, setDetailData] = useState();
-	useEffect(() => {
-		setDetailData(challengeData);
-		const key = new Date();
-	}, [challengeData]);
-	if (detailData) console.log(detailData[CId].name);
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
 	const [admitOpen, setAdmitOpen] = useState(false);
+	useEffect(() => {
+		challengeData.map((c, i) => {
+			if (String(i) === CId) {
+				console.log(i);
+				setTitle(c.name);
+			}
+			return 1;
+		});
+	}, [challengeData]);
 	// grass Init Data --- temp
 	const grassInitialData = [
 		true, false, false, false, true, false, false,

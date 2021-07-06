@@ -4,25 +4,27 @@ import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowC
 
 import '../css/main.scss';
 import { Layout } from '../components';
+import { ChallengeProvider } from '../MVVM/Provider';
+import ContextRoute from './ContextRoute';
 
 function Router() {
 	return (
-		<Layout>
-			<BrowserRouter>
+		<BrowserRouter>
+			<Layout>
 				<Switch>
+					<Route exact path="/" component={Intro} />
 					<Route exate path="/login" component={LogIn} />
-					<Route exact path="/challenge" component={Main} />
+					<Route exact path="/register" component={Register} />
+					<ContextRoute path="/challenge" Component={Main} exact Provider={ChallengeProvider} />
+					<ContextRoute path="/challenge/info/:challengeId" exact Component={NowChallenge} Provider={ChallengeProvider} />
+					<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
+					<Route exact path="/challenge/manage/:challengeId" component={ManageChallenge} />
 					<Route exact path="/challenge/make" component={ChallengeMake} />
 					<Route exact path="/color" component={colorTest} />
 					<Route exact path="/mypage" component={MyPage} />
-					<Route exact path="/register" component={Register} />
-					<Route exact path="/" component={Intro} />
-					<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
-					<Route exact path="/challenge/info/:challengeId" component={NowChallenge} />
-					<Route exact path="/challenge/manage/:challengeId" component={ManageChallenge} />
 				</Switch>
-			</BrowserRouter>
-		</Layout>
+			</Layout>
+		</BrowserRouter>
 	);
 }
 
