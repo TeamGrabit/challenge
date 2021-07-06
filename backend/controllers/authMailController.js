@@ -55,14 +55,18 @@ async function SendAuthMail(req, res){
 
 async function CheckAuthNum(req, res) {
     try {
+        console.log(req.body);
         const email = req.body.email;
         const input_num = req.body.authNum;
 
         const info = await AuthMail.findRecentByEmail(email);
-        if (info.auth_num == input_num) {
+        console.log(info);
+        if (info === undefined) throw "메일 정보 없음";
+        if (info.auth_num === input_num) {
             // 인증 성공
             // 해당 email 관련 데이터 스키마에서 삭제 
-            AuthMail.deleteMany({"email": email});
+            console.log("success");
+            await AuthMail.deleteMany({"email": email});
 
             res.status(201).json({result: true});
 
