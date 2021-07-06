@@ -30,8 +30,9 @@ AuthMail.statics.create = function(email, auth_num) {
 
 AuthMail.statics.findRecentByEmail = async function(email) { 
     // 해당 email에 대한 모든 데이터 찾아서 내림차순 정렬 
+    //console.log(email);
     const result = await this.find({"email": email}).sort({"date":-1});
-    // console.log(result[0]);
+    //console.log(result);
     return result[0]; //가장 최신값
 }
 

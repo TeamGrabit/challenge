@@ -20,7 +20,7 @@ router.get('/user/uniqueid/:userId', userController.checkIdDupl);
 
 // <-- mailCon
 router.post('/authmail/send', mailContriller.sendAuthMail);
-router.get('/authmail/check', mailContriller.checkAuthNum);
+router.post('/authmail/check', mailContriller.checkAuthNum);
 // mailCon --> 
 
 // <-- gitCrawlData

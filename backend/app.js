@@ -26,8 +26,8 @@ mongoose.connect(config.mongoURI,{
 .catch(err => console.log(err));
 
 app.use(cors({
-    origin: process.env.CORSORIGIN,
-    credentials: true,
+    // origin: process.env.CORSORIGIN,
+    // credentials: true,
 }));
 app.use(expressSession({
     resave: false,
