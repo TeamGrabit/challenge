@@ -22,25 +22,6 @@ function CreateChallenge(req, res) {
 
 }
 
-function DelUserInchallege(req,res){
-    const challengeId = req.params.challengeId;
-    const userId = req.params.userId;
-
-    const id = ObjectID(challengeId);
-
-    Challenge.findOneById(id).then((ch)=>{
-        const preUser=ch.challenge_users;
-        console.log(preUser);
-        preuser.splice(preUser.indexOf(userId),1);
-        console.log(preUser);
-    }, (err,doc) =>{
-        if(err){
-            console.log(err);
-        }else{
-            console.log("Update =>"+perUser);
-        }
-    })
-}
 
 
 
@@ -52,15 +33,15 @@ async function WhoIsKing(req, res) {
 	await Challenge.findOneById(id).then(async (challenge)=> {
 		
 		var commit =challenge.commitCount;
-		console.log(commit);
+		
 
 		commit.sort(function(a, b) { // 내림차순
 			return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
-			// 광희, 명수, 재석, 형돈
+			
 		});
 
 		for(let i=0;i<3;i++){
-			await User.findById(commit[i]._id).then((user)=> {
+			await User.findOne({user_id:commit[i]._id}).then((user)=> {
 				
 				usercommit.push(user);
 				
@@ -84,20 +65,22 @@ async function WhoIsKing(req, res) {
 	res.send(usercommit);
 	res.end;
 }
+
+
 async function WhoIsPoor(req, res) {
 	const challengeId= req.params.challengeId;
 	const id = ObjectID(challengeId);
 	var Puser =[];
 
 	await Challenge.findById(id).then(async (chcommit) => {
-		commit=chcommit.commitCount;
+		var commit=chcommit.commitCount;
 		
 
 		commit.sort(function(a, b) { // 내림차순
 		return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
 	})
 	
-	await User.findById(commit[0]._id).then((user) =>{
+	await User.findOne({user_id:commit[0]._id}).then((user) =>{
 		Puser=user;
 
 	}, (err,doc) => {
@@ -105,10 +88,10 @@ async function WhoIsPoor(req, res) {
 			console.log(err);
 			res.send(err);
 		}else{
-			console.log(Puser);
+			
 		}
 	})
-	console.log(commit[0]);
+	
 	}, (err,doc) => {
 		if(err){
 			console.log(err);
@@ -207,7 +190,7 @@ function DeleteChallenge(req, res) {
 function JoinChallenge(req, res) {
 	const { userId, challengeId } = req.body;
 	const id = ObjectID(challengeId);
-
+	
 	var userArray
 	var userCount
 	var newCommitCount
@@ -369,5 +352,5 @@ module.exports = {
 	outChallenge: OutChallenge,
 	inviteUser : InviteUser,
 	changeKey: ChangeKey,
-	delUserInChallenge:DelUserInchallege
+	
 };
