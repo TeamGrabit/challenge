@@ -9,6 +9,7 @@ const VerifyUserContext = createContext(() => {});
 const SendAuthMailContext = createContext((email) => {});
 const CheckAuthMailContext = createContext((email, authNum) => {});
 const CheckUniqueIdContext = createContext((id) => {});
+const SignUpUserContext = createContext((userInfo) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -40,13 +41,6 @@ export const UserLogicProvider = ({ children }) => {
 	};
 
 	const LogoutUser = async () => {
-		// if (user.auth === "user") {
-		// 	userDispatch({
-		// 		...user,
-		// 		auth: "no"
-		// 	});
-		// 	console.log("로그아웃 성공");
-		// }
 		let flag = false;
 		await axios.post(`${API_URL}/logout`, {}, {
 			withCredentials: true,
@@ -80,8 +74,19 @@ export const UserLogicProvider = ({ children }) => {
 			.then((res) => { flag = !res.data.duplicate; console.log(res.data.duplicate); });
 		return flag;
 	};
-	const SignUp = async () => {
-
+	const SignUp = async (userInfo) => {
+		console.log(userInfo);
+		let flag = false;
+		await axios.post(`${API_URL}/signup`, {
+			userId: userInfo.id,
+			userPw: userInfo.pw,
+			userName: userInfo.name,
+			userEmail: userInfo.email,
+			gitId: userInfo.githubId
+		}).then((res) => {
+			flag = res.data.result;
+		});
+		return flag;
 	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
@@ -90,7 +95,9 @@ export const UserLogicProvider = ({ children }) => {
 					<SendAuthMailContext.Provider value={SendAuthMail}>
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
-								{children}
+								<SignUpUserContext.Provider value={SignUp}>
+									{children}
+								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
 					</SendAuthMailContext.Provider>
@@ -127,5 +134,9 @@ export function useCheckAuthMail() {
 
 export function useCheckUniqueId() {
 	const context = useContext(CheckUniqueIdContext);
+	return context;
+}
+export function useSignUpUser() {
+	const context = useContext(SignUpUserContext);
 	return context;
 }

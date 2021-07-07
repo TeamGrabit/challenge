@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { withStyles, Box, Button, TextField } from '@material-ui/core';
-import { useSendAuthMail, useCheckAuthMail, useCheckUniqueId } from '../MVVM/ViewModel/UserViewModel';
+import { useSendAuthMail, useCheckAuthMail, useCheckUniqueId, useSignUpUser } from '../MVVM/ViewModel/UserViewModel';
 
 const CssTextField = withStyles({
 	root: {
@@ -42,6 +42,7 @@ function RegisterForm({ changeStatus }) {
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
 	const uniqueIdCheck = useCheckUniqueId();
+	const signUpUser = useSignUpUser();
 
 	const updateField = (e) => {
 		setUserInfo({
@@ -81,12 +82,14 @@ function RegisterForm({ changeStatus }) {
 
 		return message;
 	};
-	const submitHandler = () => {
+	const submitHandler = async () => {
 		console.log("submit");
 		// 폼이 다 채워졌는지 확인
 		const message = check();
 		if (message === "") {
 			// 회원가입 back api 호출
+			const result = await signUpUser(userInfo);
+			if (!result) { alert("회원가입 실패"); }
 			// 응답 받아서 회원가입 성공했으면 완료 페이지로 보내기
 			changeStatus(2);
 		} else {
@@ -118,7 +121,7 @@ function RegisterForm({ changeStatus }) {
 						onChange={updateField}
 						disabled={isMailAuth}
 						error={!isEmail(userInfo.email)}
-						// helperText="이메일 형식을 맞춰주세요"
+						helperText="이메일 형식을 맞춰주세요"
 					/>
 					{!isSend ?
 						<Button
@@ -165,13 +168,11 @@ function RegisterForm({ changeStatus }) {
 						placeholder="아이디를 입력하세요"
 						value={userInfo.id}
 						onChange={updateField}
-						disabled={isIdUnique}
 					/>
 					<Button
 						className="btn"
 						variant="contained"
 						onClick={idCheckHandler}
-						disabled={isIdUnique}
 					>
 						중복 확인
 					</Button>
@@ -212,23 +213,22 @@ function RegisterForm({ changeStatus }) {
 						onChange={updateField}
 					/>
 				</Box>
-			</div>
-			<div className="wrap-btn">
-				<Button
-					className="btn"
-					variant="contained"
-					onClick={() => changeStatus(0)}
-				>
-					이전단계
-				</Button>
-				<Button
-					className="btn"
-					variant="contained"
-					onClick={submitHandler}
-				// disabled={!checked}
-				>
-					가입완료
-				</Button>
+				<div className="wrap-btn">
+					<Button
+						className="btn"
+						variant="contained"
+						onClick={() => changeStatus(0)}
+					>
+						이전단계
+					</Button>
+					<Button
+						className="btn"
+						variant="contained"
+						onClick={submitHandler}
+					>
+						가입완료
+					</Button>
+				</div>
 			</div>
 		</div>
 	);
