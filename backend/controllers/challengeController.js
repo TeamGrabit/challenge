@@ -66,6 +66,9 @@ async function WhoIsKing(req, res) {
 
 
         for(let i=0;i<3;i++){
+			if(commit[i]==null){
+				break;
+			}
             await User.findOne({user_id:commit[i]._id}).then((user)=> {
                 
                 usercommit.push(user);
