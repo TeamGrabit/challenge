@@ -138,7 +138,7 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 		.then((list) => getList(list))
 		.then((challengeList) => {
 			for (let i=0; i<challengeList.length; i++){
-				checkDate(challengeList[i])
+				checkDate(challengeList[i].challenge_id)
 			}
 			console.log(challengeList)
 			res.send(challengeList)
