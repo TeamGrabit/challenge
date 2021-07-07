@@ -31,12 +31,13 @@ async function CreateUser(req, res, next) {
         const last_update = today;
 
 
-        const user = await User.findOneByUsername(user_id);
+        const user = await User.findOneByUsername(userId);
+
         if (user) {
             console.log(user);
             throw 'user exists';
         } else {
-            await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
+            await User.create(userId, userPw, userName, userEmail, gitId, in_date, last_update);
         }
 
         res.status(201).json({result : true}); 
@@ -317,3 +318,4 @@ module.exports = {
 	checkIdDupl: CheckIdDupl,
 
 };
+
