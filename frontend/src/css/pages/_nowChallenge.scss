@@ -87,11 +87,16 @@
 		.right-con{
 			width: 47%;
 
-			.commit-log{
-				height: 60%;
+			.commitKing{
+				margin-top: 2rem;
 				display: flex;
-				justify-content: center;
+				flex-direction: column;
 				align-items: center;
+				justify-content: space-between;
+
+				.rank{
+					margin-bottom: 10px;
+				}
 			}
 		}
 	}
@@ -134,29 +139,14 @@
 			}
 		}
 		.middle-con{
-			width: 23%;
+			width: 47%;
 
 			.failKing{
-				margin-top: 30%;
-
-				.rank{
-					text-align: center;
-				}
-			}
-		}
-		.right-con{
-			width: 23%;
-
-			.commitKing{
-				margin-top: 2rem;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				justify-content: space-between;
-
-				.rank{
-					margin-bottom: 10px;
-				}
+				justify-content: center;
+				height: 85%;
 			}
 		}
 	}

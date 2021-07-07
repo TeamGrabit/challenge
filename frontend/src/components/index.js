@@ -5,3 +5,4 @@ export { default as SideBar } from './SideBar';
 export { default as ChangePassword } from './ChangePassword';
 export { default as LogInForm } from './LogInForm';
 export { default as ManageComponent } from './ManageComponent';
+export { default as useSessionStorage } from './useSessionStorage';

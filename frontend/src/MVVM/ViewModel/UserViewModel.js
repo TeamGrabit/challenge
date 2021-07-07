@@ -1,6 +1,6 @@
 import React, { useContext, createContext } from 'react';
 import axios from 'axios';
-import { useUserState, useUserDispatch } from '../Model/UserModel';
+import { useUserState, useUserDispatch, UserContextProvider } from '../Model/UserModel';
 import { API_URL } from '../../CommonVariable';
 
 const LoginUserContext = createContext((id, pw) => {});
@@ -30,7 +30,7 @@ export const UserLogicProvider = ({ children }) => {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data.result);
-			if (res.data.result === "ok") flag = true;
+			if (res.data.result) flag = true;
 		});
 		await VerifyUser();
 		return flag;
