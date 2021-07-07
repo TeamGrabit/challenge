@@ -3,10 +3,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-
 const gitData = require('../models/gitDataModel');
 const User = require('../models/userModel');
-
 
 /*
 	getDate()
@@ -144,7 +142,6 @@ const isLastDay = (date) => {
 	else return false;
 }
 
-
 /* 유저의 깃 데이터가 없을 때 처리해주는 함수 */
 async function CreateGitData(userId) {
 	const user = await User.findOneByUsername(userId);
@@ -165,5 +162,4 @@ module.exports = {
 	crawlingModule: crawlingModule,
 	getCommitDate: getCommitDate,
 	CreateGitData: CreateGitData
-
 }

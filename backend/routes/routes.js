@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 
@@ -19,12 +20,10 @@ router.post('/auth/jwtvalidcheck', userController.verifyToken);
 router.get('/user/uniqueid/:userId', userController.checkIdDupl);
 // userCon -->
 
-
 // <-- mailCon
 router.post('/authmail/send', mailContriller.sendAuthMail);
 router.post('/authmail/check', mailContriller.checkAuthNum);
 // mailCon --> 
-
 
 // <-- gitCrawlData
 router.post('/grass', gitDataController.createInitData);
@@ -33,14 +32,12 @@ router.delete('/grass', gitDataController.deleteData);
 router.put('/grass', gitDataController.putData);
 // gitCrawlData -->
 
-
 // <-- grassController 
 router.get('/grass/personal', grassController.getPersonalGrass);
 // grassController -->
 
 router.post('/challenge', challengeController.createChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
-
 router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
 router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
 router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
@@ -50,7 +47,6 @@ router.patch('/keyChange/:challengeId', challengeController.changeKey)
 
 router.patch('/challengeIn/challenge', challengeController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
-
 router.post('/invite/:challengeId', challengeController.inviteUser);
 
 router.post('/approve', approveController.createApprove);
@@ -71,4 +67,3 @@ router.post('/invite/:challengeId', challengeController.inviteUser);
 
 
 module.exports = router;
-

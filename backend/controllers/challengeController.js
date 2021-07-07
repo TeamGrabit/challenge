@@ -6,18 +6,14 @@ const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
-
 async function CreateChallenge(req, res) {
-
 	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
 
 	Challenge.create(userId, name, challenge_start, challenge_end, private_key)
 		.then((doc) => {
 			console.log("challenge 생성");
 			console.log(doc._id);
-
 			return doc._id
-
 		})
 		.catch((err) => {
 			console.error(err);
@@ -52,95 +48,93 @@ async function CreateChallenge(req, res) {
 		})
 }
 
-
 async function WhoIsKing(req, res) {
-	const challengeId = req.params.challengeId;
+    const challengeId = req.params.challengeId;
 
-	const id = ObjectID(challengeId);
-	let usercommit=[];
-	
-	await Challenge.findOneById(id).then(async (challenge)=> {
-		
-		var commit =challenge.commitCount;
-		
+    const id = ObjectID(challengeId);
+    let usercommit=[];
+    
+    await Challenge.findOneById(id).then(async (challenge)=> {
+        
+        var commit =challenge.commitCount;
+        
 
-		commit.sort(function(a, b) { // 내림차순
-			return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
-			
-		});
-
-
-		for(let i=0;i<3;i++){
-			await User.findOne({user_id:commit[i]._id}).then((user)=> {
-				
-				usercommit.push(user);
-				
-			},(err,doc)=>{
-				if(err){
-					console.log(err);
-				}else{
-					console.log(doc);
-				}
-			});
-		}
-	}),(err,doc)=>{
-		if(err){
-			console.log(err);
-		}else{
-			
-			return doc;
+        commit.sort(function(a, b) { // 내림차순
+            return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
+            
+        });
 
 
-		}
-	}
+        for(let i=0;i<3;i++){
+            await User.findOne({user_id:commit[i]._id}).then((user)=> {
+                
+                usercommit.push(user);
+                
+            },(err,doc)=>{
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log(doc);
+                }
+            });
+        }
+    }),(err,doc)=>{
+        if(err){
+            console.log(err);
+        }else{
+            
+            return doc;
 
-	res.send(usercommit);
-	res.end;
+
+        }
+    }
+
+    res.send(usercommit);
+    res.end;
 }
 
 
 
 async function WhoIsPoor(req, res) {
-	const challengeId= req.params.challengeId;
+    const challengeId= req.params.challengeId;
 
 
-	const id = ObjectID(challengeId);
-	var Puser =[];
+    const id = ObjectID(challengeId);
+    var Puser =[];
 
 
-	await Challenge.findById(id).then(async (chcommit) => {
-		var commit=chcommit.commitCount;
-		
+    await Challenge.findById(id).then(async (chcommit) => {
+        var commit=chcommit.commitCount;
+        
 
-		commit.sort(function(a, b) { // 내림차순
-		return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
-	})
-	
-	await User.findOne({user_id:commit[0]._id}).then((user) =>{
-		Puser=user;
+        commit.sort(function(a, b) { // 내림차순
+        return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
+    })
+    
+    await User.findOne({user_id:commit[0]._id}).then((user) =>{
+        Puser=user;
 
-	}, (err,doc) => {
-		if(err){
-			console.log(err);
-			res.send(err);
-		}else{
-			
+    }, (err,doc) => {
+        if(err){
+            console.log(err);
+            res.send(err);
+        }else{
+            
 
-		}
-	})
-	
-	}, (err,doc) => {
-		if(err){
-			console.log(err);
-		}else{
-		
-		}
-	})
-	
-	res.send(Puser);
-	res.end;
+        }
+    })
+    
+    }, (err,doc) => {
+        if(err){
+            console.log(err);
+        }else{
+        
+        }
+    })
+    
+    res.send(Puser);
+    res.end;
 }
-
 
 function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
@@ -201,7 +195,6 @@ function FixChallengeInfo(req, res) {
 	})
 
 
-
 	res.end("success");
 }
 
@@ -218,7 +211,6 @@ function DeleteChallenge(req, res) {
 			console.log("challenge 삭제")
 			console.log(doc._id)
 			res.send('true')
-
 		}
 	})
 
@@ -266,7 +258,6 @@ async function JoinChallenge(req, res) {
 			console.log("user에 challenge 추가")
 			console.log(doc)
 			res.send('true')
-
 		}
 	})
 		.catch((err) => {
@@ -320,7 +311,7 @@ async function JoinChallenge(req, res) {
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
 	const id = ObjectID(challengeId);
-	
+
 	var userArray
 	var userCount
 	var newCommitCount
@@ -328,7 +319,6 @@ function OutChallenge(req, res) {
 	Challenge.findOneById(id)
 		.then((challenge) => {
 			userArray = challenge.challenge_users
-
 			userCount = challenge.challenge_user_num - 1
 
 			for (let i = 0; i < userArray.length; i++) {
@@ -349,16 +339,13 @@ function OutChallenge(req, res) {
 				throw new Error('challenge DB에 해당 user 없음.')
 			out(userArray, userCount, newCommitCount)
 
-
 		})
 		.catch((err) => {
 			console.error(err);
 			res.send('false');
 		})
 
-
 	const out = (userArray, userCount, newCommitCount) => Challenge.findByIdAndUpdate(id, {
-
 		$set: {
 			challenge_users: userArray,
 			challenge_user_num: userCount,
@@ -366,18 +353,15 @@ function OutChallenge(req, res) {
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {
-
 			console.log(err)
 			res.send('false')
 		}
 		else {
 			console.log("challenge에 user 삭제")
-
 			console.log(doc._id)
 			res.send('true')
 		}
 	})
-
 }
 
 function InviteUser(req, res) {
@@ -419,45 +403,6 @@ function ChangeKey(req, res) {
 		})
 	}
 
-
-}
-
-function ChangeKey(req, res) {
-	const { userId, private_key } = req.body;
-	const challengeId = req.params.challengeId;
-
-	Challenge.findOneById(challengeId)
-	.then((ch) => {
-		if (userId === ch.challenge_leader){
-			changePrivateKey();
-		}else{
-			throw new Error('leader가 아님.')
-		}
-	})
-	.catch((err) => {
-		console.error(err);
-		res.send('false')
-	})
-
-	const changePrivateKey = () => {
-		Challenge.findByIdAndUpdate(challengeId, {
-			$set: {
-				private_key: private_key
-			}
-		}, { new: true, useFindAndModify: false }, (err, doc) => {
-			if (err) {
-				console.log(err)
-				res.send('false')
-			}
-			else {
-				console.log("private_key 변경")
-				console.log(doc._id)
-				res.send('true')
-			}
-		})
-	}
-
-	
 }
 
 module.exports = {
@@ -469,8 +414,6 @@ module.exports = {
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
-
 	inviteUser: InviteUser,
 	changeKey: ChangeKey
-
 };

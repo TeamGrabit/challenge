@@ -28,10 +28,8 @@ var Approve = new Schema({
     approve_cnt:{
         type: Number,
         default: 0
-
     }, 
     state:{ 
-
         type: Boolean,
         default: false
     }
