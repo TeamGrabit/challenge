@@ -3,7 +3,10 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const expressSession = require('express-session');
-const port = 5000;
+
+
+const port = process.env.PORT || 5000;
+
 const bodyParser = require('body-parser')
 
 const router = require('./routes/routes');
@@ -24,7 +27,9 @@ mongoose.connect(config.mongoURI,{
 .catch(err => console.log(err));
 
 app.use(cors({
-    origin: true,
+
+    origin: process.env.CORSORIGIN,
+
     credentials: true,
 }));
 app.use(expressSession({
@@ -38,6 +43,9 @@ app.use(expressSession({
 }))
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.get('/', (req,res)=>{res.send('hi')})
+
 app.use('/',router);
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))

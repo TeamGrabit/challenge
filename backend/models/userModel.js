@@ -54,8 +54,11 @@ User.statics.findOneByUsername = function(user_id) {
   }).exec()
 }
 
-User.statics.getUserById = function(id) {
-	return this.find({"user_id": id});
+
+User.statics.getUserById = async function(id) {
+	const result = await this.findOne({"user_id": id});
+	return result;
+
 }
 
 User.statics.loginCheck = async function(id,pw) {
