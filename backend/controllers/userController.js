@@ -1,5 +1,3 @@
-const express = require('express');
-const mongoose = require('mongoose');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
@@ -8,7 +6,6 @@ const { ObjectID } = require('bson');
 
 require("dotenv").config();
 const SecretKey = process.env.SECRET_KEY;
-const salt = process.env.SALT;
 
 function getCurrentDate() {
 	var date = new Date();
@@ -23,11 +20,9 @@ function getCurrentDate() {
 }
 
 async function CreateUser(req, res, next) {
-
     try {
         console.log(req.body);
-        const { user_id, user_pw, user_name, user_email, git_id } = req.body;
-
+        const { userId, userPw, userName, userEmail, gitId } = req.body;
         let today = getCurrentDate();
         const in_date = today;
         const last_update = today;
@@ -39,12 +34,30 @@ async function CreateUser(req, res, next) {
         } else {
             await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
         }
-        res.end("result");
+        res.status(201).json({result : true}); 
     } catch (err) {
         res.status(401).json({ error: err});
         next(err);
     }
-}    
+}   
+
+async function CheckIdDupl(req, res){ // id 중복체크용
+	try {
+		const input_id = req.params.userId;
+		console.log(input_id);
+		const result = await User.getUserById(input_id);
+		if (result) { // 중복 
+			res.status(201).json({duplicate : true}); 
+		}
+		else {
+			res.status(201).json({duplicate : false});
+		}
+	}catch (err) {
+		console.log(err);
+        res.status(401).json({ error: err});
+    }
+
+}
 function DeleteUser(req, res) {
 	var id = req.params.id;
 
@@ -202,14 +215,13 @@ async function LogIn(req, res, next) {
             );
             res.cookie('user', token, { sameSite:'none', secure: true });
             res.status(201).json({
-                result: 'ok',
-                token
+                result: true
             });
         }
         else 
             res.status(400).json({ error: 'invalid user' });
     }catch (err) {
-        res.status(401).json({ error: 'invalid user' });
+        res.status(401).json({ error: err });
         console.error(err);
         next(err);
     }
@@ -256,5 +268,6 @@ module.exports = {
     logOut : LogOut,
     getChallengeList: GetChallengeList,
     verifyToken: VerifyToken,
-	outChallenge: OutChallenge
+	outChallenge: OutChallenge,
+	checkIdDupl: CheckIdDupl,
 };
