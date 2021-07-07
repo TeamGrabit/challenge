@@ -53,7 +53,7 @@ async function CreateChallenge(req, res) {
 }
 
 
-function WhoIsKing(req, res) {
+async function WhoIsKing(req, res) {
 	const challengeId = req.params.challengeId;
 
 	const id = ObjectID(challengeId);
