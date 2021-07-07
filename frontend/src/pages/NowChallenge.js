@@ -3,13 +3,24 @@ import { Button, Grid, Typography, Modal, Fade, Backdrop, TextField, IconButton 
 import AddIcon from '@material-ui/icons/Add';
 import Slider from 'react-slick';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
+import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function NowChallenge({ match }) {
+	console.log(match);
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
 	const [admitOpen, setAdmitOpen] = useState(false);
+	useEffect(() => {
+		challengeData.map((c, i) => {
+			if (String(i) === CId) {
+				console.log(i);
+				setTitle(c.name);
+			}
+			return 1;
+		});
+	}, [challengeData]);
 	// grass Init Data --- temp
 	const grassInitialData = [
 		true, false, false, false, true, false, false,
@@ -39,11 +50,6 @@ function NowChallenge({ match }) {
 		className: 'grass-slider'
 	};
 	// grass carousel setting -->
-	useEffect(() => {
-		// 추후 challengeId 넣어서 해당 정보만 받아아오기
-		console.log(challengeData[CId - 1].name);
-		setTitle(challengeData[CId - 1].name);
-	}, [CId, challengeData]);
 	const grassHandler = () => {
 		window.location.href = `/challenge/info/${CId}/fix`;
 	};
@@ -74,15 +80,17 @@ function NowChallenge({ match }) {
 						</Grid>
 					</Grid>
 					<Grid className="right-con">
-						<Typography className="sub-title">최근 커밋 로그</Typography>
-						<Grid className="commit-log">
+						<Typography className="sub-title">이달의 커밋왕</Typography>
+						<Grid className="commitKing">
 							{/* 백엔드에서 내용 불러오기 */}
-							<p className="rank">log</p>
+							<p className="rank">1등: 이현광</p>
+							<p className="rank">2등: 김수빈</p>
+							<p className="rank">3등: 차현철</p>
 						</Grid>
 					</Grid>
 				</Grid>
 				<Grid className="lastGrid">
-					{/* 팀원 잔디, 실패왕, 최근커밋로그 */}
+					{/* 팀원 잔디, 실패왕 */}
 					<Grid className="left-con">
 						<Typography className="sub-title">다른 잔디</Typography>
 						<Slider {...settings}>
@@ -102,15 +110,6 @@ function NowChallenge({ match }) {
 						<Grid className="failKing">
 							{/* 백엔드에서 내용 불러오기 */}
 							<p className="rank">김바다</p>
-						</Grid>
-					</Grid>
-					<Grid className="right-con">
-						<Typography className="sub-title">이달의 커밋왕</Typography>
-						<Grid className="commitKing">
-							{/* 백엔드에서 내용 불러오기 */}
-							<p className="rank">1등: 이현광</p>
-							<p className="rank">2등: 김수빈</p>
-							<p className="rank">3등: 차현철</p>
 						</Grid>
 					</Grid>
 				</Grid>
