@@ -18,7 +18,7 @@ function Router() {
 					<ContextRoute path="/challenge" Component={Main} exact Provider={ChallengeProvider} />
 					<ContextRoute path="/challenge/info/:challengeId" exact Component={NowChallenge} Provider={ChallengeProvider} />
 					<Route exact path="/challenge/info/:challengeId/fix" component={ChallengeInfoFix} />
-					<Route exact path="/challenge/manage/:challengeId" component={ManageChallenge} />
+					<ContextRoute exact path="/challenge/manage/:challengeId" Component={ManageChallenge} Provider={ChallengeProvider} />
 					<Route exact path="/challenge/make" component={ChallengeMake} />
 					<Route exact path="/color" component={colorTest} />
 					<Route exact path="/mypage" component={MyPage} />
