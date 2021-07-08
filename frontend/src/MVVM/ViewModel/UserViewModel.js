@@ -6,6 +6,10 @@ import { API_URL } from '../../CommonVariable';
 const LoginUserContext = createContext((id, pw) => {});
 const LogoutUserContext = createContext(() => {});
 const VerifyUserContext = createContext(() => {});
+const SendAuthMailContext = createContext((email) => {});
+const CheckAuthMailContext = createContext((email, authNum) => {});
+const CheckUniqueIdContext = createContext((id) => {});
+const SignUpUserContext = createContext((userInfo) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -37,13 +41,6 @@ export const UserLogicProvider = ({ children }) => {
 	};
 
 	const LogoutUser = async () => {
-		// if (user.auth === "user") {
-		// 	userDispatch({
-		// 		...user,
-		// 		auth: "no"
-		// 	});
-		// 	console.log("로그아웃 성공");
-		// }
 		let flag = false;
 		await axios.post(`${API_URL}/logout`, {}, {
 			withCredentials: true,
@@ -54,14 +51,56 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SignUp = () => {
+	const SendAuthMail = async (eMail) => {
+		let flag = false;
+		await axios.post(`${API_URL}/authmail/send`, { email: eMail })
+			.then((res) => {
+				console.log(res);
+				if (res.data.result === "success") flag = true;
+			});
+		return flag;
+	};
 
+	const CheckAuthMail = async (email, authNum) => {
+		let flag = false;
+		await axios.post(`${API_URL}/authmail/check`, { email, authNum })
+			.then((res) => { flag = res.data.result; });
+		return flag;
+	};
+
+	const CheckUniqueId = async (id) => {
+		let flag = false;
+		await axios.get(`${API_URL}/user/uniqueid/${id}`)
+			.then((res) => { flag = !res.data.duplicate; console.log(res.data.duplicate); });
+		return flag;
+	};
+	const SignUp = async (userInfo) => {
+		console.log(userInfo);
+		let flag = false;
+		await axios.post(`${API_URL}/signup`, {
+			userId: userInfo.id,
+			userPw: userInfo.pw,
+			userName: userInfo.name,
+			userEmail: userInfo.email,
+			gitId: userInfo.githubId
+		}).then((res) => {
+			flag = res.data.result;
+		});
+		return flag;
 	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
 				<VerifyUserContext.Provider value={VerifyUser}>
-					{children}
+					<SendAuthMailContext.Provider value={SendAuthMail}>
+						<CheckAuthMailContext.Provider value={CheckAuthMail}>
+							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
+								<SignUpUserContext.Provider value={SignUp}>
+									{children}
+								</SignUpUserContext.Provider>
+							</CheckUniqueIdContext.Provider>
+						</CheckAuthMailContext.Provider>
+					</SendAuthMailContext.Provider>
 				</VerifyUserContext.Provider>
 			</LogoutUserContext.Provider>
 		</LoginUserContext.Provider>
@@ -80,5 +119,24 @@ export function useLogoutUser() {
 
 export function useVerifyUser() {
 	const context = useContext(VerifyUserContext);
+	return context;
+}
+
+export function useSendAuthMail() {
+	const context = useContext(SendAuthMailContext);
+	return context;
+}
+
+export function useCheckAuthMail() {
+	const context = useContext(CheckAuthMailContext);
+	return context;
+}
+
+export function useCheckUniqueId() {
+	const context = useContext(CheckUniqueIdContext);
+	return context;
+}
+export function useSignUpUser() {
+	const context = useContext(SignUpUserContext);
 	return context;
 }
