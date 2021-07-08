@@ -13,11 +13,10 @@ function NowChallenge({ match }) {
 	const [inviteOpen, setInviteOpen] = useState(false);
 	const [admitOpen, setAdmitOpen] = useState(false);
 	useEffect(() => {
-		challengeData.map((c, i) => {
-			if (String(i) === CId) {
-				console.log(i);
-				setTitle(c.name);
-			}
+		const result = challengeData.filter((item) => item.challenge_id === CId);
+		result.map((c, i) => {
+			console.log(i);
+			setTitle(c.name);
 			return 1;
 		});
 	}, [challengeData]);

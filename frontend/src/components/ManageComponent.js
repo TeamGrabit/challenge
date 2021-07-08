@@ -4,12 +4,11 @@ import DatePicker from 'react-datepicker';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import ExpelMember from './ExpelMember';
 
-function ManageComponent({ value, index, CId }) {
-	const challengeData = useChallengeState();
+function ManageComponent({ value, index, challengeData }) {
 	const [title, setTitle] = useState("");
 	const [user, setUser] = useState("");
-	const [sDate, setsDate] = useState("");
-	const [eDate, seteDate] = useState("");
+	const [sDate, setsDate] = useState();
+	const [eDate, seteDate] = useState();
 	const [open, setopen] = useState(false);
 	const [expel, setExpel] = useState("");
 	const handleOpen = (c) => {
@@ -21,11 +20,11 @@ function ManageComponent({ value, index, CId }) {
 		setopen(false);
 	};
 	useEffect(() => {
-		setTitle(challengeData[CId - 1].name);
-		setUser(challengeData[CId - 1].user);
-		setsDate(challengeData[CId - 1].sDate);
-		seteDate(challengeData[CId - 1].eDate);
-	}, [CId, challengeData]);
+		setTitle(challengeData.name);
+		setUser(challengeData.challenge_users);
+		setsDate(new Date(challengeData.challenge_start));
+		seteDate(new Date(challengeData.challenge_end));
+	}, [challengeData]);
 
 	return (
 		<div className="manageComponent">
