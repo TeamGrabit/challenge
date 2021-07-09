@@ -1,0 +1,13 @@
+.Intro{
+	.box{
+		display: block;
+		justify-content: center;
+		align-items: center;
+		// margin-left: 15vw;
+        overflow: hidden;
+	}
+    .box-img {
+        padding-left: 15vw;
+        padding-right: 15vw;
+    }
+}

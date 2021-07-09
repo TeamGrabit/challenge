@@ -1,28 +1,29 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "node": true
-    },
-    "extends": [
+	env: {
+		browser: true,
+		node: true
+	},
+	extends: [
 		"plugin:react/recommended",
 		"airbnb"
 	],
-	"parserOptions": {
-		"ecmaFeatures": {
-			"jsx": true
+	parserOptions: {
+		ecmaFeatures: {
+			jsx: true
 		},
-		"ecmaVersion": 12,
-		"sourceType": "module"
+		ecmaVersion: 12,
+		sourceType: "module"
 	},
-	"plugins": [
+	plugins: [
 		"react",
 		"eslint-plugin-import",
 		"eslint-plugin-jsx-a11y",
-		"eslint-plugin-react",
-		"eslint-plugin-react-hooks"
+		"eslint-plugin-react"
 	],
-	"rules": {
-		"indent": [
+	rules: {
+		"react/prop-types": "off",
+		"react/destructuring-assignment": [1, 'always'],
+		indent: [
 			"error",
 			"tab"
 		], // indent는 tab으로 통일
@@ -34,7 +35,7 @@ module.exports = {
 		"react/jsx-filename-extension": [
 			1,
 			{
-				"extensions": [
+				extensions: [
 					".js",
 					".jsx",
 				]
@@ -48,10 +49,10 @@ module.exports = {
 		"no-use-before-define": 1, // 정의 전에 사용 금지
 		"no-console": 0, // console 사용하기
 		"no-nested-ternary": 0, // 삼항 연산자좀 쓰자
-		"camelcase": [
+		camelcase: [
 			"error",
 			{
-				"properties": "always"
+				properties: "always"
 			}
 		], // 속성에 camelcase 사용
 		"no-tabs": 0, // tab 사용 안되는 rule
@@ -74,22 +75,21 @@ module.exports = {
 			"warn"
 		], // 길이 100이 넘어가도 warning 만 하기
 		"react/jsx-boolean-value": 0, // boolean 못넘기게 하는 룰 없애기
-		"react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
 		"comma-dangle": 0, // 마지막에 콤마 안붙여도 되게 하기
 		"object-curly-newline": 0, // {}에서 새로운 line에 매개변수 쓰지 않아도 되게
-		"quotes": 0, // string에 doublequotes 가능
+		quotes: 0, // string에 doublequotes 가능
 		"react/jsx-indent-props": [
 			2,
 			"tab"
 		], // jsx props tab으로 들여쓰기
 		"no-underscore-dangle": 0, // _ 쓰기
-		"no-shadow" : ["warn"], // 변수 가리기 경고만 하기
-		"jsx-a11y/click-events-have-key-events" : 0 // onClick쓰려면 다른 event handler도 등록해야하는 옵션 끄기
+		"no-shadow": ["warn"], // 변수 가리기 경고만 하기
+		"jsx-a11y/click-events-have-key-events": 0 // onClick쓰려면 다른 event handler도 등록해야하는 옵션 끄기
 	},
-	"settings": {
+	settings: {
 		"import/resolver": {
-			"node": {
-				"extensions": [
+			node: {
+				extensions: [
 					".js",
 					".jsx",
 					".ts",

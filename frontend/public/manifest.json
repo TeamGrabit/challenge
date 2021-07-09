@@ -1,11 +1,11 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "세살버릇 여든까지",
+  "name": "세살버릇 여든까지",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "ChallengeLogo.png",
+      "sizes": "250x250",
+      "type": "image/png"
     },
     {
       "src": "logo192.png",
