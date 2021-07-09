@@ -6,6 +6,7 @@ import { API_URL } from '../../CommonVariable';
 
 const GetChallengeContext = createContext(() => {});
 const GetChallengeDetailContext = createContext(() => {});
+const CreateChallengeContext = createContext(() => {});
 const SaveChallengeContext = createContext(() => {});
 const DeleteChallengeContext = createContext(() => {});
 
@@ -31,6 +32,19 @@ export const ChallengeLogicProvider = ({ children }) => {
 			return res.data;
 		});
 	};
+	const createChallenge = (challengeInfo) => {
+		console.log(challengeInfo);
+		axios.post(`${API_URL}/challenge`, {
+			userId: challengeInfo.userId,
+			name: challengeInfo.name,
+			challenge_start: challengeInfo.challenge_start,
+			challenge_end: challengeInfo.challenge_end,
+			private_key: challengeInfo.private_key
+		}).then((res) => {
+			console.log(res);
+			return res;
+		});
+	};
 	const saveChallenge = () => {
 
 	};
@@ -40,11 +54,13 @@ export const ChallengeLogicProvider = ({ children }) => {
 	return (
 		<GetChallengeContext.Provider value={getChallengeList}>
 			<GetChallengeDetailContext.Provider value={getChallengeDetail}>
-				<SaveChallengeContext.Provider value={saveChallenge}>
-					<DeleteChallengeContext.Provider value={deleteChallenge}>
-						{children}
-					</DeleteChallengeContext.Provider>
-				</SaveChallengeContext.Provider>
+				<CreateChallengeContext.Provider value={createChallenge}>
+					<SaveChallengeContext.Provider value={saveChallenge}>
+						<DeleteChallengeContext.Provider value={deleteChallenge}>
+							{children}
+						</DeleteChallengeContext.Provider>
+					</SaveChallengeContext.Provider>
+				</CreateChallengeContext.Provider>
 			</GetChallengeDetailContext.Provider>
 		</GetChallengeContext.Provider>
 	);
@@ -57,5 +73,10 @@ export function useGetChallenge() {
 
 export function useGetChallengeDetail() {
 	const context = useContext(GetChallengeDetailContext);
+	return context;
+}
+
+export function useCreateChallenge() {
+	const context = useContext(CreateChallengeContext);
 	return context;
 }

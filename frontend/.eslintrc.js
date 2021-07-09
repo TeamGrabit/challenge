@@ -50,7 +50,7 @@ module.exports = {
 		"no-console": 0, // console 사용하기
 		"no-nested-ternary": 0, // 삼항 연산자좀 쓰자
 		camelcase: [
-			"error",
+			"warn",
 			{
 				properties: "always"
 			}
