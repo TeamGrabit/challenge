@@ -105,9 +105,22 @@ function GetChallengeInfo(req, res) {
 function FixChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
-	var { name, challenge_start, challenge_end, challenge_leader } = req.body;
+	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key } = req.body;
 
-	Challenge.findOneById(id).then((ch) => {
+	Challenge.findOneById(challengeId)
+	.then((ch) => {
+		if (user_id === ch.challenge_leader){
+			changeInfo();
+		}else{
+			throw new Error('leader가 아님.')
+		}
+	})
+	.catch((err) => {
+		console.error(err);
+		res.send('false')
+	})
+
+	const changeInfo = () => Challenge.findOneById(id).then((ch) => {
 		var preChallenge = ch;
 		if (name === undefined) {
 			name = preChallenge.name;
@@ -121,13 +134,17 @@ function FixChallengeInfo(req, res) {
 		if (challenge_leader === undefined) {
 			challenge_leader = preChallenge.challenge_leader;
 		}
+		if (private_key === undefined){
+			private_key = preChallenge.private_key;
+		}
 	}).then(() => {
 		Challenge.findByIdAndUpdate(id, {
 			$set: {
 				name: name,
 				challenge_start: challenge_start,
 				challenge_end: challenge_end,
-				challenge_leader: challenge_leader
+				challenge_leader: challenge_leader,
+				private_key: private_key
 			}
 		}, { new: true, useFindAndModify: false }, (err, doc) => {
 			if (err) {
@@ -141,15 +158,33 @@ function FixChallengeInfo(req, res) {
 			}
 		})
 	})
-
-
-	res.end("success");
 }
 
-function DeleteChallenge(req, res) {
+async function DeleteChallenge(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
-
+	
+	userArray = await Challenge.findById(id).then((ch) => {return ch.challenge_users})
+	for(let i=0; i<userArray.length; i++){
+		list = await User.findOne({user_id: userArray[i]}).then((user)=>{return user.ch_list})
+		list = await list.filter(function(item){
+			return item !== challengeId
+		})
+		User.findOneAndUpdate({user_id: userArray[i]}, {
+			$set: {
+				ch_list: list
+			}
+		}, { new: true, useFindAndModify: false }, (err, doc) => {
+			if (err) {
+				console.log(err)
+				res.send('false')
+			}
+			else {
+				console.log("user의 challengeList 수정")
+				console.log(userArray[i])
+			}
+		})
+	}
 	Challenge.findByIdAndDelete(id, (err, doc) => {
 		if (err) {
 			console.log(err)
@@ -161,9 +196,6 @@ function DeleteChallenge(req, res) {
 			res.send('true')
 		}
 	})
-
-
-
 }
 
 async function JoinChallenge(req, res) {
@@ -232,7 +264,7 @@ async function JoinChallenge(req, res) {
 
 	//commitCount 추가
 	newCommitCount = challenge.commitCount
-	const addCommitCount = challenge.commitCount.create({ _id: userId })
+	const addCommitCount = challenge.commitCount.create({ user_id: userId })
 	newCommitCount.push(addCommitCount)
 
 	join_ch(userArray, userCount, newCommitCount)
@@ -316,43 +348,6 @@ function InviteUser(req, res) {
 
 }
 
-function ChangeKey(req, res) {
-	const { userId, private_key } = req.body;
-	const challengeId = req.params.challengeId;
-
-	Challenge.findOneById(challengeId)
-	.then((ch) => {
-		if (userId === ch.challenge_leader){
-			changePrivateKey();
-		}else{
-			throw new Error('leader가 아님.')
-		}
-	})
-	.catch((err) => {
-		console.error(err);
-		res.send('false')
-	})
-
-	const changePrivateKey = () => {
-		Challenge.findByIdAndUpdate(challengeId, {
-			$set: {
-				private_key: private_key
-			}
-		}, { new: true, useFindAndModify: false }, (err, doc) => {
-			if (err) {
-				console.log(err)
-				res.send('false')
-			}
-			else {
-				console.log("private_key 변경")
-				console.log(doc._id)
-				res.send('true')
-			}
-		})
-	}
-
-}
-
 module.exports = {
 	whoIsKing: WhoIsKing,
 	whoIsPoor: WhoIsPoor,
@@ -362,6 +357,5 @@ module.exports = {
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
-	inviteUser: InviteUser,
-	changeKey: ChangeKey
+	inviteUser: InviteUser
 };

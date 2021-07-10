@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 
 const CommitSchema = new Schema({
-	_id: {
+	user_id: {
 		type: String,
 	},
 	count: {
@@ -41,11 +41,11 @@ var Challenge = new Schema({
 		type: String,
 		required: true
 	},
-	state:{
+	state: {
 		type: Number,
 		default: 0
 	},
-	private_key:{
+	private_key: {
 		type: String,
 		trim: true,
 		required: true
@@ -65,9 +65,9 @@ Challenge.statics.create = function (userId, name, challenge_start, challenge_en
 		private_key
 	})
 
-	const commitCount = challenge.commitCount.create({_id: userId})
+	const commitCount = challenge.commitCount.create({ user_id: userId })
 	challenge.commitCount = commitCount
-	
+
 	challenge.challenge_users.push(userId)
 	//commitCount 추가.
 
