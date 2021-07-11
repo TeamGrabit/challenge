@@ -79,8 +79,12 @@ function ChallengeMake({ history }) {
 			};
 			const result = await createChallenge(challengeInfo);
 			console.log(result);
-			if (!result) { alert("생성 실패"); }
+			if (!result) {
+				alert("생성 실패");
+			} else {
+				alert("생성 완료");
 			// history.push('/challenge');
+			}
 		}
 	};
 	const isMobile = useMediaQuery("(max-width: 550px)");
