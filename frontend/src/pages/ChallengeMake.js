@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { Link, Button, TextField, Select, MenuItem, useMediaQuery } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
+import { Link, Button, TextField, Select, MenuItem, useMediaQuery } from '@material-ui/core';
+import { useUserState } from '../MVVM/Model/UserModel';
+import { useCreateChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function ChallengeMake({ history }) {
+	const user = useUserState();
+	const createChallenge = useCreateChallenge();
 	const [Name, setName] = useState("");
 	const [Password, setPassword] = useState("");
 	const [PWcheck, setPWcheck] = useState("");
@@ -50,7 +54,7 @@ function ChallengeMake({ history }) {
 			setDateRef(true);
 		}
 	};
-	const handleMake = () => {
+	const handleMake = async () => {
 		if (Password === PWcheck) {
 			setPWerror(false);
 			setPWhint("");
@@ -66,7 +70,21 @@ function ChallengeMake({ history }) {
 			setNamehint("");
 		}
 		if (Name !== "" && Password === PWcheck) {
-			history.push('/challenge');
+			const challengeInfo = {
+				userId: user.userId,
+				name: Name,
+				challenge_start: sDate,
+				challenge_end: eDate,
+				private_key: Password,
+			};
+			const result = await createChallenge(challengeInfo);
+			console.log(result);
+			if (!result) {
+				alert("생성 실패");
+			} else {
+				alert("생성 완료");
+			// history.push('/challenge');
+			}
 		}
 	};
 	const isMobile = useMediaQuery("(max-width: 550px)");
