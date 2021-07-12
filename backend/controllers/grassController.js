@@ -12,48 +12,54 @@ function dateToString(date) { // 시간 빼고 오직 년월일만
 	return year+'-'+month+'-'+day;
 }
 
+// month-2,month-1,month 세 달치 commit 기록을 true, false배열로 반환. 
+// return 형태 : [[전전달],[전달],[이번달]]
+async function GetCommitList(user_id, challenge_id, year, month){
+    // Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
+    const result = await Approve.findByUserChallangeMonth(user_id, challenge_id, year, month);
+        
+    // 위에서 filter한 데이터에서 날짜만 남기기 
+    const approve = result.map(element => dateToString(element.date));
+    //console.log(approve);
+
+    // 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
+    var gitAll = await gitData.findOneByUserId(user_id);
+    if(gitAll === null){
+        await CreateGitData(user_id);
+        gitAll = await gitData.findOneByUserId(user_id);
+    }
+    const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
+    //console.log(git);
+
+    // approve랑 git 중복제거해서 한 배열에 담기 
+    const dates = Array.from(new Set(approve.concat(git))).sort();
+    //console.log(dates);
+
+    // 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 true, false 배열로 만들기 
+    const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
+    const isCommitedList = []; 
+    var tempDate = new Date(year, month-3);
+    dateCounts.forEach(dateCount => {
+        var monthList = new Array(dateCount).fill(false);
+        for(var i=0; i< dateCount;i++){
+            if (dates.find(element => element == dateToString(tempDate)) !== undefined)
+                monthList[i] = true;
+            tempDate.setDate(tempDate.getDate()+1);
+        }
+        isCommitedList.push(monthList);
+    });
+    console.log(isCommitedList);
+    return isCommitedList;
+}
+
 async function GetPersonalGrass(req, res){
     try {
         const user_id = req.body.userId;
         const challenge_id = req.body.challengeId;
         const year = req.body.year;
         const month = req.body.month;
-
-        // Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
-        const result = await Approve.findByUserChallangeMonth(user_id, challenge_id, year, month);
         
-        // 위에서 filter한 데이터에서 날짜만 남기기 
-        const approve = result.map(element => dateToString(element.date));
-        console.log(approve);
-
-        // 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
-        var gitAll = await gitData.findOneByUserId(user_id);
-		if(gitAll === null){
-			await CreateGitData(user_id);
-			gitAll = await gitData.findOneByUserId(user_id);
-		}
-        const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
-        console.log(git);
-
-        // approve랑 git 중복제거해서 한 배열에 담기 
-        const dates = Array.from(new Set(approve.concat(git))).sort();
-        console.log(dates);
-
-        // 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 true, false 배열로 만들기 
-        const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
-        const isCommitedList = []; 
-        var tempDate = new Date(year, month-3);
-        dateCounts.forEach(dateCount => {
-            var monthList = new Array(dateCount).fill(false);
-            for(var i=0; i< dateCount;i++){
-                if (dates.find(element => element == dateToString(tempDate)) !== undefined)
-                    monthList[i] = true;
-                tempDate.setDate(tempDate.getDate()+1);
-            }
-            isCommitedList.push(monthList);
-        });
-        console.log(isCommitedList);
-      
+        const isCommitedList = await GetCommitList(user_id, challenge_id, year, month);
         res.status(201).json({isCommitedList: isCommitedList});
     }catch(err) {
         console.log(err);
@@ -67,5 +73,6 @@ async function GetPersonalGrass(req, res){
 
 
 module.exports = {
-    getPersonalGrass: GetPersonalGrass,
+    getPersonalGrass: GetPersonalGrass, // api 처리
+    getCommitList: GetCommitList, // function  (다른 컨트롤러에서 가져다써도됨)
 }
