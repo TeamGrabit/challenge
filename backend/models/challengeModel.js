@@ -47,8 +47,7 @@ var Challenge = new Schema({
 	},
 	private_key: {
 		type: String,
-		trim: true,
-		required: true
+		trim: true
 	},
 	commitCount: [CommitSchema]
 }, {
