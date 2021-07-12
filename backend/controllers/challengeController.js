@@ -5,6 +5,8 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
+const { getCommitList } = require('./grassController')
+
 
 async function CreateChallenge(req, res) {
 	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
@@ -84,20 +86,52 @@ function WhoIsPoor(req, res) {
 }
 
 
-function GetChallengeInfo(req, res) {
+async function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
 
+	commitList = await Challenge.findById(id).then((ch) => { return ch.commitCount })
+	const today = new Date()
+	const _year = today.getFullYear()
+	const _month = today.getMonth() + 1
+	for (let i = 0; i < commitList.length; i++) {
+		var _joinday = commitList[i].join_time
+		var join_year = _joinday.getFullYear()
+		var join_month = _joinday.getMonth() + 1
+		var start = 0
+		if (join_year === _year && join_month === _month) {start = _joinday.getDate()}	// 챌린지를 이번해에 가입했으면 start를 조정함.
+		month_count = await getCommitList(commitList[i].user_id, challengeId, _year, _month)
+		cnt = 0
+		for(let j=start-1; j<month_count[2].length; j++){
+			if(month_count[2][j] == true) {cnt += 1}
+		}
+		commitList[i].count = cnt
+	}
+
+	await Challenge.findByIdAndUpdate(id, {
+		$set: {
+			commitCount: commitList
+		}
+	}, { new: true, useFindAndModify: false }, (err, doc) => {
+		if (err) {
+			console.log(err)
+			res.send('false')
+		}
+		else {
+			console.log("commitCount update!")
+		}
+	})
+
 	Challenge.findById(id)
-	.then((doc) => {
-		console.log("challengeInfo 받음");
-		console.log(doc._id)
-		res.send(doc)
-	})
-	.catch((err) => {
-		console.log(err)
-		res.send(err)
-	})
+		.then((doc) => {
+			console.log("challengeInfo 받음");
+			console.log(doc._id)
+			res.send(doc)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
 
 }
 
@@ -108,17 +142,17 @@ function FixChallengeInfo(req, res) {
 	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key } = req.body;
 
 	Challenge.findOneById(challengeId)
-	.then((ch) => {
-		if (user_id === ch.challenge_leader){
-			changeInfo();
-		}else{
-			throw new Error('leader가 아님.')
-		}
-	})
-	.catch((err) => {
-		console.error(err);
-		res.send('false')
-	})
+		.then((ch) => {
+			if (user_id === ch.challenge_leader) {
+				changeInfo();
+			} else {
+				throw new Error('leader가 아님.')
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			res.send('false')
+		})
 
 	const changeInfo = () => Challenge.findOneById(id).then((ch) => {
 		var preChallenge = ch;
@@ -134,7 +168,7 @@ function FixChallengeInfo(req, res) {
 		if (challenge_leader === undefined) {
 			challenge_leader = preChallenge.challenge_leader;
 		}
-		if (private_key === undefined){
+		if (private_key === undefined) {
 			private_key = preChallenge.private_key;
 		}
 	}).then(() => {
@@ -163,12 +197,12 @@ function FixChallengeInfo(req, res) {
 async function DeleteChallenge(req, res) {
 	const challengeId = req.params.challengeId;
 	const id = ObjectID(challengeId);
-	
-	userArray = await Challenge.findById(id).then((ch) => {return ch.challenge_users})
-	for(let i=0; i<userArray.length; i++){
-		list = await User.findOne({user_id: userArray[i]}).then((user)=>{return user.ch_list})
-		await list.splice(list.indexOf(challengeId),1);
-		User.findOneAndUpdate({user_id: userArray[i]}, {
+
+	userArray = await Challenge.findById(id).then((ch) => { return ch.challenge_users })
+	for (let i = 0; i < userArray.length; i++) {
+		list = await User.findOne({ user_id: userArray[i] }).then((user) => { return user.ch_list })
+		await list.splice(list.indexOf(challengeId), 1);
+		User.findOneAndUpdate({ user_id: userArray[i] }, {
 			$set: {
 				ch_list: list
 			}
@@ -279,7 +313,7 @@ async function JoinChallenge(req, res) {
 		throw new Error('already join');
 	}
 	chArray.push(challengeId);
-	
+
 	join_user(chArray)
 
 
