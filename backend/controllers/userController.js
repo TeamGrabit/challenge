@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
 const { ObjectID } = require('bson');
+const { find } = require('../models/userModel');
 
 
 require("dotenv").config();
@@ -64,10 +65,19 @@ async function CheckIdDupl(req, res){ // id 중복체크용
 
 }
 function DeleteUser(req, res) {
-	var id = req.params.id;
+	var _id = req.params.id;
+	var deluser=User.findOne({user_id:_id});
+	var chlist = deluser.ch_list;
+	var length = len(chlist);
+	
+	for(let i=0;i<length;i++){
+		OutChallenge({ userId:_id, challengeId:chlist[i]},)
+
+	}
+	
 
 
-	User.findByIdAndDelete(_id, function (err, docs) {
+	User.findOneAndDelete({user_id:_id}, function (err, docs) {
 		if (err) {
 			console.log(err)
 		}
@@ -130,7 +140,6 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
-
 
 	var chArray
 
