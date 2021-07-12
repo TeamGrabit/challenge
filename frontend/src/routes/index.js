@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowChallenge, ChallengeMake, ManageChallenge } from "../pages";
+import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowChallenge, ChallengeMake, ManageChallenge, PwFind } from "../pages";
 
 import '../css/main.scss';
 import { Layout } from '../components';
@@ -22,6 +22,7 @@ function Router() {
 					<Route exact path="/challenge/make" component={ChallengeMake} />
 					<Route exact path="/color" component={colorTest} />
 					<Route exact path="/mypage" component={MyPage} />
+					<Route exact path="/pwfind" component={PwFind} />
 				</Switch>
 			</Layout>
 		</BrowserRouter>

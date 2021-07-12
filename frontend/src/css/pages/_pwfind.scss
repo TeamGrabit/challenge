@@ -1,0 +1,34 @@
+.pw-find-auth{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    // .MuiInputBase-root{
+    //     width: 20vw;
+    // }
+    .btn{
+        // width: 5rem;
+        background-color: $green3 !important;
+        margin-left: 1vw;
+    }
+    .btn-nextHelper{
+        // width: 5rem;
+        background-color: $green3 !important;
+        margin-left: 1vw;
+        margin-bottom: 19.2px; //helpertext부분 height가 19.2 
+    }
+    .MuiButton-contained{
+        box-shadow: none;
+    }
+    .MuiButton-label{
+        font-size: 1rem;
+    }
+    .MuiIconButton-colorSecondary:hover {
+        background-color: rgba(56,82,59,0.1);
+    }
+    .MuiBox-root {
+        display: flex;
+        align-items: center;
+    }
+}
