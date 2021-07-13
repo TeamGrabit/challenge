@@ -20,37 +20,58 @@
 		display: flex;
 		border: 1px solid black;
 		width: 1000px;
-		height: 400px;
+		height: 430px;
 		justify-content: center;
 		align-items: center;
 		margin-bottom: 5vh;
 
-		.left-con{
-			width: 100%;
-	
-			.myGrass{
-				display: flex !important;
-				flex-direction: column;
-				flex-wrap: wrap;
-				align-content: center;
-				height: 350px;
+		.myGrass{
+			display: flex !important;
+			flex-direction: column;
+			flex-wrap: wrap;
+			align-content: center;
+			height: 350px;
 
-				.setBtn{
-					background-color: white;
-					border: none;
-					color: white;
-					
-					.grass{
-						width: 40px;
-						height: 40px;
-						margin: 5px;
-						border-radius: 10%;
+			.setBtn{
+				background-color: white;
+				border: none;
+				color: white;
+				
+				.grass{
+					width: 40px;
+					height: 40px;
+					margin: 5px;
+					margin-left: 10px;
+					margin-right: 10px;
+					border-radius: 10%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+				.fill-grass{
+					background-color: $green3;
+					.text{
+						font-size: 0px;
 					}
-					.fill-grass{
-						background-color: $green3;
+				}
+				.fill-grass:hover{
+					opacity: 0.5;
+					.text{
+						font-size: 15px;
+						color: black;
 					}
-					.unfill-grass{
-						background-color: antiquewhite;
+				}
+				.unfill-grass{
+					background-color: antiquewhite;
+					.text{
+						font-size: 0px;
+					}
+				}
+				.unfill-grass:hover{
+					opacity: 0.5;
+					.text{
+						font-size: 15px;
+						color: black;
 					}
 				}
 			}

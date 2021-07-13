@@ -14,34 +14,35 @@ function ChallengeInfoFix(props) {
 	const handleClose = () => {
 		setopen(false);
 	};
+	const grassHandler = () => {
+		window.location.href = `/challenge/info/${_challengeId}`;
+	};
 	const grassInitialData = [
-		true, false, false, false, true, false, false,
-		false, false, true, false, false, true, false,
-		true, false, false, false, false, false, true
-	];
-	const otherGrass = [
 		[
-			false, false, false, false, false, false, false,
-			false, false, false, false, false, false, false,
-			false, false, false, false, false, false, false
+			true, false, false, false, true, false, false,
+			false, false, true, false, false, true, false,
+			true, false, false, false, false, false, true,
+			true, false, false, false, false, false, true,
+			true, false, false
 		],
 		[
-			true, true, true, true, true, true, true,
-			true, true, true, true, true, true, true,
-			true, true, true, true, true, true, true
+			true, false, false, false, true, false, false,
+			false, false, true, false, false, true, false,
+			true, false, false, false, false, false, true,
+			true, false, false, false, false, false, true,
+			true, false
+		],
+		[
+			true, false, false, false, true, false, false,
+			false, false, true, false, false, true, false,
+			true, false, false, false, false, false, true,
+			true, false, false, false, false, false, true,
+			true, false, true
 		]
 	];
-	const settings = {
-		dots: false,
-		infinite: true,
-		speed: 500,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-		className: 'grass-slider'
-	};
-	const Ahe = () => {
-		alert('1');
-	};
+	const grassData = grassInitialData.map((array) => array.map((data, index) => [data, index + 1]));
+	const day = new Date();
+	const month = day.getMonth() + 1;
 	return (
 		<div className="challengeInfoFix">
 			<div className="body">
@@ -49,27 +50,47 @@ function ChallengeInfoFix(props) {
 					나의 챌린지 현황
 				</div>
 				<div className="box">
-					<Grid className="left-con">
-						<Slider {...settings}>
-							{
-								otherGrass.map((data) => (
-									<Grid className="myGrass">
-										{data.map((g) => (
-											<button className="setBtn" type="button" onClick={Ahe}>
-												<Grid className={['grass', g ? 'fill-grass' : 'unfill-grass']} />
-											</button>
-										))}
-									</Grid>
-								))
-							}
-						</Slider>
+					<Grid className="myGrass">
+						{grassData[0].map((data) => (
+							<div className="setBtn">
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={handleOpen} role="button" tabIndex={0}>
+									<div className="text">
+										{(month + 10) % 12}
+										/
+										{data[1]}
+									</div>
+								</Grid>
+							</div>
+						))}
+						{grassData[1].map((data) => (
+							<div className="setBtn">
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={handleOpen} role="button" tabIndex={0}>
+									<div className="text">
+										{(month + 11) % 12}
+										/
+										{data[1]}
+									</div>
+								</Grid>
+							</div>
+						))}
+						{grassData[2].map((data) => (
+							<div className="setBtn">
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={handleOpen} role="button" tabIndex={0}>
+									<div className="text">
+										{(month + 12) % 12}
+										/
+										{data[1]}
+									</div>
+								</Grid>
+							</div>
+						))}
 					</Grid>
 				</div>
 				<div className="btnSet">
-					<Button className="Btn" type="button">
+					<Button className="Btn" type="button" onClick={grassHandler}>
 						취소
 					</Button>
-					<Button className="Btn" type="button">
+					<Button className="Btn" type="button" onClick={grassHandler}>
 						수정완료
 					</Button>
 				</div>
