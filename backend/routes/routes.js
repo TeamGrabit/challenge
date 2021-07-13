@@ -34,6 +34,7 @@ router.put('/grass', gitDataController.putData);
 
 // <-- grassController 
 router.get('/grass/personal', grassController.getPersonalGrass);
+router.get('/grass/challenge', grassController.getChallengeGrass);
 // grassController -->
 
 router.post('/challenge', challengeController.createChallenge);
