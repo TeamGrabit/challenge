@@ -123,12 +123,12 @@ function ManageChallenge({ match }) {
 							</Tabs>
 					}
 					<div className="comp_all">
-						<ManageComponent value={value} index={0} challengeData={challengeData} />
-						<ManageComponent value={value} index={1} challengeData={challengeData} />
-						<ManageComponent value={value} index={2} challengeData={challengeData} />
-						<ManageComponent value={value} index={3} challengeData={challengeData} />
-						<ManageComponent value={value} index={4} challengeData={challengeData} />
-						<ManageComponent value={value} index={5} challengeData={challengeData} />
+						<ManageComponent value={value} index={0} challengeData={challengeData} CId={CId} />
+						<ManageComponent value={value} index={1} challengeData={challengeData} CId={CId} />
+						<ManageComponent value={value} index={2} challengeData={challengeData} CId={CId} />
+						<ManageComponent value={value} index={3} challengeData={challengeData} CId={CId} />
+						<ManageComponent value={value} index={4} challengeData={challengeData} CId={CId} />
+						<ManageComponent value={value} index={5} challengeData={challengeData} CId={CId} />
 					</div>
 				</div>
 			</div>

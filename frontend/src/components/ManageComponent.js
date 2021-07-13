@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Box, Button, TextField, Typography, Modal, Fade } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
-import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import ExpelMember from './ExpelMember';
+// import { useChallengeState } from '../MVVM/Model/ChallengeModel';
+import { useDeleteChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
-function ManageComponent({ value, index, challengeData }) {
+function ManageComponent({ value, index, challengeData, CId }) {
+	const deleteChallenge = useDeleteChallenge();
 	const [title, setTitle] = useState("");
 	const [user, setUser] = useState("");
 	const [sDate, setsDate] = useState();
@@ -18,6 +20,11 @@ function ManageComponent({ value, index, challengeData }) {
 	};
 	const handleClose = () => {
 		setopen(false);
+	};
+	const handleDelete = () => {
+		const result = deleteChallenge(CId);
+		console.log(result);
+		// history.push('/challenge');
 	};
 	useEffect(() => {
 		setTitle(challengeData.name);
@@ -100,7 +107,7 @@ function ManageComponent({ value, index, challengeData }) {
 					<div className="content_box">
 						<div className="quit_box">
 							<Typography className="quit_msg">정말 중단하시겠습니까?</Typography>
-							<Button className="quitBtn">중단</Button>
+							<Button className="quitBtn" onClick={handleDelete}>중단</Button>
 						</div>
 					</div>
 				</div>

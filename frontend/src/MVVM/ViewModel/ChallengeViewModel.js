@@ -49,8 +49,11 @@ export const ChallengeLogicProvider = ({ children }) => {
 	const saveChallenge = () => {
 
 	};
-	const deleteChallenge = () => {
-
+	const deleteChallenge = (CId) => {
+		axios.delete(`${API_URL}/challenge/${CId}`).then((res) => {
+			console.log(res);
+			return res.data;
+		});
 	};
 	return (
 		<GetChallengeContext.Provider value={getChallengeList}>
@@ -79,5 +82,10 @@ export function useGetChallengeDetail() {
 
 export function useCreateChallenge() {
 	const context = useContext(CreateChallengeContext);
+	return context;
+}
+
+export function useDeleteChallenge() {
+	const context = useContext(DeleteChallengeContext);
 	return context;
 }
