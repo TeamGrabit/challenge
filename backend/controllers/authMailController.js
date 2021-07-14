@@ -1,4 +1,5 @@
-const AuthMail = require('../models/authMailModel')
+const AuthMail = require('../models/authMailModel');
+const User = require('../models/userModel');
 const nodemailer = require('nodemailer');
 
 let transporter = nodemailer.createTransport({
@@ -28,20 +29,45 @@ function makeAuthNum(n){
 }
 async function SendAuthMail(req, res){
     try {
+         // req type검사
+            // type: 0 => 가입시 이메일 인증 
+                //TODO : 이미 가입된 email이면 인증메일 안보내도록 처리
+            // type: 1 => 비밀번호 찾기 이메일 인증 
+                // 이미 가입된 이메일에 대해서만 인증메일 보내도록 처리
         console.log("send auth mail");
-        //TODO : 이미 가입된 email이면 인증메일 안보내도록 처리
-
+        const type = req.body.type;
         const email = req.body.email;
         const auth_num = makeAuthNum(4); // random 생성
-        // send mail with defined transport object
-        let info = await transporter.sendMail({
-            from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
-            to: email, // list of receivers
-            subject: "이메일 인증을 통해 회원가입을 완료해주세요", // Subject line
-            text: `인증번호 : ${auth_num}`, // plain text body
-        });
-        // console.log(info);
-        
+        const user = await User.findOne({"user_email":email});
+        if (type) {
+            if (user){
+                res.status(201).json({
+                    result: 'already exists',
+                });
+            }
+            // send mail with defined transport object
+            let info = await transporter.sendMail({
+                from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
+                to: email, // list of receivers
+                subject: "이메일 인증을 통해 회원가입을 완료해주세요.", // Subject line
+                text: `인증번호 : ${auth_num}`, // plain text body
+            });
+            // console.log(info);
+        }
+        else {
+            if (!user){
+                res.status(201).json({
+                    result: 'user not exists',
+                });
+            }
+            let info = await transporter.sendMail({
+                from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
+                to: email, // list of receivers
+                subject: "이메일 인증을 통해 비밀번호 재설정을 완료해주세요.", // Subject line
+                text: `인증번호 : ${auth_num}`, // plain text body
+            });
+        }
+       
         // 인증메일 모델에 email, auth_num 저장 
         await AuthMail.create(email, auth_num);
         res.status(201).json({
@@ -52,8 +78,8 @@ async function SendAuthMail(req, res){
         res.status(401).json({ error: err});
     }
 }
-
-async function CheckAuthNum(req, res) {
+ 
+async function CheckAuthNum(req, res) { // 이거는 type상관없이 가능
     try {
         console.log(req.body);
         const email = req.body.email;
