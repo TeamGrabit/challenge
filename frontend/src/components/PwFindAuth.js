@@ -36,6 +36,7 @@ function PwFindAuth() {
 	const authMailSendHandler = async () => { // mail 전송
 		const result = await authMailSend(email);
 		console.log(result);
+		// TODO: 가입되지 않은 사용자입니다. 새로 가입해주세요 추가해야함
 		if (!result) { alert('인증 메일 전송에 실패했습니다. 다시 한 번 시도해주세요'); } else { alert('인증 메일이 전송되었습니다. 메일함을 확인해주세요'); }
 		setIsSend(result);
 	};
@@ -48,6 +49,7 @@ function PwFindAuth() {
 	return (
 		<div className="pw-find-auth">
 			<Box mt={2}>
+				<div className="text">가입 이메일</div>
 				<CssTextField
 					required
 					name="email"
@@ -71,6 +73,7 @@ function PwFindAuth() {
 			</Box>
 			{isSend ?
 				<Box mt={2}>
+					<div className="text">인증번호</div>
 					<CssTextField
 						required
 						name="email"
