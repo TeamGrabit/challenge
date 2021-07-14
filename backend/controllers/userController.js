@@ -78,6 +78,29 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 	var challengeList = [];
 
+	const checkDate = async (id) => {
+		const changeState = async () => {
+			await Challenge.findByIdAndUpdate(id, {
+				$set: {
+					state: 1
+				}
+			}, { new: true, useFindAndModify: false }, (err, doc) => {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					console.log("challenge state 수정")
+					console.log(doc._id)
+				}
+			})
+		}
+		const challenge = await Challenge.findById(id)
+		console.log(challenge)
+		const currentDate = new Date()
+		if (challenge.challenge_end !== undefined && challenge.challenge_end.valueOf() < currentDate.valueOf())
+			changeState()
+	}
+	
 	const addChallenge = (ch_id) => {
 		const challengeId = ObjectID(ch_id)
 		return new Promise((resolve) => {
@@ -86,6 +109,12 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 		})
 	  }
 
+	const changeState = async (list) => {
+		const promises = list.map((ch_id) => checkDate(ch_id))
+		await Promise.all(promises)
+		return list
+	}
+	
 	const getList = async (list) => {
 		const promises = list.map(async ch_id => {
 		  return await addChallenge(ch_id)
@@ -113,10 +142,11 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 				throw new Error('not exist user')
 			}
 		})
+		.then((id_list) => changeState(id_list))
 		.then((list) => getList(list))
-		.then((challengeList) => {
-			console.log(challengeList)
-			res.send(challengeList)
+		.then((infomations) => {
+			console.log(infomations)
+			res.send(infomations)
 		})
 
 }

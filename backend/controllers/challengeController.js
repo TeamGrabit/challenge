@@ -7,6 +7,8 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 const { getCommitList } = require('./grassController')
 
+const bcrypt = require('bcrypt');
+const { checkPreferences } = require('joi');
 
 async function CreateChallenge(req, res) {
 	const { userId, name, challenge_start, challenge_end, private_key } = req.body;
@@ -99,11 +101,11 @@ async function GetChallengeInfo(req, res) {
 		var join_year = _joinday.getFullYear()
 		var join_month = _joinday.getMonth() + 1
 		var start = 0
-		if (join_year === _year && join_month === _month) {start = _joinday.getDate()}	// 챌린지를 이번해에 가입했으면 start를 조정함.
+		if (join_year === _year && join_month === _month) { start = _joinday.getDate() }	// 챌린지를 이번해에 가입했으면 start를 조정함.
 		month_count = await getCommitList(commitList[i].user_id, challengeId, _year, _month)
 		cnt = 0
-		for(let j=start-1; j<month_count[2].length; j++){
-			if(month_count[2][j] == true) {cnt += 1}
+		for (let j = start - 1; j < month_count[2].length; j++) {
+			if (month_count[2][j] == true) { cnt += 1 }
 		}
 		commitList[i].count = cnt
 	}
@@ -231,7 +233,7 @@ async function DeleteChallenge(req, res) {
 }
 
 async function JoinChallenge(req, res) {
-	const { userId, challengeId } = req.body;
+	const { userId, challengeId, private_key } = req.body;
 	const id = ObjectID(challengeId);
 
 	var userArray
@@ -277,47 +279,56 @@ async function JoinChallenge(req, res) {
 			res.send('false');
 		})
 
-	challenge = await Challenge.findOneById(id)
-	if (challenge === null) {
-		res.send('false')
-		throw new Error('not exist challenge');
-	}
-
-	userArray = challenge.challenge_users
-	userCount = challenge.challenge_user_num + 1
-
-	for (let i = 0; i < userArray.length; i++) {
-		if (userArray[i] === userId) {
+	const join = async (challenge) => {
+		if (challenge === null) {
+			console.log('not exist challenge')
 			res.send('false')
-			throw new Error('이미 가입되어 있음')
 		}
+
+		userArray = challenge.challenge_users
+		userCount = challenge.challenge_user_num + 1
+
+		for (let i = 0; i < userArray.length; i++) {
+			if (userArray[i] === userId) {
+				console.log('이미 가입되어 있음')
+				res.send('false')
+			}
+		}
+		userArray.push(userId)
+
+		//commitCount 추가
+		newCommitCount = challenge.commitCount
+		const addCommitCount = challenge.commitCount.create({ user_id: userId })
+		newCommitCount.push(addCommitCount)
+
+
+		join_ch(userArray, userCount, newCommitCount)
+
+		user = await User.findOneByUsername(userId)
+		if (user === null) {
+			console.log('user가 존재하지 않음.')
+			res.send('false')
+		}
+		var chArray;
+		chArray = user.ch_list
+		if (chArray.indexOf(challengeId) >= 0) {	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
+			console.log('already join')
+			res.send('false')
+		}
+		chArray.push(challengeId);
+
+		join_user(chArray)
 	}
-	userArray.push(userId)
 
-	//commitCount 추가
-	newCommitCount = challenge.commitCount
-	const addCommitCount = challenge.commitCount.create({ user_id: userId })
-	newCommitCount.push(addCommitCount)
-
-	join_ch(userArray, userCount, newCommitCount)
-
-	user = await User.findOneByUsername(userId)
-	if (user === null) {
+	const challenge = await Challenge.findById(id)
+	if (challenge.private_key === private_key) join(challenge)
+	else {
+		console.log('private_key different!')
 		res.send('false')
-		throw new Error('user가 존재하지 않음.');
-	}
-	var chArray;
-	chArray = user.ch_list
-	if (chArray.indexOf(challengeId) >= 0) {	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
-		res.send('false')
-		throw new Error('already join');
 	}
 	chArray.push(challengeId);
 
 	join_user(chArray)
-
-
-
 }
 
 function OutChallenge(req, res) {
