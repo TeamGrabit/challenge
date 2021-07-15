@@ -39,11 +39,12 @@ async function SendAuthMail(req, res){
         const email = req.body.email;
         const auth_num = makeAuthNum(4); // random 생성
         const user = await User.findOne({"user_email":email});
-        if (type) {
+        if (type === 0) {
             if (user){
                 res.status(201).json({
                     result: 'already exists',
                 });
+                return;
             }
             // send mail with defined transport object
             let info = await transporter.sendMail({
@@ -54,11 +55,12 @@ async function SendAuthMail(req, res){
             });
             // console.log(info);
         }
-        else {
+        else if (type===1){
             if (!user){
                 res.status(201).json({
                     result: 'user not exists',
                 });
+                return;
             }
             let info = await transporter.sendMail({
                 from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
@@ -81,19 +83,18 @@ async function SendAuthMail(req, res){
  
 async function CheckAuthNum(req, res) { // 이거는 type상관없이 가능
     try {
-        console.log(req.body);
         const email = req.body.email;
         const input_num = req.body.authNum;
 
         const info = await AuthMail.findRecentByEmail(email);
-        console.log(info);
+        //console.log(info);
         if (info === undefined) throw "메일 정보 없음";
         if (info.auth_num === input_num) {
             // 인증 성공
             // 해당 email 관련 데이터 스키마에서 삭제 
             console.log("success");
             await AuthMail.deleteMany({"email": email});
-
+            console.log(await AuthMail.find({"email":email}));
             res.status(201).json({result: true});
 
         } 
