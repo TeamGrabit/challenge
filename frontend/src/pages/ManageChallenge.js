@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Button, Box, Tabs, Tab, makeStyles, withStyles, useMediaQuery } from '@material-ui/core';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import ManageComponent from '../components/ManageComponent';
+import { useGetChallengeDetail } from '../MVVM/ViewModel/ChallengeViewModel';
+import { API_URL } from '../CommonVariable';
 
 function ManageChallenge({ match }) {
 	const CId = match.params.challengeId;
-	console.log(CId);
-	const challengeData = useChallengeState();
-	const [title, setTitle] = useState("");
+	const [challengeData, setChallengeData] = useState([]);
 	useEffect(() => {
-		if (CId !== undefined) console.log(challengeData[CId - 1].name);
-		setTitle(challengeData[CId - 1].name);
-	}, [CId, challengeData]);
+		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
+			console.log(res.data);
+			setChallengeData(res.data);
+			console.log(challengeData);
+		});
+	}, [CId]);
 
 	const [value, setValue] = useState(0);
 	const handleChange = (event, newValue) => {
@@ -80,7 +84,7 @@ function ManageChallenge({ match }) {
 			<div className="content">
 				<div className="cha_nameBox">
 					<div className="cha_name">
-						<div>{title}</div>
+						<div>{challengeData.name}</div>
 					</div>
 				</div>
 				<div className={classes.root}>
@@ -119,12 +123,12 @@ function ManageChallenge({ match }) {
 							</Tabs>
 					}
 					<div className="comp_all">
-						<ManageComponent value={value} index={0} CId={CId} />
-						<ManageComponent value={value} index={1} CId={CId} />
-						<ManageComponent value={value} index={2} CId={CId} />
-						<ManageComponent value={value} index={3} CId={CId} />
-						<ManageComponent value={value} index={4} CId={CId} />
-						<ManageComponent value={value} index={5} CId={CId} />
+						<ManageComponent value={value} index={0} challengeData={challengeData} />
+						<ManageComponent value={value} index={1} challengeData={challengeData} />
+						<ManageComponent value={value} index={2} challengeData={challengeData} />
+						<ManageComponent value={value} index={3} challengeData={challengeData} />
+						<ManageComponent value={value} index={4} challengeData={challengeData} />
+						<ManageComponent value={value} index={5} challengeData={challengeData} />
 					</div>
 				</div>
 			</div>

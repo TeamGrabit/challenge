@@ -18,8 +18,7 @@ module.exports = {
 		"react",
 		"eslint-plugin-import",
 		"eslint-plugin-jsx-a11y",
-		"eslint-plugin-react",
-		"eslint-plugin-react-hooks"
+		"eslint-plugin-react"
 	],
 	rules: {
 		"react/prop-types": "off",
@@ -51,7 +50,7 @@ module.exports = {
 		"no-console": 0, // console 사용하기
 		"no-nested-ternary": 0, // 삼항 연산자좀 쓰자
 		camelcase: [
-			"error",
+			"warn",
 			{
 				properties: "always"
 			}
@@ -76,7 +75,6 @@ module.exports = {
 			"warn"
 		], // 길이 100이 넘어가도 warning 만 하기
 		"react/jsx-boolean-value": 0, // boolean 못넘기게 하는 룰 없애기
-		"react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
 		"comma-dangle": 0, // 마지막에 콤마 안붙여도 되게 하기
 		"object-curly-newline": 0, // {}에서 새로운 line에 매개변수 쓰지 않아도 되게
 		quotes: 0, // string에 doublequotes 가능

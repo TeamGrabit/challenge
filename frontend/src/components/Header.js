@@ -24,9 +24,10 @@ function Header() {
 
 	useEffect(() => {
 		userVerify();
-	}, [userVerify]);
+	}, []);
 	useEffect(() => {
 		if (userState.auth === "user") setIsLogined(true);
+		console.log(userState);
 	}, [userState]);
 
 	const handleClick = (e) => {
