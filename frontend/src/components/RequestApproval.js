@@ -1,8 +1,23 @@
 import React from 'react';
 import { Button, Input, RadioGroup, FormControlLabel, Radio, TextareaAutosize } from '@material-ui/core';
+import { } from '../MVVM/ViewModel/ChallengeViewModel';
 
-function RequestApproval({ onClose }) {
+function RequestApproval({ onClose, ch_id, user_id, date }) {
 	const handleCheck = () => { };
+	const [Type, setType] = useState(0)
+	const [Message, setMessage] = useState("")
+	const submitApprove = () => {};
+
+	const chooseExemption = () => {
+		setType(0);
+	};
+	const chooseApprove = () => {
+		setType(1);
+	};
+	const changeMessage = (e) => {
+		setMessage(e.currentTarget.value);
+	};
+	const submitApprove = async () => {};
 	return (
 		<div className="requestApproval">
 			<div className="title">
@@ -37,8 +52,8 @@ function RequestApproval({ onClose }) {
 				rowsMax={10}
 			/>
 			<div className="setBtn">
-				<Button className="selectBtn" type="button" onClick={onClose}>취소</Button>
-				<Button className="selectBtn" type="button">보내기</Button>
+				<Button className="selectBtn" type="button" onClick={submitApprove}>취소</Button>
+				<Button className="selectBtn" type="button" onClick={onClose}>보내기</Button>
 			</div>
 		</div>
 	);
