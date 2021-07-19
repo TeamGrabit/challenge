@@ -17,7 +17,7 @@ router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
-router.get('/user/uniqueid/:userId', userController.checkIdDupl);
+router.get('/user/uniqueid/:user_id', userController.checkIdDupl);
 // userCon -->
 
 // <-- mailCon
