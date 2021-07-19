@@ -26,7 +26,7 @@ const isEmail = (email) => {
 	return emailRegex.test(email);
 };
 
-function PwFindAuth() {
+function PwFindAuth({ setStatus }) {
 	const [email, setEmail] = useState("");
 	const [isSend, setIsSend] = useState(false); // 이메일 인증 메일이 발송되었는지 여부
 	const [isMailAuth, setisMailAuth] = useState(false); // 이메일 인증 완료 여부
@@ -45,6 +45,7 @@ function PwFindAuth() {
 		if (result) { alert('인증에 성공했습니다.'); } else { alert('인증번호가 올바르지 않습니다. 다시 한 번 확인해주세요'); }
 		console.log(result);
 		setisMailAuth(result);
+		setStatus(result);
 	};
 	return (
 		<div className="pw-find-auth">

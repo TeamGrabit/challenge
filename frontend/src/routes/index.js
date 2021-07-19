@@ -22,7 +22,7 @@ function Router() {
 					<ContextRoute exact path="/challenge/make" Component={ChallengeMake} Provider={ChallengeProvider} />
 					<Route exact path="/color" component={colorTest} />
 					<Route exact path="/mypage" component={MyPage} />
-					<Route exact path="/pwfind" component={PwFind} />
+					<Route exact path="/findpw" component={PwFind} />
 				</Switch>
 			</Layout>
 		</BrowserRouter>
