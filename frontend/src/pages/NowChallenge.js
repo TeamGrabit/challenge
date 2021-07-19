@@ -6,10 +6,12 @@ import Slider from 'react-slick';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 import { API_URL } from '../CommonVariable';
+import { useUserState } from '../MVVM/Model/UserModel';
 
 function NowChallenge({ match }) {
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
+	const userData = useUserState();
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
 	const [admitOpen, setAdmitOpen] = useState(false);
@@ -28,17 +30,20 @@ function NowChallenge({ match }) {
 			month: today.getMonth() + 1,
 			year: today.getFullYear()
 		} }).then((res) => {
-			console.log(res.data.isCommitedList.flat());
 			setChallengeGrass(res.data.isCommitedList.flat());
+		})
+			.catch((error) => { console.log(error); });
+		axios.get(`${API_URL}/grass/personal`, { params: {
+			user_id: userData.userId,
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
+			setMyGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
 	}, [challengeData]);
 	// grass Init Data --- temp
-	const grassInitialData = [
-		true, false, false, false, true, false, false,
-		false, false, true, false, false, true, false,
-		true, false, false, false, false, false, true
-	];
 	const otherGrass = [
 		[
 			false, false, false, false, false, false, false,
@@ -77,7 +82,7 @@ function NowChallenge({ match }) {
 				</Grid>
 				<Grid className="teamGrass">
 					{/* 팀 잔디 */}
-					{challengeGrass.map((data) => (
+					{challengeGrass !== undefined && challengeGrass.map((data) => (
 						<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
 					))}
 				</Grid>
@@ -86,7 +91,7 @@ function NowChallenge({ match }) {
 					<Grid className="left-con" style={{ cursor: 'pointer' }} onClick={grassHandler}>
 						<Typography className="sub-title">나의 잔디</Typography>
 						<Grid className="myGrass">
-							{grassInitialData.map((data) => (
+							{myGrass !== undefined && myGrass.map((data) => (
 								<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
 							))}
 						</Grid>
