@@ -95,10 +95,7 @@ async function GetCommitLists(users, challenge_id, year, month){
 
 async function GetPersonalGrass(req, res){
     try {
-        const user_id = req.body.userId;
-        const challenge_id = req.body.challengeId;
-        const year = req.body.year;
-        const month = req.body.month;
+		const { user_id, challenge_id, year, month } = req.query;
         
         const isCommitedList = await GetCommitList(user_id, challenge_id, year, month);
         res.status(201).json({isCommitedList: isCommitedList});
@@ -112,7 +109,7 @@ async function GetPersonalGrass(req, res){
 // /grass/challenge api 처리 함수 여기에 만들어주세요!
 async function GetChallengeGrass(req, res){
     try {
-		const { challenge_id, year, month } = req.body;
+		const { challenge_id, year, month } = req.query;
 		const id = ObjectID(challenge_id);
 	
 		const chData = await Challenge.findById(id).then(data => data);
