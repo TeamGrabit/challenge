@@ -57,41 +57,96 @@ async function CreateChallenge(req, res) {
 	}
 }
 
-function WhoIsKing(req, res) {
-	const challengeId = req.params.challengeId;
-	const id = ObjectID(challengeId);
+async function WhoIsKing(req, res) {
+    const challengeId = req.params.challengeId;
+
+    const id = ObjectID(challengeId);
+    let usercommit=[];
+    
+    await Challenge.findOneById(id).then(async (challenge)=> {
+        
+        var commit =challenge.commitCount;
+        
+
+        commit.sort(function(a, b) { // 내림차순
+            return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
+            
+        });
 
 
-	Challenge.findById(id).then((chcommit) => {
-		var commit = chcommit.commitCount;
-		commit.sort(1);
-	}, (err, doc) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log("Challengekig :" + commit[1]);
-			res.send(commit[1]);
-		}
-	})
+        for(let i=0;i<3;i++){
+			if(commit[i]==null){
+				break;
+			}
+            await User.findOne({user_id:commit[i]._id}).then((user)=> {
+                
+                usercommit.push(user);
+                
+            },(err,doc)=>{
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log(doc);
+                }
+            });
+        }
+    }),(err,doc)=>{
+        if(err){
+            console.log(err);
+        }else{
+            
+            return doc;
+
+
+        }
+    }
+
+    res.send(usercommit);
+    res.end;
 }
-function WhoIsPoor(req, res) {
-	const challengeId = req.params.challengeId;
-	const id = ObjectID(challengeId);
 
 
-	Challenge.findById(id).then((chcommit) => {
-		var commit = chcommit.commitCount;
-		commit.sort(-1);
-	}, (err, doc) => {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log("Challengekig :" + commit[1]);
-			res.send(commit[1]);
-		}
-	})
+
+async function WhoIsPoor(req, res) {
+    const challengeId= req.params.challengeId;
+
+
+    const id = ObjectID(challengeId);
+    var Puser =[];
+
+
+    await Challenge.findById(id).then(async (chcommit) => {
+        var commit=chcommit.commitCount;
+        
+
+        commit.sort(function(a, b) { // 내림차순
+        return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
+    })
+    
+    await User.findOne({user_id:commit[0]._id}).then((user) =>{
+        Puser=user;
+
+    }, (err,doc) => {
+        if(err){
+            console.log(err);
+            res.send(err);
+        }else{
+            
+
+        }
+    })
+    
+    }, (err,doc) => {
+        if(err){
+            console.log(err);
+        }else{
+        
+        }
+    })
+    
+    res.send(Puser);
+    res.end;
 }
-
 
 async function GetChallengeInfo(req, res) {
 	const challengeId = req.params.challengeId;

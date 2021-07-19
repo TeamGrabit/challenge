@@ -29,6 +29,8 @@ app.use(cors({
     origin: process.env.CORSORIGIN,
     credentials: true,
 }));
+// app.use(cors());
+
 app.use(expressSession({
     resave: false,
     saveUninitialized: false,
