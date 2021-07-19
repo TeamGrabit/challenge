@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Button, Grid, Typography, Modal, Fade, Backdrop, TextField, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Slider from 'react-slick';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
+import { API_URL } from '../CommonVariable';
 
 function NowChallenge({ match }) {
-	console.log(match);
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
 	const [admitOpen, setAdmitOpen] = useState(false);
+	const [challengeGrass, setChallengeGrass] = useState();
+	const [myGrass, setMyGrass] = useState();
+	const today = new Date();
 	useEffect(() => {
 		const result = challengeData.filter((item) => item.challenge_id === CId);
 		result.map((c, i) => {
@@ -19,6 +23,15 @@ function NowChallenge({ match }) {
 			setTitle(c.name);
 			return 1;
 		});
+		axios.get(`${API_URL}/grass/challenge`, { params: {
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
+			console.log(res.data.isCommitedList.flat());
+			setChallengeGrass(res.data.isCommitedList.flat());
+		})
+			.catch((error) => { console.log(error); });
 	}, [challengeData]);
 	// grass Init Data --- temp
 	const grassInitialData = [
@@ -64,7 +77,7 @@ function NowChallenge({ match }) {
 				</Grid>
 				<Grid className="teamGrass">
 					{/* 팀 잔디 */}
-					{grassInitialData.map((data) => (
+					{challengeGrass.map((data) => (
 						<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
 					))}
 				</Grid>
