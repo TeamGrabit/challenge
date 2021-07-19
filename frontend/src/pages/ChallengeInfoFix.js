@@ -6,7 +6,6 @@ import { RequestApproval } from '../components/index';
 function ChallengeInfoFix(props) {
 	const _props = props;
 	const _challengeId = _props.match.params.challengeId;
-	console.log(_challengeId);
 	const [open, setopen] = useState(false);
 	const handleOpen = () => {
 		setopen(true);
@@ -107,7 +106,7 @@ function ChallengeInfoFix(props) {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<RequestApproval onClose={handleClose} />
+						<RequestApproval onClose={handleClose} ch_id={_challengeId} user_id="qf9ar8nv" />
 					</div>
 				</Fade>
 			</Modal>
