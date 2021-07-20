@@ -18,7 +18,7 @@ function CreateApprove(req, res) {
 }
 
 function DeleteApprove(req, res) {
-	const approve_id = req.params.approveId;
+	const approve_id = req.params.approve_id;
 	const id = ObjectID(approve_id);
 
 	Approve.findByIdAndDelete(id, (err, doc) => {
@@ -52,7 +52,7 @@ function GetApproveList(req, res) {
 
 async function ConfirmApprove(req, res) {
 
-	const approve_id = req.params.approveId;
+	const approve_id = req.params.approve_id;
 	const Id = ObjectID(approve_id)
 	const { user_id, ch_id } = req.body;
 
@@ -109,7 +109,7 @@ async function ConfirmApprove(req, res) {
 }
 
 function GetApproveInfo(req, res) {
-	const approve_id = req.params.approveId;
+	const approve_id = req.params.approve_id;
 	const id = ObjectID(approve_id);
 	Approve.findOneById(id)
 
