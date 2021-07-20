@@ -20,45 +20,42 @@ function getCurrentDate() {
 }
 
 async function CreateUser(req, res, next) {
-    try {
-        console.log(req.body);
-        const { user_id, user_pw, user_name, user_email, git_id } = req.body;
-        let today = getCurrentDate();
-        const in_date = today;
-        const last_update = today;
+	try {
+		console.log(req.body);
+		const { user_id, user_pw, user_name, user_email, git_id } = req.body;
+		let today = getCurrentDate();
+		const in_date = today;
+		const last_update = today;
 
+		const user = await User.findOneByUsername(user_id);
+		if (user) {
+			console.log(user);
+			throw 'user exists';
+		} else {
+			await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
+		}
+		res.status(201).json({ result: true });
+	} catch (err) {
+		res.status(401).json({ error: err });
+		next(err);
+	}
+}
 
-        const user = await User.findOneByUsername(user_id);
-
-        if (user) {
-            console.log(user);
-            throw 'user exists';
-        } else {
-            await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
-        }
-
-        res.status(201).json({result : true}); 
-    } catch (err) {
-        res.status(401).json({ error: err});
-        next(err);
-    }
-}   
-
-async function CheckIdDupl(req, res){ // id 중복체크용
+async function CheckIdDupl(req, res) { // id 중복체크용
 	try {
 		const input_id = req.params.user_id;
 		console.log(input_id);
 		const result = await User.getUserById(input_id);
 		if (result) { // 중복 
-			res.status(201).json({duplicate : true}); 
+			res.status(201).json({ duplicate: true });
 		}
 		else {
-			res.status(201).json({duplicate : false});
+			res.status(201).json({ duplicate: false });
 		}
-	}catch (err) {
+	} catch (err) {
 		console.log(err);
-        res.status(401).json({ error: err});
-    }
+		res.status(401).json({ error: err });
+	}
 
 }
 function DeleteUser(req, res) {
@@ -91,7 +88,8 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 	var challengeList = [];
 
-	const checkDate = async (id) => {
+	try {
+		const checkDate = async (id) => {
 		const changeState = async () => {
 			await Challenge.findByIdAndUpdate(id, {
 				$set: {
@@ -110,30 +108,31 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 		const challenge = await Challenge.findById(id)
 		console.log(challenge)
 		const currentDate = new Date()
-		if (challenge.challenge_end !== undefined && challenge.challenge_end.valueOf() < currentDate.valueOf())
-			changeState()
+		if (challenge["challenge_end"]) {
+			if (challenge.challenge_end.valueOf() < currentDate.valueOf()) changeState()
+		}
 	}
-	
+
 	const addChallenge = (ch_id) => {
 		const challengeId = ObjectID(ch_id)
 		return new Promise((resolve) => {
 			Challenge.findById(challengeId)
-			.then((Info) => resolve(Info));
+				.then((Info) => resolve(Info));
 		})
-	  }
+	}
 
 	const changeState = async (list) => {
 		const promises = list.map((ch_id) => checkDate(ch_id))
 		await Promise.all(promises)
 		return list
 	}
-	
+
 	const getList = async (list) => {
 		const promises = list.map(async ch_id => {
-		  return await addChallenge(ch_id)
-			.then(Info => Info)
+			return await addChallenge(ch_id)
+				.then(Info => Info)
 		})
-		
+
 		const results = await Promise.all(promises)
 		results.forEach(Info => {
 			var infoList = {
@@ -144,7 +143,7 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 			challengeList.push(infoList)
 		})
 		return challengeList
-	  }
+	}
 
 	User.findOneByUsername(userId)
 		.then((user) => {
@@ -161,6 +160,10 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 			console.log(infomations)
 			res.send(infomations)
 		})
+	} catch(err){
+		console.log(err)
+		res.send(err);
+	}
 
 }
 
@@ -270,37 +273,37 @@ const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
 })
 
 function LogOut(req, res, next) {
-    try{
-        console.log("logout");
-        res.cookie("user", "", { sameSite:'none', secure: true }).json({logoutSuccess: true});
-    }catch (err) {
-        res.status(401).json({ error: 'error' });
-        console.error(err);
-        next(err);
-    }
+	try {
+		console.log("logout");
+		res.cookie("user", "", { sameSite: 'none', secure: true }).json({ logoutSuccess: true });
+	} catch (err) {
+		res.status(401).json({ error: 'error' });
+		console.error(err);
+		next(err);
+	}
 }
 function VerifyToken(req, res, next) {
-    try {
-        console.log("verify Token");
-        // console.log(req.cookies);
-        // console.log(req.cookies.user);
-        const clientToken = req.cookies.user;
-        
-        const decoded = jwt.verify(clientToken, SecretKey);
-        console.log(decoded);
-        if (decoded) {
-            // console.log(decoded);
-            // res.locals.userId = decoded.user_id;
-            res.status(201).json({userId: decoded.user_id, gitId: decoded.git_id});
-            next();
-        }
-        else {
-            res.status(401).json({ error: 'unauthorized' });
-        }
-    } catch(err) {
-        // console.log(err);
-        res.status(401).json({ error: 'token expired' });
-    }
+	try {
+		console.log("verify Token");
+		// console.log(req.cookies);
+		// console.log(req.cookies.user);
+		const clientToken = req.cookies.user;
+
+		const decoded = jwt.verify(clientToken, SecretKey);
+		console.log(decoded);
+		if (decoded) {
+			// console.log(decoded);
+			// res.locals.userId = decoded.user_id;
+			res.status(201).json({ userId: decoded.user_id, gitId: decoded.git_id });
+			next();
+		}
+		else {
+			res.status(401).json({ error: 'unauthorized' });
+		}
+	} catch (err) {
+		// console.log(err);
+		res.status(401).json({ error: 'token expired' });
+	}
 }
 
 module.exports = {
