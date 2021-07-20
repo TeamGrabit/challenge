@@ -7,7 +7,11 @@ function ChallengeInfoFix(props) {
 	const _props = props;
 	const _challengeId = _props.match.params.challengeId;
 	const [open, setopen] = useState(false);
-	const handleOpen = () => {
+	const [Month, setMonth] = useState(0);
+	const [Day, setDay] = useState(0);
+	const handleOpen = (a, b) => {
+		setMonth(a);
+		setDay(b);
 		setopen(true);
 	};
 	const handleClose = () => {
@@ -52,7 +56,7 @@ function ChallengeInfoFix(props) {
 					<Grid className="myGrass">
 						{grassData[0].map((data) => (
 							<div className="setBtn">
-								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={handleOpen} role="button" tabIndex={0}>
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen((month + 10) % 12, data[1])} role="button" tabIndex={0}>
 									<div className="text">
 										{(month + 10) % 12}
 										/
@@ -63,7 +67,7 @@ function ChallengeInfoFix(props) {
 						))}
 						{grassData[1].map((data) => (
 							<div className="setBtn">
-								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={handleOpen} role="button" tabIndex={0}>
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen((month + 11) % 12, data[1])} role="button" tabIndex={0}>
 									<div className="text">
 										{(month + 11) % 12}
 										/
@@ -74,7 +78,7 @@ function ChallengeInfoFix(props) {
 						))}
 						{grassData[2].map((data) => (
 							<div className="setBtn">
-								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={handleOpen} role="button" tabIndex={0}>
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen((month + 12) % 12, data[1])} role="button" tabIndex={0}>
 									<div className="text">
 										{(month + 12) % 12}
 										/
@@ -87,10 +91,7 @@ function ChallengeInfoFix(props) {
 				</div>
 				<div className="btnSet">
 					<Button className="Btn" type="button" onClick={grassHandler}>
-						취소
-					</Button>
-					<Button className="Btn" type="button" onClick={grassHandler}>
-						수정완료
+						변경완료
 					</Button>
 				</div>
 			</div>
@@ -106,7 +107,7 @@ function ChallengeInfoFix(props) {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<RequestApproval onClose={handleClose} ch_id={_challengeId} user_id="qf9ar8nv" />
+						<RequestApproval onClose={handleClose} challengeId={_challengeId} userId="qf9ar8nv" month={Month} day={Day} />
 					</div>
 				</Fade>
 			</Modal>
