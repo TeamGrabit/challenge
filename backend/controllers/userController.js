@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
 const { ObjectID } = require('bson');
 const { find } = require('../models/userModel');
+const { json } = require('body-parser');
 
 
 require("dotenv").config();
@@ -142,6 +143,8 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
 
+	const id = ObjectID(challengeId);
+
 	var chArray
 
 	User.findOneByUsername(userId)
@@ -149,7 +152,12 @@ function OutChallenge(req, res) {
 			chArray = user.ch_list
 
 			for (let i = 0; i < chArray.length; i++) {
-				if (chArray[i] === challengeId) {
+				_id = ObjectID(chArray[i]);
+				temp1=JSON.stringify(id);
+				temp2=JSON.stringify(_id);
+
+				if (temp1==temp2) {
+					console.log(chArray[i]);
 					chArray.pop(i);
 					return 1;
 				}
@@ -159,33 +167,64 @@ function OutChallenge(req, res) {
 		.then((state) => {
 			if (state === 0)
 				throw new Error('user DB에 해당 challenge 없음.')
-			out(chArray)
-
-
+			outch(chArray)
 		})
 		.catch((err) => {
 			console.error(err);
-			res.send('false');
-
-		})
-		.catch((err) => {
-			console.error(err);
-			res.send('false');
 		})
 
-	const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
+	const outch = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
 		$set: {
 			ch_list: chArray
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {
 			console.log(err)
-			res.send('false')
 		}
 		else {
 			console.log("user의 challenge 삭제")
 			console.log(doc._id)
-			res.send('true')
+		}
+	})
+
+	Challenge.findById(id)
+	.then((challenge) =>{
+		userAry = challenge.challenge_users
+
+		for (let i = 0; i < userAry.length; i++) {
+			_id =userAry[i]
+			console.log(i);
+			temp1=JSON.stringify(userId);
+			temp2=JSON.stringify(_id);
+
+			if (temp1==temp2) {
+				console.log(userAry[i]);
+				userAry.pop(i-1);
+				return 1;
+			}
+		}
+		return 0;
+	}).then((state) => {
+		if (state === 0)
+			throw new Error('Challege DB에 해당 유저 없어!')
+		outuser(userAry)
+	})
+	.catch((err) => {
+		console.error(err);
+
+	})
+
+	const outuser = (userAry) => Challenge.findOneAndUpdate({ _id: id }, {
+		$set: {
+			challenge_users: userAry
+		}
+	}, { new: true, useFindAndModify: false }, (err, doc) => {
+		if (err) {
+			console.log(err)
+		}
+		else {
+			console.log("challenge에서 user 삭제")
+			console.log(doc._id)
 		}
 	})
 }
@@ -327,4 +366,3 @@ module.exports = {
 	checkIdDupl: CheckIdDupl,
 
 };
-
