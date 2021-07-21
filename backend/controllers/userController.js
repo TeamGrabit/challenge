@@ -230,59 +230,6 @@ async function LogIn(req, res, next) {
     try {
         const user = await User.loginCheck(id, pw);
         // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
-        console.log("----");
-        console.log(user);
-        //같으면 jwtToken 발급 
-        
-        if (user) {
-            // const token = jwt.createToken(user);
-            const token = jwt.sign({
-                    user_id: user.user_id,
-                    git_id: user.git_id,
-                }
-                , SecretKey, {
-                    expiresIn: '1h'
-                }
-            );
-            res.cookie('user', token, { sameSite:'none', secure: true });
-            res.status(201).json({
-                result: 'ok',
-                token
-            });
-        }
-        else 
-            res.status(400).json({ error: 'invalid user' });
-    }catch (err) {
-        res.status(401).json({ error: 'invalid user' });
-        console.error(err);
-        next(err);
-    }
-}
-
-	const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
-		$set: {
-			ch_list: chArray
-		}
-	}, { new: true, useFindAndModify: false }, (err, doc) => {
-		if (err) {
-			console.log(err)
-			res.send('false')
-		}
-		else {
-			console.log("user의 challenge 삭제")
-			console.log(doc._id)
-			res.send('true')
-		}
-	})
-
-async function LogIn(req, res, next) {
-    const id = req.body.userId;
-    const pw = req.body.userPw;
-    console.log("id, pw :"+id+" "+pw);
-    // DB에서 user 정보 조회 
-    try {
-        const user = await User.loginCheck(id, pw);
-        // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
         console.log(user);
         //같으면 jwtToken 발급 
         if (user === false) {
