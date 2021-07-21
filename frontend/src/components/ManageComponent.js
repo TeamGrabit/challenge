@@ -62,6 +62,10 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			});
 		}
 	};
+	const handleExpel = () => {
+		alert("추방하였습니다");
+		setopen(false);
+	};
 	useEffect(() => {
 		setTitle(challengeData.name);
 		setUser(challengeData.challenge_users);
@@ -116,7 +120,7 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 				<div className="comp_box">
 					<div className="title_box">
 						<div className="comp_title">챌린지 날짜 관리</div>
-						<Button className="saveBtn">저장</Button>
+						<Button className="saveBtn" onClick={handleSave}>저장</Button>
 					</div>
 					<div className="date_box">
 						<Typography className="date_name">시작 날짜 :</Typography>
@@ -157,7 +161,7 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 				onClose={handleClose}
 			>
 				<Fade in={open}>
-					<ExpelMember onClose={handleClose} member={expel} />
+					<ExpelMember onClose={handleClose} handleExpel={handleExpel} member={expel} />
 				</Fade>
 			</Modal>
 		</div>
