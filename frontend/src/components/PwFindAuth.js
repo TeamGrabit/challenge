@@ -34,7 +34,7 @@ function PwFindAuth({ setStatus }) {
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
 	const authMailSendHandler = async () => { // mail 전송
-		const result = await authMailSend(email);
+		const result = await authMailSend(email, 1);
 		console.log(result);
 		// TODO: 가입되지 않은 사용자입니다. 새로 가입해주세요 추가해야함
 		if (!result) { alert('인증 메일 전송에 실패했습니다. 다시 한 번 시도해주세요'); } else { alert('인증 메일이 전송되었습니다. 메일함을 확인해주세요'); }
@@ -43,7 +43,6 @@ function PwFindAuth({ setStatus }) {
 	const authMailCheckHandler = async () => { // email 인증번호 맞게 입력했는지 확인
 		const result = await authMailCheck(email, authNum);
 		if (result) { alert('인증에 성공했습니다.'); } else { alert('인증번호가 올바르지 않습니다. 다시 한 번 확인해주세요'); }
-		console.log(result);
 		setisMailAuth(result);
 		setStatus(result);
 	};
@@ -60,7 +59,7 @@ function PwFindAuth({ setStatus }) {
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					disabled={isMailAuth}
-					error={!isEmail(email)}
+					error={email.length > 0 && !isEmail(email)}
 				/>
 
 				<Button

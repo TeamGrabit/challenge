@@ -24,6 +24,11 @@ const CssTextField = withStyles({
 function PwChange() {
 	const [password, setPw] = useState("");
 	const [pwCheck, setPwCheck] = useState("");
+	const submitHandler = async () => {
+		if (password.length === 0 || password !== pwCheck) { alert("올바르지 않은 입력입니다.\n입력을 다시 한 번 확인해주세요."); } else {
+			// pw change viewmodel 함수 호출
+		}
+	};
 	return (
 		<div className="pw-change">
 			<div>
@@ -38,8 +43,6 @@ function PwChange() {
 						type="password"
 						value={password}
 						onChange={(e) => setPw(e.target.value)}
-						// disabled={isMailAuth}
-						// error={!isEmail(email)}
 					/>
 				</Box>
 				<Box mt={2}>
@@ -56,9 +59,14 @@ function PwChange() {
 						type="password"
 						value={pwCheck}
 						onChange={(e) => setPwCheck(e.target.value)}
-						error={password !== pwCheck}
+						error={password.length > 0 && password !== pwCheck}
 					/>
-					<Button className="btn">변경하기</Button>
+					<Button
+						className="btn"
+						onClick={submitHandler}
+					>
+						변경하기
+					</Button>
 				</Box>
 			</div>
 		</div>);

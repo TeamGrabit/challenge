@@ -51,9 +51,9 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SendAuthMail = async (eMail) => {
+	const SendAuthMail = async (eMail, type = 0) => {
 		let flag = false;
-		await axios.post(`${API_URL}/authmail/send`, { email: eMail })
+		await axios.post(`${API_URL}/authmail/send`, { type, email: eMail })
 			.then((res) => {
 				console.log(res);
 				if (res.data.result === "success") flag = true;
