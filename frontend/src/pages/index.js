@@ -9,3 +9,4 @@ export { default as ChallengeMake } from './ChallengeMake';
 export { default as NowChallenge } from './NowChallenge';
 export { default as ManageChallenge } from './ManageChallenge';
 export { default as PwFind } from './PwFind';
+export { default as IdFind } from './IdFind';
