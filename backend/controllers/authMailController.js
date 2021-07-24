@@ -84,7 +84,7 @@ async function SendAuthMail(req, res){
 async function CheckAuthNum(req, res) { // 이거는 type상관없이 가능
     try {
         const email = req.body.email;
-        const input_num = req.body.authNum;
+        const input_num = req.body.auth_num;
 
         const info = await AuthMail.findRecentByEmail(email);
         //console.log(info);
