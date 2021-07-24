@@ -3,8 +3,12 @@ const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
 const { ObjectID } = require('bson');
+const { find } = require('../models/userModel');
+
+
 require("dotenv").config();
 const SecretKey = process.env.SECRET_KEY;
+
 
 function getCurrentDate() {
 	var date = new Date();
@@ -22,17 +26,17 @@ function getCurrentDate() {
 async function CreateUser(req, res, next) {
 	try {
 		console.log(req.body);
-		const { user_id, user_pw, user_name, user_email, git_id } = req.body;
+		const { userId, userPw, userName, userEmail, gitId } = req.body;
 		let today = getCurrentDate();
 		const in_date = today;
 		const last_update = today;
 
-		const user = await User.findOneByUsername(user_id);
+		const user = await User.findOneByUsername(userId);
 		if (user) {
 			console.log(user);
 			throw 'user exists';
 		} else {
-			await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
+			await User.create(userId, userPw, userName, userEmail, gitId, in_date, last_update);
 		}
 		res.status(201).json({ result: true });
 	} catch (err) {
@@ -41,9 +45,10 @@ async function CreateUser(req, res, next) {
 	}
 }
 
+
 async function CheckIdDupl(req, res) { // id 중복체크용
 	try {
-		const input_id = req.params.user_id;
+		const input_id = req.params.userId;
 		console.log(input_id);
 		const result = await User.getUserById(input_id);
 		if (result) { // 중복 
@@ -220,8 +225,8 @@ function OutChallenge(req, res) {
 }
 
 async function LogIn(req, res, next) {
-    const id = req.body.user_id;
-    const pw = req.body.user_pw;
+    const id = req.body.userId;
+    const pw = req.body.userPw;
     console.log("id, pw :"+id+" "+pw);
     // DB에서 user 정보 조회 
     try {
@@ -256,21 +261,59 @@ async function LogIn(req, res, next) {
     }
 }
 
-const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
-	$set: {
-		ch_list: chArray
-	}
-}, { new: true, useFindAndModify: false }, (err, doc) => {
-	if (err) {
-		console.log(err)
-		res.send('false')
-	}
-	else {
-		console.log("user의 challenge 삭제")
-		console.log(doc._id)
-		res.send('true')
-	}
-})
+
+	const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
+		$set: {
+			ch_list: chArray
+		}
+	}, { new: true, useFindAndModify: false }, (err, doc) => {
+		if (err) {
+			console.log(err)
+			res.send('false')
+		}
+		else {
+			console.log("user의 challenge 삭제")
+			console.log(doc._id)
+			res.send('true')
+		}
+	})
+
+async function LogIn(req, res, next) {
+    const id = req.body.userId;
+    const pw = req.body.userPw;
+    console.log("id, pw :"+id+" "+pw);
+    // DB에서 user 정보 조회 
+    try {
+        const user = await User.loginCheck(id, pw);
+        // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
+        console.log("----");
+        console.log(user);
+        //같으면 jwtToken 발급 
+        
+        if (user) {
+            // const token = jwt.createToken(user);
+            const token = jwt.sign({
+                    user_id: user.user_id,
+                    git_id: user.git_id,
+                }
+                , SecretKey, {
+                    expiresIn: '1h'
+                }
+            );
+            res.cookie('user', token, { sameSite:'none', secure: true });
+            res.status(201).json({
+                result: true
+            });
+        }
+        else 
+            res.status(400).json({ error: 'invalid user' });
+    }catch (err) {
+        res.status(401).json({ error: err });
+        console.error(err);
+        next(err);
+    }
+}
+
 
 function LogOut(req, res, next) {
 	try {
