@@ -45,7 +45,6 @@ async function CreateUser(req, res, next) {
 	}
 }
 
-
 async function CheckIdDupl(req, res) { // id 중복체크용
 	try {
 		const input_id = req.params.userId;
@@ -172,7 +171,6 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 }
 
-
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
 
@@ -232,64 +230,12 @@ async function LogIn(req, res, next) {
     try {
         const user = await User.loginCheck(id, pw);
         // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
-        console.log("----");
         console.log(user);
         //같으면 jwtToken 발급 
-        
-        if (user) {
-            // const token = jwt.createToken(user);
-            const token = jwt.sign({
-                    user_id: user.user_id,
-                    git_id: user.git_id,
-                }
-                , SecretKey, {
-                    expiresIn: '1h'
-                }
-            );
-            res.cookie('user', token, { sameSite:'none', secure: true });
-            res.status(201).json({
-                result: 'ok',
-                token
-            });
-        }
-        else 
-            res.status(400).json({ error: 'invalid user' });
-    }catch (err) {
-        res.status(401).json({ error: 'invalid user' });
-        console.error(err);
-        next(err);
-    }
-}
-
-
-	const out = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
-		$set: {
-			ch_list: chArray
+        if (user === false) {
+			res.status(400).json({ error: 'wrong pw' });
+			return;
 		}
-	}, { new: true, useFindAndModify: false }, (err, doc) => {
-		if (err) {
-			console.log(err)
-			res.send('false')
-		}
-		else {
-			console.log("user의 challenge 삭제")
-			console.log(doc._id)
-			res.send('true')
-		}
-	})
-
-async function LogIn(req, res, next) {
-    const id = req.body.userId;
-    const pw = req.body.userPw;
-    console.log("id, pw :"+id+" "+pw);
-    // DB에서 user 정보 조회 
-    try {
-        const user = await User.loginCheck(id, pw);
-        // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
-        console.log("----");
-        console.log(user);
-        //같으면 jwtToken 발급 
-        
         if (user) {
             // const token = jwt.createToken(user);
             const token = jwt.sign({
@@ -349,6 +295,24 @@ function VerifyToken(req, res, next) {
 	}
 }
 
+async function ChangePw(req, res){
+	try{
+		console.log(req.body);
+		const new_pw = req.body.new_pw;
+		const user_id = req.body.user_id;
+		const user = await User.findOne({"user_id": user_id});
+		console.log(user);
+		if (user == undefined) {
+			res.status(201).json({result: 'user not exists'});
+			return;
+		}
+		await User.changePw(user_id, new_pw);
+		res.status(201).json({result: "success"});
+	}catch (err) {
+		// console.log(err);
+		res.status(401).json({ error: err.message });
+	}
+}
 module.exports = {
     createUser: CreateUser,
     deleteUser: DeleteUser,
@@ -359,6 +323,6 @@ module.exports = {
     verifyToken: VerifyToken,
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
-
+	changePw: ChangePw,
 };
 
