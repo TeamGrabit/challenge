@@ -275,7 +275,7 @@ async function DeleteChallenge(req, res) {
 		for (let i = 0; i < userArray.length; i++) {
 			list = await User.findOne({ user_id: userArray[i] }).then((user) => { return user.ch_list })
 			await list.splice(list.indexOf(challenge_id), 1);
-			await User.findOneAndUpdate({ user_id: userArray[i] }, {
+			User.findOneAndUpdate({ user_id: userArray[i] }, {
 				$set: {
 					ch_list: list
 				}
