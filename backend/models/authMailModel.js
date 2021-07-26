@@ -35,5 +35,4 @@ AuthMail.statics.findRecentByEmail = async function(email) {
     //console.log(result);
     return result[0]; //가장 최신값
 }
-
 module.exports = mongoose.model('authMail',AuthMail);
