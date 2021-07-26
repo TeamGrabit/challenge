@@ -30,12 +30,13 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 	};
 	const handleDelete = () => {
 		const result = deleteChallenge(CId);
+		console.log(CId);
 		console.log(result);
 		if (!result) {
 			alert("삭제 실패");
 		} else {
 			alert("삭제 완료");
-		// history.push('/challenge');
+			// history.push('/challenge');
 		}
 	};
 	const handleSave = async () => {

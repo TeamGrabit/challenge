@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import { Link, Button, TextField, Select, MenuItem, useMediaQuery } from '@material-ui/core';
 import { useUserState } from '../MVVM/Model/UserModel';
@@ -83,7 +84,7 @@ function ChallengeMake({ history }) {
 				alert("생성 실패");
 			} else {
 				alert("생성 완료");
-			// history.push('/challenge');
+				history.push('/challenge');
 			}
 		}
 	};
@@ -227,4 +228,4 @@ function ChallengeMake({ history }) {
 	);
 }
 
-export default ChallengeMake;
+export default withRouter(ChallengeMake);

@@ -36,13 +36,14 @@ export const ChallengeLogicProvider = ({ children }) => {
 		console.log(challengeInfo);
 		let flag = false;
 		await axios.post(`${API_URL}/challenge`, {
-			userId: challengeInfo.userId,
+			user_id: challengeInfo.userId,
 			name: challengeInfo.name,
 			challenge_start: challengeInfo.challenge_start,
 			challenge_end: challengeInfo.challenge_end,
 			private_key: challengeInfo.private_key
 		}).then((res) => {
 			flag = res.data;
+			getChallengeList();
 		});
 		return flag;
 	};
@@ -61,10 +62,12 @@ export const ChallengeLogicProvider = ({ children }) => {
 		return flag;
 	};
 	const deleteChallenge = (CId) => {
+		let result;
 		axios.delete(`${API_URL}/challenge/${CId}`).then((res) => {
 			console.log(res);
-			return res.data;
+			result = res.data;
 		});
+		return result;
 	};
 	return (
 		<GetChallengeContext.Provider value={getChallengeList}>
