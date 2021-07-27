@@ -29,7 +29,7 @@ async function CreateChallenge(req, res) {
 				var chArray;
 				chArray = _user.ch_list
 				_challenge = await Challenge.findById(ch_id)
-				chArray.push(_challenge._id);
+				chArray.push(_challenge._id.toString());
 				join(chArray)
 			})
 
@@ -203,7 +203,7 @@ async function GetChallengeInfo(req, res) {
 }
 
 
-function FixChallengeInfo(req, res) {
+async function FixChallengeInfo(req, res) {
 	const challenge_id = req.params.challenge_id;
 	const id = ObjectID(challenge_id);
 	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key } = req.body;
