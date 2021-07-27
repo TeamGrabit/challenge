@@ -51,9 +51,9 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SendAuthMail = async (eMail, type = 0) => {
+	const SendAuthMail = async (email, user_id = "", type = 0) => {
 		let flag = false;
-		await axios.post(`${API_URL}/authmail/send`, { type, email: eMail })
+		await axios.post(`${API_URL}/authmail/send`, { type, user_id, email })
 			.then((res) => {
 				console.log(res);
 				if (res.data.result === "success") flag = true;
@@ -87,6 +87,12 @@ export const UserLogicProvider = ({ children }) => {
 			flag = res.data.result;
 		});
 		return flag;
+	};
+	const ChangePw = async (user_id, new_pw) => {
+		// let flag = false;
+		await axios.post(`${API_URL}/changepw`, {
+			user_id, new_pw
+		});
 	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>

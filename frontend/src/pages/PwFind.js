@@ -6,6 +6,7 @@ import PwChange from '../components/PwChange';
 
 function PwFind() {
 	const [status, setStatus] = useState(false);
+	const [user_id, setUserId] = useState("");
 	return (
 		<div className="pw-find">
 			<div className="wrap">
@@ -21,8 +22,8 @@ function PwFind() {
 			</div>
 			<div className="line" />
 			{status === false ?
-				<PwFindAuth setStatus={setStatus} />
-				: <PwChange />}
+				<PwFindAuth setStatus={setStatus} user_id={user_id} setUserId={setUserId} />
+				: <PwChange user_id={user_id} />}
 		</div>
 	);
 }
