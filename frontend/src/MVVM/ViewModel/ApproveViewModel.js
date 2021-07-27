@@ -1,9 +1,10 @@
-import React, { useContext, createContext, useEffect } from 'react';
+import React, { useContext, createContext } from 'react';
 import axios from 'axios';
 import { useApproveState, useApproveDispatch } from '../Model/ApproveModel';
 import { API_URL } from '../../CommonVariable';
 
 const CreateApproveContext = createContext(() => {});
+const DDContext = createContext(() => {});
 
 export const ApproveLogicProvider = ({ children }) => {
 	const approve = useApproveState();
@@ -16,9 +17,11 @@ export const ApproveLogicProvider = ({ children }) => {
 			ch_id: approveInfo.ch_id,
 			user_id: approveInfo.user_id,
 			type: approveInfo.type,
-			message: approveInfo.message
+			message: approveInfo.message,
+			request_date: approveInfo.request_date
 		}).then((res) => {
 			flag = res.data;
+			console.log(res.data);
 		});
 		return flag;
 	};

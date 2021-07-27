@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Input, RadioGroup, FormControlLabel, Radio, TextareaAutosize } from '@material-ui/core';
-import { } from '../MVVM/ViewModel/ChallengeViewModel';
+import { useCreateApprove } from '../MVVM/ViewModel/ApproveViewModel';
 
 function RequestApproval({ onClose, challengeId, userId, month, day }) {
+	const createApprove = useCreateApprove();
 	const [Type, setType] = useState(0);
 	const [Message, setMessage] = useState("");
 	const chooseExemption = () => {
@@ -20,9 +21,10 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 			user_id: userId,
 			type: Type,
 			message: Message,
-			req_day: `${month}/${day}`
+			request_date: `${month}/${day}`
 		};
-		console.log(approveInfo);
+		const result = await createApprove(approveInfo);
+		console.log(result);
 		onClose();
 	};
 	return (
