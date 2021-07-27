@@ -419,9 +419,9 @@ module.exports = {
     logIn : LogIn,
     logOut : LogOut,
     getChallengeList: GetChallengeList,
-
     verifyToken: VerifyToken,
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
+	changePw:ChangePw,
 
 };
