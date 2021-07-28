@@ -392,7 +392,6 @@ module.exports = {
 	checkIdDupl: CheckIdDupl,
 	changePw:ChangePw,
 
-	changePw: ChangePw,
 };
 
 
