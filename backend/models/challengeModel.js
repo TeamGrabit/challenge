@@ -16,6 +16,9 @@ const CommitSchema = new Schema({
 	join_time: {
 		type: Date,
 		default: new Date()
+	},
+	user_id:{
+		type:String
 	}
 });
 
