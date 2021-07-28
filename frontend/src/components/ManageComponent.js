@@ -3,10 +3,11 @@ import { Grid, Box, Button, TextField, Typography, Modal, Fade } from '@material
 import DatePicker from 'react-datepicker';
 import ExpelMember from './ExpelMember';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useDeleteChallenge, useSaveChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
+import { useExpelChallenge, useDeleteChallenge, useSaveChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function ManageComponent({ value, index, challengeData, setChallengeData, CId }) {
 	const user_id = useUserState();
+	const expelChallenge = useExpelChallenge();
 	const deleteChallenge = useDeleteChallenge();
 	const saveChallenge = useSaveChallenge();
 	const [title, setTitle] = useState("");
@@ -54,7 +55,6 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			alert("저장 실패");
 		} else {
 			alert("저장 완료");
-			// history.push('/challenge');
 			setChallengeData({
 				name: title,
 				challenge_users: user,
@@ -63,8 +63,20 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			});
 		}
 	};
-	const handleExpel = () => {
-		alert("추방하였습니다");
+	const handleExpel = async (member) => {
+		const result = await expelChallenge(CId, member);
+		console.log(result);
+		if (!result) {
+			alert("추방 실패");
+		} else {
+			alert("추방 완료");
+			setChallengeData({
+				name: title,
+				challenge_users: user,
+				challenge_start: sDate,
+				challenge_end: eDate
+			});
+		}
 		setopen(false);
 	};
 	useEffect(() => {
