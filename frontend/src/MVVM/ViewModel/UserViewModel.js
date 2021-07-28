@@ -10,6 +10,7 @@ const SendAuthMailContext = createContext((email) => {});
 const CheckAuthMailContext = createContext((email, authNum) => {});
 const CheckUniqueIdContext = createContext((id) => {});
 const SignUpUserContext = createContext((userInfo) => {});
+const ChangePwContext = createContext((user_id, new_pw) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -90,8 +91,11 @@ export const UserLogicProvider = ({ children }) => {
 	};
 	const ChangePw = async (user_id, new_pw) => {
 		// let flag = false;
-		await axios.post(`${API_URL}/changepw`, {
+
+		await axios.patch(`${API_URL}/user/changepw`, {
 			user_id, new_pw
+		}).then((res) => {
+			console.log(res.result);
 		});
 	};
 	return (
@@ -102,7 +106,9 @@ export const UserLogicProvider = ({ children }) => {
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
 								<SignUpUserContext.Provider value={SignUp}>
-									{children}
+									<ChangePwContext.Provider value={ChangePw}>
+										{children}
+									</ChangePwContext.Provider>
 								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
@@ -144,5 +150,9 @@ export function useCheckUniqueId() {
 }
 export function useSignUpUser() {
 	const context = useContext(SignUpUserContext);
+	return context;
+}
+export function useChangePw() {
+	const context = useContext(ChangePwContext);
 	return context;
 }
