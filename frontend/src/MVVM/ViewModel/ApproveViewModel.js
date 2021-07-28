@@ -21,7 +21,6 @@ export const ApproveLogicProvider = ({ children }) => {
 			request_date: approveInfo.request_date
 		}).then((res) => {
 			flag = res.data;
-			console.log(res.data);
 		});
 		return flag;
 	};

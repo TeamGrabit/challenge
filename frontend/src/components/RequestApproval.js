@@ -24,7 +24,11 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 			request_date: `${month}/${day}`
 		};
 		const result = await createApprove(approveInfo);
-		console.log(result);
+		if (result === false || result === undefined) {
+			alert('요청 실패');
+		} else {
+			alert('요청 성공');
+		}
 		onClose();
 	};
 	return (

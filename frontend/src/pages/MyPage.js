@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@material-ui/core';
 import { SideBar, ChangePassword } from '../components/index';
+import { useUserState } from '../MVVM/Model/UserModel';
 
 function MyPage() {
+	const user = useUserState();
 	const [Name, setName] = useState("name");
 	const [Email, setEmail] = useState("test@gmail.com");
 	const [GitId, setGitId] = useState("gitId");
@@ -23,6 +25,7 @@ function MyPage() {
 		console.log(Name);
 		console.log(Email);
 		console.log(GitId);
+		console.log(user);
 	};
 	return (
 		<div className="mypage">
