@@ -6,24 +6,33 @@
 	.head {
 		display:flex;
 		flex-direction: row;
-		justify-content: space-between;
 		margin-top: 1rem;
 
-		.headTitle {
-			font-size: 1.6rem;
-			margin-left: 5%;
-			background-color: $green1;
+		.head-left {
+			display:flex;
+			flex-direction: column;
 			width:50%;
-			text-align: center;
-			border-radius: 10px;
+
+			.headTitle {
+				font-size: 1.6rem;
+				background-color: $green1;
+				text-align: center;
+				border-radius: 10px;
+				margin-bottom: 0.51rem;
+			}
 		}
-		.btnCon {
-			justify-content: space-between;
+		.head-right {
+			display:flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width:50%;
 		}
 		.btn {
 			background-color: $green1 !important;
-			margin-right: 1rem;
 			letter-spacing: 2px;
+			margin-bottom: 1rem;
+			width: 80%;
 		}
 	}
 

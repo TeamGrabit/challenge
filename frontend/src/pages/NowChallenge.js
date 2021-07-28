@@ -17,6 +17,8 @@ function NowChallenge({ match }) {
 	const [admitOpen, setAdmitOpen] = useState(false);
 	const [challengeGrass, setChallengeGrass] = useState();
 	const [myGrass, setMyGrass] = useState();
+	const [king, setKing] = useState(null);
+	const [poor, setPoor] = useState(null);
 	const today = new Date();
 	useEffect(() => {
 		const result = challengeData.filter((item) => item.challenge_id === CId);
@@ -25,6 +27,7 @@ function NowChallenge({ match }) {
 			setTitle(c.name);
 			return 1;
 		});
+		// team grass
 		axios.get(`${API_URL}/grass/challenge`, { params: {
 			challenge_id: CId,
 			month: today.getMonth() + 1,
@@ -33,6 +36,7 @@ function NowChallenge({ match }) {
 			setChallengeGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
+		// my grass
 		axios.get(`${API_URL}/grass/personal`, { params: {
 			user_id: userData.userId,
 			challenge_id: CId,
@@ -42,6 +46,17 @@ function NowChallenge({ match }) {
 			setMyGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
+		// other grass
+		// king
+		axios.get(`${API_URL}/challengeKing/${CId}`).then((res) => {
+			console.log(res);
+			// king api 수정되면 넣기
+		});
+		// poor
+		axios.get(`${API_URL}/challengePoor/${CId}`).then((res) => {
+			console.log(res);
+			// poor api 수정되면 넣기
+		});
 	}, [challengeData]);
 	// grass Init Data --- temp
 	const otherGrass = [
@@ -74,17 +89,19 @@ function NowChallenge({ match }) {
 		<>
 			<Grid className="NowChallenge">
 				<Grid className="head">
-					<Typography className="headTitle">{title}</Typography>
-					<Grid className="btnCon">
+					<Grid className="head-left">
+						<Typography className="headTitle">{title}</Typography>
+						<Grid className="teamGrass">
+							{/* 팀 잔디 */}
+							{challengeGrass !== undefined && challengeGrass.map((data) => (
+								<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
+							))}
+						</Grid>
+					</Grid>
+					<Grid className="head-right">
 						<Button className="btn" onClick={() => setInviteOpen(true)}>Invite</Button>
 						<Button className="btn" onClick={() => setAdmitOpen(true)}>Admit</Button>
 					</Grid>
-				</Grid>
-				<Grid className="teamGrass">
-					{/* 팀 잔디 */}
-					{challengeGrass !== undefined && challengeGrass.map((data) => (
-						<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
-					))}
 				</Grid>
 				<Grid className="secondGrid">
 					{/* 나의 잔디, 커밋왕 */}
@@ -99,10 +116,11 @@ function NowChallenge({ match }) {
 					<Grid className="right-con">
 						<Typography className="sub-title">이달의 커밋왕</Typography>
 						<Grid className="commitKing">
-							{/* 백엔드에서 내용 불러오기 */}
-							<p className="rank">1등: 이현광</p>
-							<p className="rank">2등: 김수빈</p>
-							<p className="rank">3등: 차현철</p>
+							{
+								king === null ?
+									<p className="rank">데이터를 불러오는 중입니다.</p>
+									: king.map((d) => <p className="rank">{d}</p>)
+							}
 						</Grid>
 					</Grid>
 				</Grid>
@@ -125,8 +143,11 @@ function NowChallenge({ match }) {
 					<Grid className="middle-con">
 						<Typography className="sub-title">이달의 실패왕</Typography>
 						<Grid className="failKing">
-							{/* 백엔드에서 내용 불러오기 */}
-							<p className="rank">김바다</p>
+							{
+								poor === null ?
+									<p className="rank">데이터를 불러오는 중입니다.</p>
+									: poor.map((d) => <p className="rank">{d}</p>)
+							}
 						</Grid>
 					</Grid>
 				</Grid>
