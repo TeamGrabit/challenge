@@ -391,7 +391,7 @@ module.exports = {
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
 	changePw:ChangePw,
-	changePw: ChangePw,
+
 };
 
 

@@ -73,12 +73,14 @@ async function WhoIsKing(req, res) {
             
         });
 
+	
+
 
         for(let i=0;i<3;i++){
 			if(commit[i]==null){
 				break;
 			}
-            await User.findOne({user_id:commit[i]._id}).then((user)=> {
+            await User.findOne({user_id:commit[i].user_id}).then((user)=> {
                 
                 usercommit.push(user);
                 
@@ -123,7 +125,7 @@ async function WhoIsPoor(req, res) {
         return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
     })
     
-    await User.findOne({user_id:commit[0]._id}).then((user) =>{
+    await User.findOne({user_id:commit[0].user_id}).then((user) =>{
         Puser=user;
 
     }, (err,doc) => {
