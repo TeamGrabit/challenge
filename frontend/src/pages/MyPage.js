@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@material-ui/core';
 import { SideBar, ChangePassword } from '../components/index';
-import { useUserState } from '../MVVM/Model/UserModel';
+import { } from '../MVVM/ViewModel/UserViewModel';
 
 function MyPage() {
-	const user = useUserState();
-	const [Name, setName] = useState("name");
+	const [Name, setName] = useState("d");
 	const [Email, setEmail] = useState("test@gmail.com");
-	const [GitId, setGitId] = useState("gitId");
+	const [GitId, setGitId] = useState("d");
 	const [open, setopen] = useState(false);
 	const handleOpen = () => {
 		setopen(true);
@@ -25,7 +24,6 @@ function MyPage() {
 		console.log(Name);
 		console.log(Email);
 		console.log(GitId);
-		console.log(user);
 	};
 	return (
 		<div className="mypage">
