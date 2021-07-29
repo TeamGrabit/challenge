@@ -50,12 +50,12 @@ async function GetCommitList(user_id, challenge_id, year, month){
         }
         isCommitedList.push(monthList);
     });
-    console.log(isCommitedList);
     return isCommitedList;
 }
 
 // month-2,month-1,month 세 달치 commit 기록을 true, false배열로 반환. 
 // return 형태 : [[전전달],[전달],[이번달]]
+// 챌린지 내 모든 유저의 기록을 합쳐서 출력
 async function GetCommitLists(users, challenge_id, year, month){
 	var dates = [];
 	for(let i=0; i<users.length; i++){
@@ -93,6 +93,47 @@ async function GetCommitLists(users, challenge_id, year, month){
 	return isCommitedList;
 }
 
+// month-2,month-1,month 세 달치 commit 기록을 true, false배열로 반환. 
+// return 형태 : [[[전전달],[전달],[이번달]], [유저2의 기록], ...]
+// 챌린지 내 다른 유저의 기록을 출력
+async function GetOtherCommitLists(users, challenge_id, year, month){
+	const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
+	var dates = [];
+	var isCommitedList = []; 
+	var tempDate = new Date(year, month-3);
+	for(let i=0; i<users.length; i++){
+		// Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
+    	const result = await Approve.findByUserChallangeMonth(users[i], challenge_id, year, month);
+		const approve = result.map(element => dateToString(element.date));
+
+		// 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
+		var gitAll = await gitData.findOneByUserId(users[i]);
+		if(gitAll === null){
+			await CreateGitData(users[i]);
+			gitAll = await gitData.findOneByUserId(users[i]);
+		}
+		const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
+
+		// approve, git 중복 제거해서 담기
+		dates[i] = Array.from(new Set(approve.concat(git))).sort();
+
+		let tempMonth = [];
+		dateCounts.forEach(dateCount => {
+			var monthList = new Array(dateCount).fill(false);
+			for(var j=0; j< dateCount; j++){
+				if (dates[i].find(element => element == dateToString(tempDate)) !== undefined)
+					monthList[j] = true;
+				tempDate.setDate(tempDate.getDate()+1);
+			}
+			tempMonth.push(monthList);
+		});
+		isCommitedList[i] = tempMonth;
+	}
+
+	return isCommitedList;
+}
+
+// /grass/personal api 처리 함수, user grass 출력
 async function GetPersonalGrass(req, res){
     try {
 		const { user_id, challenge_id, year, month } = req.query;
@@ -106,7 +147,7 @@ async function GetPersonalGrass(req, res){
 
 }
 
-// /grass/challenge api 처리 함수 여기에 만들어주세요!
+// /grass/challenge api 처리 함수, 챌린지별 grass 출력
 async function GetChallengeGrass(req, res){
     try {
 		const { challenge_id, year, month } = req.query;
@@ -123,9 +164,35 @@ async function GetChallengeGrass(req, res){
 
 }
 
+// /grass/other api 처리 함수, 챌린지별 grass 출력
+async function GetOtherGrass(req, res){
+    try {
+		const { user_id, challenge_id, year, month } = req.query;
+		const id = ObjectID(challenge_id);
+	
+		const chData = await Challenge.findById(id).then(data => data);
+
+		// 이 요청을 보내는 유저는 삭제하기!
+		let others = chData.challenge_users;
+		for (let i=0; i<others.length; i++) {
+			if(others[i] === user_id) {
+				others.splice(i,1);
+			}
+		}
+
+        const isCommitedList = await GetOtherCommitLists(others, challenge_id, year, month);
+        res.status(201).json({OtherList: isCommitedList});
+    }catch(err) {
+        console.log(err);
+        res.status(401).json({ error: err });
+    }
+
+}
+
 
 module.exports = {
     getPersonalGrass: GetPersonalGrass, // api 처리
 	getChallengeGrass: GetChallengeGrass,
+	getOtherGrass: GetOtherGrass,
     getCommitList: GetCommitList, // function  (다른 컨트롤러에서 가져다써도됨)
 }
