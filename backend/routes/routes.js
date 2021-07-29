@@ -24,7 +24,7 @@ router.patch('/user/changepw', userController.changePw);
 // <-- mailCon
 router.post('/authmail/send', mailContriller.sendAuthMail);
 router.post('/authmail/check', mailContriller.checkAuthNum);
-router.post('/invite/:challenge_id', mailContriller.inviteUser);
+router.post('/invite', mailContriller.inviteUser);
 // mailCon --> 
 
 // <-- gitCrawlData
