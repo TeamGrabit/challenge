@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal, Backdrop, Fade, Grid } from '@material-ui/core';
+import axios from 'axios';
 import Slider from 'react-slick';
 import { RequestApproval } from '../components/index';
+import { useChallengeState } from '../MVVM/Model/ChallengeModel';
+import { useUserState } from '../MVVM/Model/UserModel';
+import { API_URL } from '../CommonVariable';
 
 function ChallengeInfoFix(props) {
 	const _props = props;
 	const _challengeId = _props.match.params.challengeId;
+	const challengeData = useChallengeState();
+	const userData = useUserState();
+	const [MyGrass, setMyGrass] = useState();
 	const [open, setopen] = useState(false);
 	const [Month, setMonth] = useState(0);
 	const [Day, setDay] = useState(0);
+	const today = new Date();
 	const handleOpen = (a, b) => {
 		setMonth(a);
 		setDay(b);
@@ -20,30 +28,17 @@ function ChallengeInfoFix(props) {
 	const grassHandler = () => {
 		window.location.href = `/challenge/info/${_challengeId}`;
 	};
-	const grassInitialData = [
-		[
-			true, false, false, false, true, false, false,
-			false, false, true, false, false, true, false,
-			true, false, false, false, false, false, true,
-			true, false, false, false, false, false, true,
-			true, false, false
-		],
-		[
-			true, false, false, false, true, false, false,
-			false, false, true, false, false, true, false,
-			true, false, false, false, false, false, true,
-			true, false, false, false, false, false, true,
-			true, false
-		],
-		[
-			true, false, false, false, true, false, false,
-			false, false, true, false, false, true, false,
-			true, false, false, false, false, false, true,
-			true, false, false, false, false, false, true,
-			true, false, true
-		]
-	];
-	const grassData = grassInitialData.map((array) => array.map((data, index) => [data, index + 1]));
+	useEffect(() => {
+		axios.get(`${API_URL}/grass/personal`, { params: {
+			user_id: userData.userId,
+			challenge_id: _challengeId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
+			setMyGrass(res.data.isCommitedList.map((array) => array.map((data, index) => [data, index + 1])));
+		})
+			.catch((error) => { console.log(error); });
+	}, [challengeData]);
 	const day = new Date();
 	const month = day.getMonth() + 1;
 	return (
@@ -54,7 +49,7 @@ function ChallengeInfoFix(props) {
 				</div>
 				<div className="box">
 					<Grid className="myGrass">
-						{grassData[0].map((data) => (
+						{MyGrass !== undefined && MyGrass[0].map((data) => (
 							<div className="setBtn">
 								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen((month + 10) % 12, data[1])} role="button" tabIndex={0}>
 									<div className="text">
@@ -65,7 +60,7 @@ function ChallengeInfoFix(props) {
 								</Grid>
 							</div>
 						))}
-						{grassData[1].map((data) => (
+						{MyGrass !== undefined && MyGrass[1].map((data) => (
 							<div className="setBtn">
 								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen((month + 11) % 12, data[1])} role="button" tabIndex={0}>
 									<div className="text">
@@ -76,7 +71,7 @@ function ChallengeInfoFix(props) {
 								</Grid>
 							</div>
 						))}
-						{grassData[2].map((data) => (
+						{MyGrass !== undefined && MyGrass[2].map((data) => (
 							<div className="setBtn">
 								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen((month + 12) % 12, data[1])} role="button" tabIndex={0}>
 									<div className="text">
@@ -107,7 +102,7 @@ function ChallengeInfoFix(props) {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<RequestApproval onClose={handleClose} challengeId={_challengeId} userId="qf9ar8nv" month={Month} day={Day} />
+						<RequestApproval onClose={handleClose} challengeId={_challengeId} userId={userData.userId} month={Month} day={Day} />
 					</div>
 				</Fade>
 			</Modal>
