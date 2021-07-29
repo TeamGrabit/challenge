@@ -55,7 +55,6 @@ function RegisterTerms({ changeStatus }) {
 						label="동의"
 					/>
 				</FormGroup>
-				{/* <Link className="link" href="/registerinput"> */}
 				<Button
 					className="btn"
 					variant="contained"
@@ -64,7 +63,6 @@ function RegisterTerms({ changeStatus }) {
 				>
 					다음
 				</Button>
-				{/* </Link> */}
 			</div>
 		</div>
 	);
