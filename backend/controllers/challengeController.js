@@ -310,7 +310,8 @@ async function DeleteChallenge(req, res) {
 }
 
 async function JoinChallenge(req, res) {
-	const { user_id, challenge_id, private_key } = req.body;
+	const { user_id, private_key } = req.body;
+	const challenge_id = req.params.challenge_id;
 	const id = ObjectID(challenge_id);
 
 	try {

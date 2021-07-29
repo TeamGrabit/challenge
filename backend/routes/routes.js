@@ -48,7 +48,7 @@ router.get('/challengePoor/:challenge_id', challengeController.whoIsPoor);
 router.patch('/challenge/:challenge_id', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challenge_id', challengeController.deleteChallenge);
 
-router.patch('/challengeIn/challenge', challengeController.joinChallenge);
+router.patch('/challenge/:challenge_id/in', challengeController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
 
 router.post('/approve', approveController.createApprove);
