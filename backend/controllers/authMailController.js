@@ -19,9 +19,8 @@ let transporter = nodemailer.createTransport({
 
 async function InviteUser(req, res) {
 	try {
-		const { user_email } = req.body;
-		const ch_id = req.params.challenge_id;
-		const id = ObjectID(ch_id)
+		const { user_email, challenge_id } = req.body;
+		const id = ObjectID(challenge_id)
 		const challenge = await Challenge.findById(id).then((ch) => {return ch})
 
 		transporter.sendMail({
