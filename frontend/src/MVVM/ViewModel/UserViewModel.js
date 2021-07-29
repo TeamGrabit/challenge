@@ -96,6 +96,8 @@ export const UserLogicProvider = ({ children }) => {
 			user_id, new_pw
 		}).then((res) => {
 			console.log(res.result);
+			if (res.result === "success") return true;
+			return false;
 		});
 	};
 	return (

@@ -21,7 +21,7 @@ const CssTextField = withStyles({
 	},
 })(TextField);
 
-function PwChange({ user_id }) {
+function PwChange({ history, user_id }) {
 	const [password, setPw] = useState("");
 	const [pwCheck, setPwCheck] = useState("");
 	const changePw = useChangePw();
@@ -29,7 +29,11 @@ function PwChange({ user_id }) {
 		if (password.length === 0 || password !== pwCheck) { alert("올바르지 않은 입력입니다.\n입력을 다시 한 번 확인해주세요."); } else {
 			// pw change viewmodel 함수 호출
 			console.log(user_id, password);
-			changePw(user_id, password);
+			const result = changePw(user_id, password);
+			if (result) {
+				alert('비밀번호가 정상적으로 변경되었습니다.');
+				history.push('/login');
+			} else alert('비밀번호 변경에 실패했습니다.');
 		}
 	};
 	return (

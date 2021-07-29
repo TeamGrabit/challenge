@@ -4,7 +4,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import PwFindAuth from '../components/PwFindAuth';
 import PwChange from '../components/PwChange';
 
-function PwFind() {
+function PwFind({ history }) {
 	const [status, setStatus] = useState(false);
 	const [user_id, setUserId] = useState("");
 	return (
@@ -23,7 +23,7 @@ function PwFind() {
 			<div className="line" />
 			{status === false ?
 				<PwFindAuth setStatus={setStatus} user_id={user_id} setUserId={setUserId} />
-				: <PwChange user_id={user_id} />}
+				: <PwChange history={history} user_id={user_id} />}
 		</div>
 	);
 }
