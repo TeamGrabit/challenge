@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Box, Tabs, Tab, makeStyles, withStyles, useMediaQuery } from '@material-ui/core';
-import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import ManageComponent from '../components/ManageComponent';
-import { useGetChallengeDetail } from '../MVVM/ViewModel/ChallengeViewModel';
 import { API_URL } from '../CommonVariable';
+import { useChallengeState } from '../MVVM/Model/ChallengeModel';
+import { useUserState } from '../MVVM/Model/UserModel';
 
 function ManageChallenge({ match }) {
+	const user_id = useUserState();
 	const CId = match.params.challengeId;
 	const compo_number = [0, 1, 2, 3, 4, 5];
 	const [challengeData, setChallengeData] = useState([]);
@@ -102,7 +103,7 @@ function ManageChallenge({ match }) {
 								<MobileTab label="멤버" />
 								<MobileTab label="날짜" />
 								<MobileTab label="..." />
-								<MobileTab label="..." />
+								<MobileTab label="탈퇴" />
 								<MobileTab label="중단" />
 							</Tabs>
 							:
@@ -118,7 +119,7 @@ function ManageChallenge({ match }) {
 								<ManTab label="챌린지 멤버 관리" />
 								<ManTab label="챌린지 날짜 관리" />
 								<ManTab label="..." />
-								<ManTab label="..." />
+								<ManTab label="챌린지 탈퇴" />
 								<ManTab label="챌린지 중단" />
 							</Tabs>
 					}

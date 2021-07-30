@@ -79,6 +79,8 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 		}
 		setopen(false);
 	};
+	const handleInvite = () => {
+	};
 	useEffect(() => {
 		setTitle(challengeData.name);
 		setUser(challengeData.challenge_users);
@@ -112,7 +114,6 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 				<div className="comp_box">
 					<div className="title_box">
 						<div className="comp_title">챌린지 멤버 관리</div>
-						<Button className="saveBtn">저장</Button>
 					</div>
 					<div className="content_box">
 						<Grid container spacing={1}>
@@ -125,6 +126,13 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 									</div>
 								</Grid>
 							))}
+							<Grid item lg={3} md={4} sm={6} xs={12}>
+								<div className="member_box">
+									<Box className="invite_inner" onClick={handleInvite}>
+										+ Invite
+									</Box>
+								</div>
+							</Grid>
 						</Grid>
 					</div>
 				</div>
