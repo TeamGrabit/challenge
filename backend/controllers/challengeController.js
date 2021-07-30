@@ -400,8 +400,9 @@ async function JoinChallenge(req, res) {
 		}
 
 		const challenge = await Challenge.findById(id)
+		const user = await User.findOneByUsername(user_id)
 		if (challenge.private_key === private_key){
-			if(challenge.challenge_users.indexOf(user_id) < 0) join(challenge)
+			if(challenge.challenge_users.indexOf(user_id) < 0 && user.ch_list.indexOf(challenge_id)) join(challenge)
 			else {
 				console.log('already join user!')
 				res.send('false')

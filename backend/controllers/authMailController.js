@@ -21,7 +21,7 @@ async function InviteUser(req, res) {
 	try {
 		const { user_email, challenge_id } = req.body;
 		const id = ObjectID(challenge_id)
-		const challenge = await Challenge.findById(id).then((ch) => {return ch})
+		const challenge = await Challenge.findById(id).then((ch) => { return ch })
 
 		transporter.sendMail({
 			from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
@@ -29,9 +29,9 @@ async function InviteUser(req, res) {
 			subject: `1day 1commit "${challenge.name}"에서 당신을 초대했습니다.`, // Subject line
 			text: `링크 : http://localhost:3000/challenge/info/${challenge._id} \n비밀번호 : ${challenge.private_key}`, // plain text body
 		}, (err, info) => {
-			if(err){
-				res.status(400).json({ result: false })
-			}else{
+			if (err) {
+				res.status(401).json({ error: err })
+			} else {
 				res.status(200).json({ result: true })
 			}
 		});

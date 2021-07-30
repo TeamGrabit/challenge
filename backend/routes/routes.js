@@ -19,6 +19,7 @@ router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
 router.get('/user/uniqueid/:userId', userController.checkIdDupl);
 router.patch('/user/changepw', userController.changePw);
+router.get('/user/:user_id', userController.userInfomation);
 // userCon -->
 
 // <-- mailCon
