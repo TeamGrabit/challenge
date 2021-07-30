@@ -174,6 +174,7 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 function OutChallenge(req, res) {
 	const { userId, challengeId } = req.body;
+	const challenge_params=req.params.challenge_id;
 
 	const id = ObjectID(challengeId);
 
@@ -182,6 +183,9 @@ function OutChallenge(req, res) {
 	User.findOneByUsername(userId)
 		.then((user) => {
 			chArray = user.ch_list
+			if(challenge_params != challengeId){
+				return 2
+			}
 
 			for (let i = 0; i < chArray.length; i++) {
 				_id = ObjectID(chArray[i]);
@@ -189,16 +193,19 @@ function OutChallenge(req, res) {
 				temp2=JSON.stringify(_id);
 
 				if (temp1==temp2) {
-					console.log(chArray[i]);
-					chArray.splice(i,i);
+					chArray.splice(i,1);
 					return 1;
 				}
 			}
 			return 0;
 		})
 		.then((state) => {
-			if (state === 0)
+			if(state === 2){
+				throw new Error("challenge.params 와 challenge.body와 같지 않음")
+			}
+			else if (state === 0)
 				throw new Error('user DB에 해당 challenge 없음.')
+		
 			outch(chArray)
 		})
 		.catch((err) => {
@@ -223,6 +230,8 @@ function OutChallenge(req, res) {
 	.then((challenge) =>{
 		userAry = challenge.challenge_users
 		userCommitAry = challenge.commitCount
+		usernum = challenge.challenge_user_num
+		console.log(usernum)
 		
 		var k=0;
 
@@ -232,10 +241,8 @@ function OutChallenge(req, res) {
 			temp2=JSON.stringify(_id);
 
 			if (temp1==temp2) {
-				console.log(userAry)
-				console.log(userAry[i],i)
-				userAry.splice(i,i);
-				console.log(userAry)
+				userAry.splice(i,1);
+				usernum = usernum - 1
 				k = k+1;
 				break
 			}
@@ -248,15 +255,12 @@ function OutChallenge(req, res) {
 			temp2=JSON.stringify(_id.user_id);
 
 			if (temp1==temp2) {
-				console.log(userCommitAry)
-				console.log(userCommitAry[i],i)
-				userCommitAry.splice(i,i);
-				console.log(userCommitAry)
+
+				userCommitAry.splice(i,1);
 				k = k+1;
 				break
 			}
 		}
-		console.log(k)
 		if(k==2){
 			return 1
 		}else{
@@ -266,17 +270,18 @@ function OutChallenge(req, res) {
 	}).then((state) => {
 		if (state === 0)
 			throw new Error('Challege DB에 해당 유저 없어!')
-		outuser(userAry,userCommitAry)
+		outuser(userAry,userCommitAry,usernum)
 	})
 	.catch((err) => {
 		console.error(err);
 
 	})
 
-	const outuser = (userAry,userCommitAry) => Challenge.findOneAndUpdate({ _id: id }, {
+	const outuser = (userAry,userCommitAry,usernum) => Challenge.findOneAndUpdate({ _id: id }, {
 		$set: {
 			challenge_users: userAry,
-			commitCount: userCommitAry
+			commitCount: userCommitAry,
+			challenge_user_num:usernum
 		}
 	}, { new: true, useFindAndModify: false }, (err, doc) => {
 		if (err) {
