@@ -19,11 +19,13 @@ router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
 router.get('/user/uniqueid/:userId', userController.checkIdDupl);
 router.patch('/user/changepw', userController.changePw);
+router.get('/user/:user_id', userController.userInfomation);
 // userCon -->
 
 // <-- mailCon
 router.post('/authmail/send', mailContriller.sendAuthMail);
 router.post('/authmail/check', mailContriller.checkAuthNum);
+router.post('/invite', mailContriller.inviteUser);
 // mailCon --> 
 
 // <-- gitCrawlData
@@ -40,6 +42,7 @@ router.get('/grass/other', grassController.getOtherGrass);
 // grassController -->
 
 router.post('/challenge', challengeController.createChallenge);
+router.get('/challenge', challengeController.getAllChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
 router.get('/challenge/:challenge_id', challengeController.getChallengeInfo);
 router.get('/challengeKing/:challenge_id', challengeController.whoIsKing);
@@ -47,9 +50,8 @@ router.get('/challengePoor/:challenge_id', challengeController.whoIsPoor);
 router.patch('/challenge/:challenge_id', challengeController.fixChallengeInfo);
 router.delete('/challenge/:challenge_id', challengeController.deleteChallenge);
 
-router.patch('/challengeIn/challenge', challengeController.joinChallenge);
+router.patch('/challenge/:challenge_id/in', challengeController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
-router.post('/invite/:challenge_id', challengeController.inviteUser);
 
 router.post('/approve', approveController.createApprove);
 router.delete('/approve/:approve_id', approveController.deleteApprove);
@@ -64,8 +66,6 @@ router.delete('/approve/:approve_id', approveController.deleteApprove);
 router.get('/approve/:approve_id', approveController.getApproveInfo);
 router.patch('/approve/:approve_id', approveController.confirmApprove);
 router.get('/approve/list/:ch_id', approveController.getApproveList);
-
-router.post('/invite/:challenge_id', challengeController.inviteUser);
 
 
 module.exports = router;
