@@ -1,0 +1,109 @@
+.pw-find{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    //justify-content: center;
+    .wrap{
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        width:60%;
+        justify-content: space-between;
+        color: $green5;
+        margin-top: 20vh;
+        .title{
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            font-size:1.5rem;
+            .lock-icon{
+                width: 40px;
+                height: 40px;
+            }
+        }
+        .process{
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            .arrow-icon{
+                width: 20px;
+                height: 20px;
+                margin-left: 5px;
+                margin-right: 5px;
+                //color:#C4C4C4
+            }
+            //.normal{color:#C4C4C4}
+            .highlight{color:$green4; font-weight: 600;}
+        }
+    }
+    .line{
+        width: 60%;
+        height: 1px;
+        border-bottom: 1px solid;
+        border-color: #C4C4C4;
+        margin-bottom: 10vh;
+        margin-top: 1px;
+    }
+    .pw-find-auth{
+        .btn{
+            // width: 5rem;
+            background-color: $green3 !important;
+            margin-left: 1vw;
+        }
+        .btn-nextHelper{
+            // width: 5rem;
+            background-color: $green3 !important;
+            margin-left: 1vw;
+            margin-bottom: 19.2px; //helpertext부분 height가 19.2 
+        }
+        .MuiButton-contained{
+            box-shadow: none;
+        }
+        .MuiButton-label{
+            font-size: 1rem;
+        }
+        .MuiIconButton-colorSecondary:hover {
+            background-color: rgba(56,82,59,0.1);
+        }
+        .MuiBox-root {
+            display: flex;
+            align-items: center;
+        }
+        .text{
+            width: 100px;
+            text-align: center;
+        }
+    }
+    
+    .pw-change{
+        .btn{
+            // width: 5rem;
+            background-color: $green3 !important;
+            margin-left: 1vw;
+        }
+        .btn-nextHelper{
+            // width: 5rem;
+            background-color: $green3 !important;
+            margin-left: 1vw;
+            margin-bottom: 19.2px; //helpertext부분 height가 19.2 
+        }
+        .MuiButton-contained{
+            box-shadow: none;
+        }
+        .MuiButton-label{
+            font-size: 1rem;
+        }
+        .MuiIconButton-colorSecondary:hover {
+            background-color: rgba(56,82,59,0.1);
+        }
+        .MuiBox-root {
+            display: flex;
+            align-items: center;
+        }
+        .text{
+            width: 150px;
+            text-align: center;
+        }
+    }
+}

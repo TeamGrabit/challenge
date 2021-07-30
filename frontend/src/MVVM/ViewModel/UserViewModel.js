@@ -10,6 +10,7 @@ const SendAuthMailContext = createContext((email) => {});
 const CheckAuthMailContext = createContext((email, authNum) => {});
 const CheckUniqueIdContext = createContext((id) => {});
 const SignUpUserContext = createContext((userInfo) => {});
+const ChangePwContext = createContext((user_id, new_pw) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -51,9 +52,9 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SendAuthMail = async (eMail) => {
+	const SendAuthMail = async (email, user_id = "", type = 0) => {
 		let flag = false;
-		await axios.post(`${API_URL}/authmail/send`, { email: eMail })
+		await axios.post(`${API_URL}/authmail/send`, { type, user_id, email })
 			.then((res) => {
 				console.log(res);
 				if (res.data.result === "success") flag = true;
@@ -88,6 +89,17 @@ export const UserLogicProvider = ({ children }) => {
 		});
 		return flag;
 	};
+	const ChangePw = async (user_id, new_pw) => {
+		// let flag = false;
+
+		await axios.patch(`${API_URL}/user/changepw`, {
+			user_id, new_pw
+		}).then((res) => {
+			console.log(res.result);
+			if (res.result === "success") return true;
+			return false;
+		});
+	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
@@ -96,7 +108,9 @@ export const UserLogicProvider = ({ children }) => {
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
 								<SignUpUserContext.Provider value={SignUp}>
-									{children}
+									<ChangePwContext.Provider value={ChangePw}>
+										{children}
+									</ChangePwContext.Provider>
 								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
@@ -138,5 +152,9 @@ export function useCheckUniqueId() {
 }
 export function useSignUpUser() {
 	const context = useContext(SignUpUserContext);
+	return context;
+}
+export function useChangePw() {
+	const context = useContext(ChangePwContext);
 	return context;
 }
