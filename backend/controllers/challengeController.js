@@ -383,7 +383,6 @@ async function JoinChallenge(req, res) {
 
 			join_ch(userArray, userCount, newCommitCount)
 
-			user = await User.findOneByUsername(user_id)
 			if (user === null) {
 				console.log('user가 존재하지 않음.')
 				res.send('false')
