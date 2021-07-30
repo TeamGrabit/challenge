@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { Button, Grid, Typography, Modal, Fade, Backdrop, TextField, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Slider from 'react-slick';
@@ -9,6 +10,7 @@ import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
 
 function NowChallenge({ match }) {
+	const history = useHistory();
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
 	const userData = useUserState();
@@ -17,13 +19,22 @@ function NowChallenge({ match }) {
 	const [admitOpen, setAdmitOpen] = useState(false);
 	const [challengeGrass, setChallengeGrass] = useState();
 	const [myGrass, setMyGrass] = useState();
+	const [otherGrass, setOtherGrass] = useState([[
+		false, false, false, false, false, false, false,
+		false, false, false, false, false, false, false,
+		false, false, false, false, false, false, false
+	],
+	[
+		true, true, true, true, true, true, true,
+		true, true, true, true, true, true, true,
+		true, true, true, true, true, true, true
+	]]);
 	const [king, setKing] = useState(null);
 	const [poor, setPoor] = useState(null);
 	const today = new Date();
 	useEffect(() => {
 		const result = challengeData.filter((item) => item.challenge_id === CId);
 		result.map((c, i) => {
-			console.log(i);
 			setTitle(c.name);
 			return 1;
 		});
@@ -47,31 +58,27 @@ function NowChallenge({ match }) {
 		})
 			.catch((error) => { console.log(error); });
 		// other grass
+		axios.get(`${API_URL}/grass/other`, { params: {
+			user_id: userData.userId,
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
+			console.log(res.data.OtherList);
+			const temp = [];
+			res.data.OtherList.map((d) => temp.push(d.flat()));
+			console.log(temp);
+			setOtherGrass(temp);
+		});
 		// king
 		axios.get(`${API_URL}/challengeKing/${CId}`).then((res) => {
-			console.log(res);
-			// king api 수정되면 넣기
+			setKing(res.data);
 		});
 		// poor
 		axios.get(`${API_URL}/challengePoor/${CId}`).then((res) => {
-			console.log(res);
-			// poor api 수정되면 넣기
+			setPoor(res.data);
 		});
 	}, [challengeData]);
-	// grass Init Data --- temp
-	const otherGrass = [
-		[
-			false, false, false, false, false, false, false,
-			false, false, false, false, false, false, false,
-			false, false, false, false, false, false, false
-		],
-		[
-			true, true, true, true, true, true, true,
-			true, true, true, true, true, true, true,
-			true, true, true, true, true, true, true
-		]
-	];
-	// grass init data --- temp end
 	// <-- grass carousel setting
 	const settings = {
 		dots: false,
@@ -83,7 +90,7 @@ function NowChallenge({ match }) {
 	};
 	// grass carousel setting -->
 	const grassHandler = () => {
-		window.location.href = `/challenge/info/${CId}/fix`;
+		history.push(`/challenge/info/${CId}/fix`);
 	};
 	return (
 		<>
@@ -119,7 +126,7 @@ function NowChallenge({ match }) {
 							{
 								king === null ?
 									<p className="rank">데이터를 불러오는 중입니다.</p>
-									: king.map((d) => <p className="rank">{d}</p>)
+									: king.map((d) => <p className="rank">{d.user_name}</p>)
 							}
 						</Grid>
 					</Grid>
@@ -146,7 +153,7 @@ function NowChallenge({ match }) {
 							{
 								poor === null ?
 									<p className="rank">데이터를 불러오는 중입니다.</p>
-									: poor.map((d) => <p className="rank">{d}</p>)
+									: <p className="rank">{poor.user_name}</p>
 							}
 						</Grid>
 					</Grid>
