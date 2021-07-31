@@ -3,14 +3,15 @@ import axios from 'axios';
 import { useUserState, useUserDispatch, UserContextProvider } from '../Model/UserModel';
 import { API_URL } from '../../CommonVariable';
 
-const LoginUserContext = createContext((id, pw) => {});
-const LogoutUserContext = createContext(() => {});
-const VerifyUserContext = createContext(() => {});
-const SendAuthMailContext = createContext((email) => {});
-const CheckAuthMailContext = createContext((email, authNum) => {});
-const CheckUniqueIdContext = createContext((id) => {});
-const SignUpUserContext = createContext((userInfo) => {});
-const ChangePwContext = createContext((user_id, new_pw) => {});
+const LoginUserContext = createContext((id, pw) => { });
+const LogoutUserContext = createContext(() => { });
+const VerifyUserContext = createContext(() => { });
+const SendAuthMailContext = createContext((email) => { });
+const CheckAuthMailContext = createContext((email, authNum) => { });
+const CheckUniqueIdContext = createContext((id) => { });
+const SignUpUserContext = createContext((userInfo) => { });
+const ChangePwContext = createContext((user_id, new_pw) => { });
+const GetUserInfomationContext = createContext((user_id) => { });
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -100,6 +101,12 @@ export const UserLogicProvider = ({ children }) => {
 			return false;
 		});
 	};
+	const GetUserInfomation = async (user_id) => {
+		await axios.get(`${API_URL}/user/${user_id}`).then((res) => {
+			console.log(res);
+			return res.data;
+		});
+	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
@@ -109,7 +116,9 @@ export const UserLogicProvider = ({ children }) => {
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
 								<SignUpUserContext.Provider value={SignUp}>
 									<ChangePwContext.Provider value={ChangePw}>
-										{children}
+										<GetUserInfomationContext.Provider value={GetUserInfomation}>
+											{children}
+										</GetUserInfomationContext.Provider>
 									</ChangePwContext.Provider>
 								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
@@ -156,5 +165,9 @@ export function useSignUpUser() {
 }
 export function useChangePw() {
 	const context = useContext(ChangePwContext);
+	return context;
+}
+export function useGetUserInfomation() {
+	const context = useContext(GetUserInfomationContext);
 	return context;
 }

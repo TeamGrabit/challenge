@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@material-ui/core';
+import axios from 'axios';
 import { SideBar, ChangePassword } from '../components/index';
-import { } from '../MVVM/ViewModel/UserViewModel';
+import { useUserState } from '../MVVM/Model/UserModel';
+import { API_URL } from '../CommonVariable';
 
 function MyPage() {
-	const [Name, setName] = useState("d");
-	const [Email, setEmail] = useState("test@gmail.com");
-	const [GitId, setGitId] = useState("d");
+	const userData = useUserState();
+	const [Name, setName] = useState();
+	const [Email, setEmail] = useState();
+	const [GitId, setGitId] = useState();
 	const [open, setopen] = useState(false);
+	useEffect(() => {
+		axios.get(`${API_URL}/user/${userData.userId}`).then((res) => {
+			setName(res.data.user_id);
+			setEmail(res.data.user_email);
+			setGitId(res.data.git_id);
+		})
+			.catch((error) => { console.log(error); });
+	}, []);
 	const handleOpen = () => {
 		setopen(true);
 	};
