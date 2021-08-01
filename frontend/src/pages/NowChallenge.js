@@ -31,8 +31,10 @@ function NowChallenge({ match }) {
 	]]);
 	const [king, setKing] = useState(null);
 	const [poor, setPoor] = useState(null);
+	const [admit, setAdmit] = useState(null);
 	const today = new Date();
 	useEffect(() => {
+		// todo : grass mvvm 만들기. approve mvvm 이용하기.
 		const result = challengeData.filter((item) => item.challenge_id === CId);
 		result.map((c, i) => {
 			setTitle(c.name);
@@ -64,7 +66,6 @@ function NowChallenge({ match }) {
 			month: today.getMonth() + 1,
 			year: today.getFullYear()
 		} }).then((res) => {
-			console.log(res.data.OtherList);
 			const temp = [];
 			res.data.OtherList.map((d) => temp.push(d.flat()));
 			console.log(temp);
@@ -77,6 +78,11 @@ function NowChallenge({ match }) {
 		// poor
 		axios.get(`${API_URL}/challengePoor/${CId}`).then((res) => {
 			setPoor(res.data);
+		});
+		// approve
+		axios.get(`${API_URL}/approve/list/${CId}`).then((res) => {
+			setAdmit(res.data);
+			console.log(res.data);
 		});
 	}, [challengeData]);
 	// <-- grass carousel setting
@@ -200,15 +206,21 @@ function NowChallenge({ match }) {
 				<Fade in={admitOpen}>
 					<Grid className="inviteModalPaper">
 						<Grid className="head">인증 요청 목록</Grid>
-						{/* 백에서 불러오기 */}
 						<Grid className="admit-body">
-							<Grid className="admit-content">
-								<Grid className="admit-name">이름</Grid>
-								<Grid className="admit-reason">내역</Grid>
-								<Grid className="admit-btn-con">
-									<Button style={{ backgroundColor: '#CCFCCB', marginTop: '5px' }}>수락</Button>
-								</Grid>
-							</Grid>
+							{/* 백에서 불러오기 */}
+							{
+								admit === null ? <p>데이터가 없습니다.</p>
+									: admit.map((d) => (
+										<Grid className="admit-content">
+											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>
+											<Grid className="admit-reason">{d.user_id}</Grid>
+											<Grid className="admit-reason">{d.message}</Grid>
+											<Grid className="admit-btn-con">
+												<Button style={{ backgroundColor: '#CCFCCB', marginTop: '5px' }}>수락</Button>
+											</Grid>
+										</Grid>
+									))
+							}
 						</Grid>
 					</Grid>
 				</Fade>
