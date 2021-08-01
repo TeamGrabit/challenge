@@ -383,15 +383,19 @@ async function ChangePw(req, res) {
 }
 
 async function UserInfomation(req, res) {
-	try{
+	try {
 		const user_id = req.params.user_id;
 		const user = await User.findOneByUsername(user_id);
 
-		res.status(200).json({user_id: user.user_id, user_email: user.user_email, git_id: user.git_id});
-	}catch(err){
+		res.status(200).json({ user_id: user.user_id, user_email: user.user_email, git_id: user.git_id });
+	} catch (err) {
 		console.log(err)
-		res.status(401).json({error: 'erreor'})
+		res.status(401).json({ error: 'erreor' })
 	}
+}
+
+async function Change(req, res) {
+	const { user_id, nickname, email, git_id } = req.body;
 }
 
 module.exports = {
@@ -404,7 +408,8 @@ module.exports = {
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
 	changePw: ChangePw,
-	userInfomation: UserInfomation
+	userInfomation: UserInfomation,
+	change: Change
 };
 
 
