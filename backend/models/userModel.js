@@ -7,7 +7,6 @@ var User = new Schema({
 	user_id:{type: String, required: true, unique: true, trim: true, lowercase: true,},
 	user_pw: {type: String, required: true, trim: true},
 	user_name: {type: String, required: true, trim: true},
-	user_nickname: {type: String, required: true, trim: true},
 	user_email: {type: String, required: true, unique: true, trim: true},
 	git_id:{type: String, required: true, trim: true},
 	ch_list:{type : Array, required: true}, //challenge 스키마 배열로 변경해도 좋을듯 
@@ -36,7 +35,6 @@ User.statics.create = function(user_id,user_pw,user_name,user_email,git_id,in_da
 		user_id: user_id,
 		user_pw: user_pw,
 		user_name: user_name,
-		user_nickname: user_name,
 		user_email: user_email,
 		ch_list: [],
 		git_id: git_id,

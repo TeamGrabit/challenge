@@ -395,7 +395,25 @@ async function UserInfomation(req, res) {
 }
 
 async function Change(req, res) {
-	const { user_id, nickname, email, git_id } = req.body;
+	try{
+		const { user_id, name, git_id } = req.body;
+		User.findOneAndUpdate({ "user_id": user_id }, {
+			$set: {
+				user_name: name.replace(/ /g,""),
+				git_id: git_id.replace(/ /g,"")
+			}
+		}, { new: true, useFindAndModify: false }, (err, doc) => {
+			if (err) {
+				throw new Error('user DB에 ch_list 추가 오류')
+			}
+			else {
+				res.status(201).json({result: true})
+			}
+		})
+	}catch(err){
+		console.log(err)
+		res.status(401).json({error: 'error'})
+	}
 }
 
 module.exports = {
