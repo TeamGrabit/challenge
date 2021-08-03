@@ -147,7 +147,7 @@ async function SendId(req,res) { // 메일로 id 보내주기
 			from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
 			to: email, // list of receivers
 			subject: "[세살버릇여든까지] 회원님의 아이디입니다.", // Subject line
-			text: `야이디 : ${user_id}`, // plain text body
+			text: `아이디 : ${user_id}`, // plain text body
 		});
 		res.status(201).json({result: true});
 	} catch (e) {
