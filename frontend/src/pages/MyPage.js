@@ -44,9 +44,7 @@ function MyPage() {
 					<Grid container spacing={3} justify="center">
 						<Grid item>
 							<Box className="pro_img">
-								<div>
-									프로필 사진
-								</div>
+								<img src={`https://github.com/${userData.gitId}.png`} alt={`${userData.gitId}`} className="pro_img" />
 							</Box>
 						</Grid>
 					</Grid>
@@ -128,7 +126,7 @@ function MyPage() {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<ChangePassword onClose={handleClose} />
+						<ChangePassword onClose={handleClose} id={userData.userId} />
 					</div>
 				</Fade>
 			</Modal>

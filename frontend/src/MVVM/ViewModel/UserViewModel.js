@@ -12,6 +12,7 @@ const CheckUniqueIdContext = createContext((id) => { });
 const SignUpUserContext = createContext((userInfo) => { });
 const ChangePwContext = createContext((user_id, new_pw) => { });
 const GetUserInfomationContext = createContext((user_id) => { });
+const MypageChangePwContext = createContext((user_id, user_pw, new_pw) => { });
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -94,12 +95,27 @@ export const UserLogicProvider = ({ children }) => {
 		// let flag = false;
 
 		await axios.patch(`${API_URL}/user/changepw`, {
-			user_id, new_pw
+			type: 0, user_id, new_pw
 		}).then((res) => {
 			console.log(res.result);
 			if (res.result === "success") return true;
 			return false;
 		});
+	};
+	const MypageChangePw = async (user_id, user_pw, new_pw, onClose) => {
+		onClose();
+		let flag = false;
+		await axios.patch(`${API_URL}/user/changepw`, {
+			type: 1,
+			user_id,
+			user_pw,
+			new_pw
+		}).then((res) => {
+			if (res.data.result === "success") flag = true;
+		}).catch((error) => {
+			console.log(error);
+		});
+		return flag;
 	};
 	const GetUserInfomation = async (user_id) => {
 		await axios.get(`${API_URL}/user/${user_id}`).then((res) => {
@@ -116,9 +132,11 @@ export const UserLogicProvider = ({ children }) => {
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
 								<SignUpUserContext.Provider value={SignUp}>
 									<ChangePwContext.Provider value={ChangePw}>
-										<GetUserInfomationContext.Provider value={GetUserInfomation}>
-											{children}
-										</GetUserInfomationContext.Provider>
+										<MypageChangePwContext.Provider value={MypageChangePw}>
+											<GetUserInfomationContext.Provider value={GetUserInfomation}>
+												{children}
+											</GetUserInfomationContext.Provider>
+										</MypageChangePwContext.Provider>
 									</ChangePwContext.Provider>
 								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
@@ -169,5 +187,9 @@ export function useChangePw() {
 }
 export function useGetUserInfomation() {
 	const context = useContext(GetUserInfomationContext);
+	return context;
+}
+export function useMypageChangePw() {
+	const context = useContext(MypageChangePwContext);
 	return context;
 }
