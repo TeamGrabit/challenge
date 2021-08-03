@@ -415,13 +415,13 @@ async function Change(req, res) {
 	try{
 		const { user_id, name, git_id } = req.body;
 		User.findOneAndUpdate({ "user_id": user_id }, {
-			$set: {
+			$set: {	
 				user_name: name.replace(/ /g,""),
 				git_id: git_id.replace(/ /g,"")
 			}
 		}, { new: true, useFindAndModify: false }, (err, doc) => {
 			if (err) {
-				throw new Error('user DB에 ch_list 추가 오류')
+				throw new Error('user 정보 변경 실패')
 			}
 			else {
 				res.status(201).json({result: true})
