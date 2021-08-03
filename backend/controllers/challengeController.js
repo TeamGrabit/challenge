@@ -29,7 +29,7 @@ async function CreateChallenge(req, res) {
 				var chArray;
 				chArray = _user.ch_list
 				_challenge = await Challenge.findById(ch_id)
-				chArray.push(_challenge._id);
+				chArray.push(_challenge._id.toString());
 				join(chArray)
 			})
 
@@ -58,96 +58,96 @@ async function CreateChallenge(req, res) {
 }
 
 async function WhoIsKing(req, res) {
-    const challenge_id = req.params.challenge_id;
+	const challenge_id = req.params.challenge_id;
 
-    const id = ObjectID(challenge_id);
-    let usercommit=[];
-    
-    await Challenge.findOneById(id).then(async (challenge)=> {
-        
-        var commit =challenge.commitCount;
-        
+	const id = ObjectID(challenge_id);
+	let usercommit = [];
 
-        commit.sort(function(a, b) { // 내림차순
-            return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
-            
-        });
+	await Challenge.findOneById(id).then(async (challenge) => {
 
-	
+		var commit = challenge.commitCount;
 
 
-        for(let i=0;i<3;i++){
-			if(commit[i]==null){
+		commit.sort(function (a, b) { // 내림차순
+			return a.count > b.count ? -1 : a.count < b.count ? 1 : 0;
+
+		});
+
+
+
+
+		for (let i = 0; i < 3; i++) {
+			if (commit[i] == null) {
 				break;
 			}
-            await User.findOne({user_id:commit[i].user_id}).then((user)=> {
-                
-                usercommit.push(user);
-                
-            },(err,doc)=>{
-                if(err){
-                    console.log(err);
-                }else{
-                    console.log(doc);
-                }
-            });
-        }
-    }),(err,doc)=>{
-        if(err){
-            console.log(err);
-        }else{
-            
-            return doc;
+			await User.findOne({ user_id: commit[i].user_id }).then((user) => {
+
+				usercommit.push(user);
+
+			}, (err, doc) => {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log(doc);
+				}
+			});
+		}
+	}), (err, doc) => {
+		if (err) {
+			console.log(err);
+		} else {
+
+			return doc;
 
 
-        }
-    }
+		}
+	}
 
-    res.send(usercommit);
-    res.end;
+	res.send(usercommit);
+	res.end;
 }
 
 
 
 async function WhoIsPoor(req, res) {
-    const challenge_id= req.params.challenge_id;
+	const challenge_id = req.params.challenge_id;
 
 
-    const id = ObjectID(challenge_id);
-    var Puser =[];
+	const id = ObjectID(challenge_id);
+	var Puser = [];
 
 
-    await Challenge.findById(id).then(async (chcommit) => {
-        var commit=chcommit.commitCount;
-        
+	await Challenge.findById(id).then(async (chcommit) => {
+		var commit = chcommit.commitCount;
 
-        commit.sort(function(a, b) { // 내림차순
-        return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
-    })
-    
-    await User.findOne({user_id:commit[0].user_id}).then((user) =>{
-        Puser=user;
 
-    }, (err,doc) => {
-        if(err){
-            console.log(err);
-            res.send(err);
-        }else{
-            
+		commit.sort(function (a, b) { // 내림차순
+			return a.count < b.count ? -1 : a.count > b.count ? 1 : 0;
+		})
 
-        }
-    })
-    
-    }, (err,doc) => {
-        if(err){
-            console.log(err);
-        }else{
-        
-        }
-    })
-    
-    res.send(Puser);
-    res.end;
+		await User.findOne({ user_id: commit[0].user_id }).then((user) => {
+			Puser = user;
+
+		}, (err, doc) => {
+			if (err) {
+				console.log(err);
+				res.send(err);
+			} else {
+
+
+			}
+		})
+
+	}, (err, doc) => {
+		if (err) {
+			console.log(err);
+		} else {
+
+		}
+	})
+
+	res.send(Puser);
+	res.end;
 }
 
 async function GetChallengeInfo(req, res) {
@@ -155,7 +155,7 @@ async function GetChallengeInfo(req, res) {
 	const id = ObjectID(challenge_id);
 
 	try {
-		commitList = await Challenge.findById(id).then((ch) => {return ch.commitCount})
+		commitList = await Challenge.findById(id).then((ch) => { return ch.commitCount })
 		const today = new Date()
 		const _year = today.getFullYear()
 		const _month = today.getMonth() + 1
@@ -205,7 +205,7 @@ async function GetChallengeInfo(req, res) {
 }
 
 
-function FixChallengeInfo(req, res) {
+async function FixChallengeInfo(req, res) {
 	const challenge_id = req.params.challenge_id;
 	const id = ObjectID(challenge_id);
 	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key } = req.body;
@@ -310,7 +310,8 @@ async function DeleteChallenge(req, res) {
 }
 
 async function JoinChallenge(req, res) {
-	const { user_id, challenge_id, private_key } = req.body;
+	const { user_id, private_key } = req.body;
+	const challenge_id = req.params.challenge_id;
 	const id = ObjectID(challenge_id);
 
 	try {
@@ -382,7 +383,6 @@ async function JoinChallenge(req, res) {
 
 			join_ch(userArray, userCount, newCommitCount)
 
-			user = await User.findOneByUsername(user_id)
 			if (user === null) {
 				console.log('user가 존재하지 않음.')
 				res.send('false')
@@ -399,7 +399,14 @@ async function JoinChallenge(req, res) {
 		}
 
 		const challenge = await Challenge.findById(id)
-		if (challenge.private_key === private_key) join(challenge)
+		const user = await User.findOneByUsername(user_id)
+		if (challenge.private_key === private_key){
+			if(challenge.challenge_users.indexOf(user_id) < 0 && user.ch_list.indexOf(challenge_id)) join(challenge)
+			else {
+				console.log('already join user!')
+				res.send('false')
+			}
+		}
 		else {
 			console.log('private_key different!')
 			res.send('false')
@@ -466,8 +473,18 @@ function OutChallenge(req, res) {
 	})
 }
 
-function InviteUser(req, res) {
-
+async function GetAllChallenge(req, res) {
+	try {
+		Challenge.find()
+			.then((docs) => {
+				res.status(200).json({ challenges: docs });
+			})
+			.catch((err) => {
+				throw Error(err)
+			})
+	} catch (err) {
+		res.status(400).json({ result: false });
+	}
 }
 
 module.exports = {
@@ -479,5 +496,5 @@ module.exports = {
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
-	inviteUser: InviteUser
+	getAllChallenge: GetAllChallenge
 };

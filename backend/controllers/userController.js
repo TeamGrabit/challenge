@@ -65,18 +65,18 @@ async function CheckIdDupl(req, res) { // id 중복체크용
 }
 function DeleteUser(req, res) {
 	var _id = req.params.id;
-	var deluser=User.findOne({user_id:_id});
+	var deluser = User.findOne({ user_id: _id });
 	var chlist = deluser.ch_list;
 	var length = len(chlist);
-	
-	for(let i=0;i<length;i++){
-		OutChallenge({ userId:_id, challengeId:chlist[i]},)
+
+	for (let i = 0; i < length; i++) {
+		OutChallenge({ userId: _id, challengeId: chlist[i] },)
 
 	}
-	
 
 
-	User.findOneAndDelete({user_id:_id}, function (err, docs) {
+
+	User.findOneAndDelete({ user_id: _id }, function (err, docs) {
 		if (err) {
 			console.log(err)
 		}
@@ -95,77 +95,78 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 	try {
 		const checkDate = async (id) => {
-		const changeState = async () => {
-			await Challenge.findByIdAndUpdate(id, {
-				$set: {
-					state: 1
-				}
-			}, { new: true, useFindAndModify: false }, (err, doc) => {
-				if (err) {
-					console.log(err)
-				}
-				else {
-					console.log("challenge state 수정")
-					console.log(doc._id)
-				}
+			const changeState = async () => {
+				await Challenge.findByIdAndUpdate(id, {
+					$set: {
+						state: 1
+					}
+				}, { new: true, useFindAndModify: false }, (err, doc) => {
+					if (err) {
+						console.log(err)
+					}
+					else {
+						console.log("challenge state 수정")
+						console.log(doc._id)
+					}
+				})
+			}
+			const challenge = await Challenge.findById(id)
+			console.log(challenge)
+			const currentDate = new Date()
+			if (challenge["challenge_end"]) {
+				if (challenge.challenge_end.valueOf() < currentDate.valueOf()) changeState()
+			}
+		}
+
+		const addChallenge = (ch_id) => {
+			const challengeId = ObjectID(ch_id)
+			return new Promise((resolve) => {
+				Challenge.findById(challengeId)
+					.then((Info) => resolve(Info));
 			})
 		}
-		const challenge = await Challenge.findById(id)
-		console.log(challenge)
-		const currentDate = new Date()
-		if (challenge["challenge_end"]) {
-			if (challenge.challenge_end.valueOf() < currentDate.valueOf()) changeState()
+
+		const changeState = async (list) => {
+			const promises = list.map((ch_id) => checkDate(ch_id))
+			await Promise.all(promises)
+			return list
 		}
-	}
 
-	const addChallenge = (ch_id) => {
-		const challengeId = ObjectID(ch_id)
-		return new Promise((resolve) => {
-			Challenge.findById(challengeId)
-				.then((Info) => resolve(Info));
-		})
-	}
+		const getList = async (list) => {
+			const promises = list.map(async ch_id => {
+				return await addChallenge(ch_id)
+					.then(Info => Info)
+			})
 
-	const changeState = async (list) => {
-		const promises = list.map((ch_id) => checkDate(ch_id))
-		await Promise.all(promises)
-		return list
-	}
+			const results = await Promise.all(promises)
+			results.forEach(Info => {
+				var infoList = {
+					name: Info.name,
+					state: Info.state,
+					challenge_id: Info._id,
+					challenge_leader: Info.challenge_leader
+				}
+				challengeList.push(infoList)
+			})
+			return challengeList
+		}
 
-	const getList = async (list) => {
-		const promises = list.map(async ch_id => {
-			return await addChallenge(ch_id)
-				.then(Info => Info)
-		})
-
-		const results = await Promise.all(promises)
-		results.forEach(Info => {
-			var infoList = {
-				name: Info.name,
-				state: Info.state,
-				challenge_id: Info._id
-			}
-			challengeList.push(infoList)
-		})
-		return challengeList
-	}
-
-	User.findOneByUsername(userId)
-		.then((user) => {
-			if (user) {
-				list = user.ch_list;
-				return list
-			} else {
-				throw new Error('not exist user')
-			}
-		})
-		.then((id_list) => changeState(id_list))
-		.then((list) => getList(list))
-		.then((infomations) => {
-			console.log(infomations)
-			res.send(infomations)
-		})
-	} catch(err){
+		User.findOneByUsername(userId)
+			.then((user) => {
+				if (user) {
+					list = user.ch_list;
+					return list
+				} else {
+					throw new Error('not exist user')
+				}
+			})
+			.then((id_list) => changeState(id_list))
+			.then((list) => getList(list))
+			.then((infomations) => {
+				console.log(infomations)
+				res.send(infomations)
+			})
+	} catch (err) {
 		console.log(err)
 		res.send(err);
 	}
@@ -189,11 +190,13 @@ function OutChallenge(req, res) {
 
 			for (let i = 0; i < chArray.length; i++) {
 				_id = ObjectID(chArray[i]);
-				temp1=JSON.stringify(id);
-				temp2=JSON.stringify(_id);
+				temp1 = JSON.stringify(id);
+				temp2 = JSON.stringify(_id);
+
 
 				if (temp1==temp2) {
 					chArray.splice(i,1);
+
 					return 1;
 				}
 			}
@@ -227,6 +230,7 @@ function OutChallenge(req, res) {
 	})
 
 	Challenge.findById(id)
+
 	.then((challenge) =>{
 		userAry = challenge.challenge_users
 		userCommitAry = challenge.commitCount
@@ -275,9 +279,17 @@ function OutChallenge(req, res) {
 	.catch((err) => {
 		console.error(err);
 
-	})
+
+		}).then((state) => {
+			if (state === 0)
+				throw new Error('Challege DB에 해당 유저 없어!')
+			outuser(userAry, userCommitAry)
+		})
+		.catch((err) => {
+			console.error(err);
 
 	const outuser = (userAry,userCommitAry,usernum) => Challenge.findOneAndUpdate({ _id: id }, {
+
 		$set: {
 			challenge_users: userAry,
 			commitCount: userCommitAry,
@@ -296,41 +308,41 @@ function OutChallenge(req, res) {
 }
 
 async function LogIn(req, res, next) {
-    const id = req.body.userId;
-    const pw = req.body.userPw;
-    console.log("id, pw :"+id+" "+pw);
-    // DB에서 user 정보 조회 
-    try {
-        const user = await User.loginCheck(id, pw);
-        // 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
-        console.log(user);
-        //같으면 jwtToken 발급 
-        if (user === false) {
+	const id = req.body.userId;
+	const pw = req.body.userPw;
+	console.log("id, pw :" + id + " " + pw);
+	// DB에서 user 정보 조회 
+	try {
+		const user = await User.loginCheck(id, pw);
+		// 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
+		console.log(user);
+		//같으면 jwtToken 발급 
+		if (user === false) {
 			res.status(400).json({ error: 'wrong pw' });
 			return;
 		}
-        if (user) {
-            // const token = jwt.createToken(user);
-            const token = jwt.sign({
-                    user_id: user.user_id,
-                    git_id: user.git_id,
-                }
-                , SecretKey, {
-                    expiresIn: '1h'
-                }
-            );
-            res.cookie('user', token, { sameSite:'none', secure: true });
-            res.status(201).json({
-                result: true
-            });
-        }
-        else 
-            res.status(400).json({ error: 'invalid user' });
-    }catch (err) {
-        res.status(401).json({ error: err });
-        console.error(err);
-        next(err);
-    }
+		if (user) {
+			// const token = jwt.createToken(user);
+			const token = jwt.sign({
+				user_id: user.user_id,
+				git_id: user.git_id,
+			}
+				, SecretKey, {
+				expiresIn: '1h'
+			}
+			);
+			res.cookie('user', token, { sameSite: 'none', secure: true });
+			res.status(201).json({
+				result: true
+			});
+		}
+		else
+			res.status(400).json({ error: 'invalid user' });
+	} catch (err) {
+		res.status(401).json({ error: err });
+		console.error(err);
+		next(err);
+	}
 }
 
 
@@ -368,35 +380,65 @@ function VerifyToken(req, res, next) {
 	}
 }
 
-async function ChangePw(req, res){
-	try{
-		console.log(req.body);
+async function ChangePw(req, res) {
+	try {
+		const type = req.body.type;
+		// type : 0 
+			// 로그인전에 비밀번호 찾기 용
+			// 비밀번호 초기화 
+		// type : 1
+			// 로그인 후 마이페이지에서 비밀번호 변경 용
+			// 이전 비밀번호 확인 후, 맞으면 새 비밀번호로 변경 
 		const new_pw = req.body.new_pw;
 		const user_id = req.body.user_id;
-		const user = await User.findOne({"user_id": user_id});
-		console.log(user);
-		if (user == undefined) {
-			res.status(201).json({result: 'user not exists'});
-			return;
+		if (type == 0) { 
+			const user = await User.findOne({ "user_id": user_id });
+			console.log(user);
+			if (user == undefined) {
+				res.status(201).json({ result: 'user not exists' });
+				return;
+			}
+		}
+		else if (type == 1){
+			const user_pw = req.body.user_pw;
+			const user = await User.loginCheck(user_id, user_pw);
+			if (user === false) {
+				res.status(400).json({ error: 'wrong pw' });
+				return;
+			}
 		}
 		await User.changePw(user_id, new_pw);
-		res.status(201).json({result: "success"});
-	}catch (err) {
+		res.status(201).json({ result: "success" });
+		
+	} catch (err) {
 		// console.log(err);
 		res.status(401).json({ error: err.message });
 	}
 }
+
+async function UserInfomation(req, res) {
+	try{
+		const user_id = req.params.user_id;
+		const user = await User.findOneByUsername(user_id);
+
+		res.status(200).json({user_id: user.user_id, user_email: user.user_email, git_id: user.git_id});
+	}catch(err){
+		console.log(err)
+		res.status(401).json({error: 'erreor'})
+	}
+}
+
 module.exports = {
-    createUser: CreateUser,
-    deleteUser: DeleteUser,
-    logIn : LogIn,
-    logOut : LogOut,
-    getChallengeList: GetChallengeList,
-    verifyToken: VerifyToken,
+	createUser: CreateUser,
+	deleteUser: DeleteUser,
+	logIn: LogIn,
+	logOut: LogOut,
+	getChallengeList: GetChallengeList,
+	verifyToken: VerifyToken,
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
-	changePw:ChangePw,
-
+	changePw: ChangePw,
+	userInfomation: UserInfomation
 };
 
 
