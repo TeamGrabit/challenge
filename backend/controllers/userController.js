@@ -365,17 +365,34 @@ function VerifyToken(req, res, next) {
 
 async function ChangePw(req, res) {
 	try {
-		console.log(req.body);
+		const type = req.body.type;
+		// type : 0 
+			// 로그인전에 비밀번호 찾기 용
+			// 비밀번호 초기화 
+		// type : 1
+			// 로그인 후 마이페이지에서 비밀번호 변경 용
+			// 이전 비밀번호 확인 후, 맞으면 새 비밀번호로 변경 
 		const new_pw = req.body.new_pw;
 		const user_id = req.body.user_id;
-		const user = await User.findOne({ "user_id": user_id });
-		console.log(user);
-		if (user == undefined) {
-			res.status(201).json({ result: 'user not exists' });
-			return;
+		if (type == 0) { 
+			const user = await User.findOne({ "user_id": user_id });
+			console.log(user);
+			if (user == undefined) {
+				res.status(201).json({ result: 'user not exists' });
+				return;
+			}
+		}
+		else if (type == 1){
+			const user_pw = req.body.user_pw;
+			const user = await User.loginCheck(user_id, user_pw);
+			if (user === false) {
+				res.status(400).json({ error: 'wrong pw' });
+				return;
+			}
 		}
 		await User.changePw(user_id, new_pw);
 		res.status(201).json({ result: "success" });
+		
 	} catch (err) {
 		// console.log(err);
 		res.status(401).json({ error: err.message });
