@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Button, TextField, Typography, Modal, Fade } from '@material-ui/core';
+import { Grid, Box, Button, TextField, Typography, Backdrop, Modal, Fade } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
 import ExpelMember from './ExpelMember';
 import { useUserState } from '../MVVM/Model/UserModel';
@@ -18,6 +18,7 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 	const [expel, setExpel] = useState("");
 	const [leader, setLeader] = useState();
 	const [password, setPW] = useState();
+	const [inviteOpen, setInviteOpen] = useState(false);
 	const changeTitle = (e) => {
 		setTitle(e.currentTarget.value);
 	};
@@ -128,7 +129,7 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 							))}
 							<Grid item lg={3} md={4} sm={6} xs={12}>
 								<div className="member_box">
-									<Box className="invite_inner" onClick={handleInvite}>
+									<Box className="invite_inner" onClick={() => setInviteOpen(true)}>
 										+ Invite
 									</Box>
 								</div>
@@ -183,6 +184,28 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			>
 				<Fade in={open}>
 					<ExpelMember onClose={handleClose} handleExpel={handleExpel} member={expel} />
+				</Fade>
+			</Modal>
+			<Modal
+				className="modal"
+				open={inviteOpen}
+				onClose={() => setInviteOpen(false)}
+				closeAfterTransition
+				BackdropComponent={Backdrop}
+				BackdropProps={{
+					timeout: 500,
+				}}
+			>
+				<Fade in={inviteOpen}>
+					<Grid className="inviteModalPaper">
+						<Grid className="head">초대하기</Grid>
+						<Grid className="body">
+							<Grid className="input-con">
+								<TextField variant="outlined" label="E-mail" fullWidth />
+								<Button style={{ marginLeft: '1rem', backgroundColor: '#CCFCCB', height: '100%' }}>전송</Button>
+							</Grid>
+						</Grid>
+					</Grid>
 				</Fade>
 			</Modal>
 		</div>

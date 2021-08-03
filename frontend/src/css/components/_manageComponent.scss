@@ -84,6 +84,34 @@
 		color: white;
 	}
 }
+.inviteModalPaper {
+	background-color: white;
+	width: 50vw;
+	max-height: 70vh;
+
+	.head {
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 1rem 1rem;
+		background-color: $green2;
+		max-height: 20vh;
+	}
+	.body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+
+		.input-con {
+			display: flex;
+			align-items: center;
+		}
+		.icon-con {
+			display: flex;
+			justify-content: center;
+			margin-top: 1rem;
+		}
+	}
+}
 @media ( max-width: 600px ) {
     .manageComponent{
 		.comp_box{
