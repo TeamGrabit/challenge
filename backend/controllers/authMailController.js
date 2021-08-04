@@ -60,7 +60,7 @@ async function SendAuthMail(req, res) {
 		// req type검사
 		// type: 0 => 가입시 이메일 인증 
 			//이미 가입된 email이면 인증메일 안보내도록 처리
-		// type: 1 => 비밀번호 찾기 이메일 인증 
+		// type: 1 => 비밀번호 찾기, 아이디 찾기 이메일 인증 
 			// 이미 가입된 이메일에 대해서만 인증메일 보내도록 처리
 		console.log("send auth mail");
 		const type = req.body.type;
@@ -78,7 +78,7 @@ async function SendAuthMail(req, res) {
 			let info = await transporter.sendMail({
 				from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
 				to: email, // list of receivers
-				subject: "이메일 인증을 통해 회원가입을 완료해주세요.", // Subject line
+				subject: "[세살버릇 여든까지] 이메일 인증을 통해 회원가입을 완료해주세요.", // Subject line
 				text: `인증번호 : ${auth_num}`, // plain text body
 			});
 			// console.log(info);
@@ -93,7 +93,7 @@ async function SendAuthMail(req, res) {
 			let info = await transporter.sendMail({
 				from: `1day 1commit <${process.env.NODEMAILER_USER}>`, // sender address
 				to: email, // list of receivers
-				subject: "이메일 인증을 통해 비밀번호 재설정을 완료해주세요.", // Subject line
+				subject: "[세살버릇 여든까지] 이메일 인증번호입니다.", // Subject line
 				text: `인증번호 : ${auth_num}`, // plain text body
 			});
 		}
