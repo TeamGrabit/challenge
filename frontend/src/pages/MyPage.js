@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@material-ui/core';
 import { SideBar, ChangePassword } from '../components/index';
-import { } from '../MVVM/ViewModel/UserViewModel';
 
 function MyPage() {
-	const [Name, setName] = useState("d");
+	const [Name, setName] = useState("name");
 	const [Email, setEmail] = useState("test@gmail.com");
-	const [GitId, setGitId] = useState("d");
+	const [GitId, setGitId] = useState("gitId");
 	const [open, setopen] = useState(false);
 	const handleOpen = () => {
 		setopen(true);

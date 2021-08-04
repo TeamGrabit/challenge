@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { withStyles, Box, Button, TextField } from '@material-ui/core';
+import axios from 'axios';
 import { useSendAuthMail, useCheckAuthMail } from '../MVVM/ViewModel/UserViewModel';
+import { API_URL } from '../CommonVariable';
 
 const CssTextField = withStyles({
 	root: {
@@ -27,22 +29,31 @@ const isEmail = (email) => {
 	return emailRegex.test(email);
 };
 
-function IdFind() {
+function IdFind({ history }) {
 	const [email, setEmail] = useState("");
 	const [isSend, setIsSend] = useState(false); // 이메일 인증 메일이 발송되었는지 여부
 	const [isMailAuth, setisMailAuth] = useState(false); // 이메일 인증 완료 여부
 	const [authNum, setAuthNum] = useState(""); // 입력된 인증번호
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
+	useEffect(() => {
+		if (isMailAuth) {
+			axios.get(`${API_URL}/authmail/id/${email}`).then((res) => {
+				const { result } = res.data;
+				if (result) { alert("아이디가 메일로 발송되었습니다."); } else { alert("메일 전송에 실패했습니다. 다시 시도해주세요"); }
+			});
+			history.push('/login');
+		}
+	}, [isMailAuth]);
 	const authMailSendHandler = async () => { // mail 전송
 		const result = await authMailSend(email, 1);
-		console.log(result);
 		// TODO: 가입되지 않은 사용자입니다. 새로 가입해주세요 추가해야함
 		if (!result) { alert('인증 메일 전송에 실패했습니다. 다시 한 번 시도해주세요'); } else { alert('인증 메일이 전송되었습니다. 메일함을 확인해주세요'); }
 		setIsSend(result);
 	};
 	const authMailCheckHandler = async () => { // email 인증번호 맞게 입력했는지 확인
 		const result = await authMailCheck(email, authNum);
+		console.log(result);
 		if (result) { alert('인증에 성공했습니다.'); } else { alert('인증번호가 올바르지 않습니다. 다시 한 번 확인해주세요'); }
 		setisMailAuth(result);
 	};

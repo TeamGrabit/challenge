@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { withStyles, Box, Button, TextField } from '@material-ui/core';
-import { useChangePw } from '../MVVM/ViewModel/UserViewModel';
+import { useSendAuthMail, useCheckAuthMail } from '../MVVM/ViewModel/UserViewModel';
 
 const CssTextField = withStyles({
 	root: {
@@ -21,19 +21,12 @@ const CssTextField = withStyles({
 	},
 })(TextField);
 
-function PwChange({ history, user_id }) {
+function PwChange() {
 	const [password, setPw] = useState("");
 	const [pwCheck, setPwCheck] = useState("");
-	const changePw = useChangePw();
 	const submitHandler = async () => {
 		if (password.length === 0 || password !== pwCheck) { alert("올바르지 않은 입력입니다.\n입력을 다시 한 번 확인해주세요."); } else {
 			// pw change viewmodel 함수 호출
-			console.log(user_id, password);
-			const result = changePw(user_id, password);
-			if (result) {
-				alert('비밀번호가 정상적으로 변경되었습니다.');
-				history.push('/login');
-			} else alert('비밀번호 변경에 실패했습니다.');
 		}
 	};
 	return (

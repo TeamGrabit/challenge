@@ -8,7 +8,6 @@ import { API_URL } from '../CommonVariable';
 
 function ManageChallenge({ match }) {
 	const CId = match.params.challengeId;
-	const compo_number = [0, 1, 2, 3, 4, 5];
 	const [challengeData, setChallengeData] = useState([]);
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
@@ -17,6 +16,7 @@ function ManageChallenge({ match }) {
 			console.log(challengeData);
 		});
 	}, [CId]);
+
 	const [value, setValue] = useState(0);
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -123,15 +123,12 @@ function ManageChallenge({ match }) {
 							</Tabs>
 					}
 					<div className="comp_all">
-						{compo_number.map((c) => (
-							<ManageComponent
-								value={value}
-								index={c}
-								challengeData={challengeData}
-								setChallengeData={setChallengeData}
-								CId={CId}
-							/>
-						))}
+						<ManageComponent value={value} index={0} challengeData={challengeData} />
+						<ManageComponent value={value} index={1} challengeData={challengeData} />
+						<ManageComponent value={value} index={2} challengeData={challengeData} />
+						<ManageComponent value={value} index={3} challengeData={challengeData} />
+						<ManageComponent value={value} index={4} challengeData={challengeData} />
+						<ManageComponent value={value} index={5} challengeData={challengeData} />
 					</div>
 				</div>
 			</div>

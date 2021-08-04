@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
 
-function ExpelMember({ onClose, handleExpel, member }) {
+function ExpelMember({ onClose, member }) {
 	return (
 		<div className="expelMember">
 			<div className="doubleCheck">
@@ -10,7 +10,7 @@ function ExpelMember({ onClose, handleExpel, member }) {
 				<div>추방하시겠습니까?</div>
 			</div>
 			<div className="btn">
-				<Button className="expelBtn" onClick={handleExpel}>확인</Button>
+				<Button className="expelBtn">확인</Button>
 				<Button className="cancelBtn" onClick={onClose}>취소</Button>
 			</div>
 		</div>

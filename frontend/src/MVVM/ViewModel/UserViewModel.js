@@ -7,10 +7,9 @@ const LoginUserContext = createContext((id, pw) => {});
 const LogoutUserContext = createContext(() => {});
 const VerifyUserContext = createContext(() => {});
 const SendAuthMailContext = createContext((email) => {});
-const CheckAuthMailContext = createContext((email, authNum) => {});
+const CheckAuthMailContext = createContext((email, auth_num) => {});
 const CheckUniqueIdContext = createContext((id) => {});
 const SignUpUserContext = createContext((userInfo) => {});
-const ChangePwContext = createContext((user_id, new_pw) => {});
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -30,7 +29,8 @@ export const UserLogicProvider = ({ children }) => {
 	};
 	const LoginUser = async (id, pw) => {
 		let flag = false;
-		await axios.post(`${API_URL}/login`, { user_id: id, user_pw: pw }, {
+		console.log("Dddddddddddd");
+		await axios.post(`${API_URL}/login`, { userId: id, userPw: pw }, {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data.result);
@@ -51,9 +51,9 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SendAuthMail = async (email, user_id = "", type = 0) => {
+	const SendAuthMail = async (eMail, type = 0) => {
 		let flag = false;
-		await axios.post(`${API_URL}/authmail/send`, { type, user_id, email })
+		await axios.post(`${API_URL}/authmail/send`, { type, email: eMail })
 			.then((res) => {
 				console.log(res);
 				if (res.data.result === "success") flag = true;
@@ -74,30 +74,19 @@ export const UserLogicProvider = ({ children }) => {
 			.then((res) => { flag = !res.data.duplicate; console.log(res.data.duplicate); });
 		return flag;
 	};
-	const SignUp = async (user_info) => {
-		console.log(user_info);
+	const SignUp = async (userInfo) => {
+		console.log(userInfo);
 		let flag = false;
 		await axios.post(`${API_URL}/signup`, {
-			user_id: user_info.id,
-			user_pw: user_info.pw,
-			user_name: user_info.name,
-			user_email: user_info.email,
-			git_id: user_info.githubId
+			userId: userInfo.id,
+			userPw: userInfo.pw,
+			userName: userInfo.name,
+			userEmail: userInfo.email,
+			gitId: userInfo.githubId
 		}).then((res) => {
 			flag = res.data.result;
 		});
 		return flag;
-	};
-	const ChangePw = async (user_id, new_pw) => {
-		// let flag = false;
-
-		await axios.patch(`${API_URL}/user/changepw`, {
-			user_id, new_pw
-		}).then((res) => {
-			console.log(res.result);
-			if (res.result === "success") return true;
-			return false;
-		});
 	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
@@ -107,9 +96,7 @@ export const UserLogicProvider = ({ children }) => {
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
 								<SignUpUserContext.Provider value={SignUp}>
-									<ChangePwContext.Provider value={ChangePw}>
-										{children}
-									</ChangePwContext.Provider>
+									{children}
 								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
@@ -151,9 +138,5 @@ export function useCheckUniqueId() {
 }
 export function useSignUpUser() {
 	const context = useContext(SignUpUserContext);
-	return context;
-}
-export function useChangePw() {
-	const context = useContext(ChangePwContext);
 	return context;
 }
