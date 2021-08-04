@@ -30,6 +30,7 @@ export const UserLogicProvider = ({ children }) => {
 	};
 	const LoginUser = async (id, pw) => {
 		let flag = false;
+		console.log(`${id} ${pw}`);
 		await axios.post(`${API_URL}/login`, { user_id: id, user_pw: pw }, {
 			withCredentials: true,
 		}).then((res) => {
@@ -51,9 +52,10 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const SendAuthMail = async (email, user_id = "", type = 0) => {
+	const SendAuthMail = async (email, type = 0) => {
 		let flag = false;
-		await axios.post(`${API_URL}/authmail/send`, { type, user_id, email })
+		console.log(type);
+		await axios.post(`${API_URL}/authmail/send`, { type, email })
 			.then((res) => {
 				console.log(res);
 				if (res.data.result === "success") flag = true;

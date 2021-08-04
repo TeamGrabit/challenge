@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { withStyles, Box, Button, TextField } from '@material-ui/core';
+import axios from 'axios';
 import { useSendAuthMail, useCheckAuthMail } from '../MVVM/ViewModel/UserViewModel';
+import { API_URL } from '../CommonVariable';
 
 const CssTextField = withStyles({
 	root: {
@@ -27,13 +29,22 @@ const isEmail = (email) => {
 	return emailRegex.test(email);
 };
 
-function IdFind() {
+function IdFind({ history }) {
 	const [email, setEmail] = useState("");
 	const [isSend, setIsSend] = useState(false); // 이메일 인증 메일이 발송되었는지 여부
 	const [isMailAuth, setisMailAuth] = useState(false); // 이메일 인증 완료 여부
 	const [authNum, setAuthNum] = useState(""); // 입력된 인증번호
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
+	useEffect(() => {
+		if (isMailAuth) {
+			axios.get(`${API_URL}/authmail/id/${email}`).then((res) => {
+				const { result } = res.data;
+				if (result) { alert("아이디가 메일로 발송되었습니다."); } else { alert("메일 전송에 실패했습니다. 다시 시도해주세요"); }
+			});
+			history.push('/login');
+		}
+	}, [isMailAuth]);
 	const authMailSendHandler = async () => { // mail 전송
 		const result = await authMailSend(email, 1);
 		console.log(result);
@@ -58,7 +69,6 @@ function IdFind() {
 				</div>
 			</div>
 			<div className="line" />
-			{/* // TODO : 메일 적는 인풋, 버튼 만들고 누르면 메일로 아이디 전송되거나 / 해당 이메일로 가입된 아이디가 없습니다 뜨게 만들기 */}
 			<div className="pw-find-auth">
 				<Box mt={2}>
 					<div className="text">가입 이메일</div>

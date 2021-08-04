@@ -26,7 +26,7 @@ const isEmail = (email) => {
 	return emailRegex.test(email);
 };
 
-function PwFindAuth({ setStatus, user_id, setUserId }) {
+function PwFindAuth({ setStatus, setUserId }) {
 	const [email, setEmail] = useState("");
 	const [isSend, setIsSend] = useState(false); // 이메일 인증 메일이 발송되었는지 여부
 	const [isMailAuth, setisMailAuth] = useState(false); // 이메일 인증 완료 여부
@@ -34,7 +34,7 @@ function PwFindAuth({ setStatus, user_id, setUserId }) {
 	const authMailSend = useSendAuthMail();
 	const authMailCheck = useCheckAuthMail();
 	const authMailSendHandler = async () => { // mail 전송
-		const result = await authMailSend(email, user_id, 1);
+		const result = await authMailSend(email, 1);
 		console.log(result);
 		// TODO: 가입되지 않은 사용자입니다. 새로 가입해주세요 추가해야함
 		if (!result) { alert('인증 메일 전송에 실패했습니다. 다시 한 번 시도해주세요'); } else { alert('인증 메일이 전송되었습니다. 메일함을 확인해주세요'); }
@@ -48,19 +48,6 @@ function PwFindAuth({ setStatus, user_id, setUserId }) {
 	};
 	return (
 		<div className="pw-find-auth">
-			<Box mt={2}>
-				<div className="text">아이디</div>
-				<CssTextField
-					required
-					name="id"
-					variant="outlined"
-					label="id"
-					placeholder="아이디를 입력하세요"
-					value={user_id}
-					onChange={(e) => setUserId(e.target.value)}
-					disabled={isMailAuth}
-				/>
-			</Box>
 			<Box mt={2}>
 				<div className="text">가입 이메일</div>
 				<CssTextField
