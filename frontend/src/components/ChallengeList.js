@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Grid, Box, Link } from '@material-ui/core';
 
-function ChallengeList({ list, index }) {
+function ChallengeList({ list, index, user_id }) {
 	console.log(list);
 	return (
 		<div>
@@ -17,9 +17,16 @@ function ChallengeList({ list, index }) {
 											{c.name}
 										</div>
 										<div className="wheel">
-											<Link className="link" href={`/challenge/manage/${c.challenge_id}`}>
-												<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
-											</Link>
+											{
+												c.challenge_leader === user_id ?
+													<Link className="link" href={`/challenge/manage/${c.challenge_id}`}>
+														<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
+													</Link>
+													:
+													<Link className="link" href={`/challenge/member/${c.challenge_id}`}>
+														<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
+													</Link>
+											}
 										</div>
 									</Box>
 								</div>

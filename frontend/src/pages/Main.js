@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles, Tabs, Tab } from '@material-ui/core';
 import ChallengeList from '../components/ChallengeList';
+import { useUserState } from '../MVVM/Model/UserModel';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function Main() {
+	const user_id = useUserState();
 	const challengeData = useChallengeState();
 	console.log(challengeData);
 	const [value, setValue] = useState(0);
@@ -56,7 +58,7 @@ function Main() {
 					<AntTab label="참여중인 챌린지" />
 					<AntTab label="종료된 챌린지" />
 				</AntTabs>
-				<ChallengeList list={challengeData} index={value} />
+				<ChallengeList list={challengeData} index={value} user_id={user_id} />
 			</div>
 		</div>
 	);
