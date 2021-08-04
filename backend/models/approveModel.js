@@ -22,6 +22,9 @@ var Approve = new Schema({
         type: Date,
         default: new Date()
     },
+	request_date:{
+		type: String
+	},
     approve_user:{
         type: Array,
     },
@@ -37,12 +40,13 @@ var Approve = new Schema({
 	versionKey: false
 });
 
-Approve.statics.create = function (ch_id, user_id, type, message) {
+Approve.statics.create = function (ch_id, user_id, type, message, request_date) {
 	const approve = new this({
 		ch_id,
         user_id,
         type,
-        message
+        message,
+		request_date
 	})
 
 	console.log("modal 생성");

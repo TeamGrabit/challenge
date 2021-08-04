@@ -7,7 +7,7 @@ const gitDataController = require('../controllers/gitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
 const grassController = require('../controllers/grassController');
-const mailContriller = require('../controllers/authMailController');
+const authMailController = require('../controllers/authMailController');
 
 // <-- userCon
 router.post('/signup', userController.createUser);
@@ -18,11 +18,15 @@ router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
 router.get('/user/uniqueid/:user_id', userController.checkIdDupl);
+router.patch('/user/changepw', userController.changePw);
+router.get('/user/:user_id', userController.userInfomation);
 // userCon -->
 
 // <-- mailCon
-router.post('/authmail/send', mailContriller.sendAuthMail);
-router.post('/authmail/check', mailContriller.checkAuthNum);
+router.post('/authmail/send', authMailController.sendAuthMail);
+router.post('/authmail/check', authMailController.checkAuthNum);
+router.post('/invite', authMailController.inviteUser);
+router.get('/authmail/id/:email', authMailController.sendId);
 // mailCon --> 
 
 // <-- gitCrawlData
@@ -35,35 +39,34 @@ router.put('/grass', gitDataController.putData);
 // <-- grassController 
 router.get('/grass/personal', grassController.getPersonalGrass);
 router.get('/grass/challenge', grassController.getChallengeGrass);
+router.get('/grass/other', grassController.getOtherGrass);
 // grassController -->
 
 router.post('/challenge', challengeController.createChallenge);
+router.get('/challenge', challengeController.getAllChallenge);
 router.post('/challengeKing/:id', challengeController.whoIsKing);
-router.get('/challenge/:challengeId', challengeController.getChallengeInfo);
-router.get('/challengeKing/:challengeId', challengeController.whoIsKing);
-router.get('/challengePoor/:challengeId', challengeController.whoIsPoor);
-router.patch('/challenge/:challengeId', challengeController.fixChallengeInfo);
-router.delete('/challenge/:challengeId', challengeController.deleteChallenge);
+router.get('/challenge/:challenge_id', challengeController.getChallengeInfo);
+router.get('/challengeKing/:challenge_id', challengeController.whoIsKing);
+router.get('/challengePoor/:challenge_id', challengeController.whoIsPoor);
+router.patch('/challenge/:challenge_id', challengeController.fixChallengeInfo);
+router.delete('/challenge/:challenge_id', challengeController.deleteChallenge);
 
-router.patch('/challengeIn/challenge', challengeController.joinChallenge);
+router.patch('/challenge/:challenge_id/in', challengeController.joinChallenge);
 router.patch('/challengeOut/challenge', challengeController.outChallenge);
-router.post('/invite/:challengeId', challengeController.inviteUser);
 
 router.post('/approve', approveController.createApprove);
-router.delete('/approve/:approveId', approveController.deleteApprove);
-router.get('/approve/:approveId', approveController.getApproveInfo);
-router.patch('/approve/:approveId', approveController.confirmApprove);
+router.delete('/approve/:approve_id', approveController.deleteApprove);
+router.get('/approve/:approve_id', approveController.getApproveInfo);
+router.patch('/approve/:approve_id', approveController.confirmApprove);
 router.get('/approve/list/:ch_id', approveController.getApproveList);
 
 
 
 router.post('/approve', approveController.createApprove);
-router.delete('/approve/:approveId', approveController.deleteApprove);
-router.get('/approve/:approveId', approveController.getApproveInfo);
-router.patch('/approve/:approveId', approveController.confirmApprove);
+router.delete('/approve/:approve_id', approveController.deleteApprove);
+router.get('/approve/:approve_id', approveController.getApproveInfo);
+router.patch('/approve/:approve_id', approveController.confirmApprove);
 router.get('/approve/list/:ch_id', approveController.getApproveList);
-
-router.post('/invite/:challengeId', challengeController.inviteUser);
 
 
 module.exports = router;

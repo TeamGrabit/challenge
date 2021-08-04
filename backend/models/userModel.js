@@ -16,6 +16,7 @@ var User = new Schema({
 });
 
 User.pre("save", function(next) {
+	console.log("aaaaaaaaa");
 	var user = this;
 	if (user.isModified("user_pw")) {
 		bcrypt.genSalt(10, (err,salt) => {
@@ -62,11 +63,26 @@ User.statics.getUserById = async function(id) {
 User.statics.loginCheck = async function(id,pw) {
 	const user = await this.findOne({"user_id": id});
 	console.log("user :"+user);
-	
-	if (bcrypt.compare(pw, user.user_pw)){
+	console.log(pw);
+	const result = await bcrypt.compare(pw, user.user_pw)
+	console.log(result);
+	if(result){
+		console.log(user);
 		return user;
 	}
+	return result;
+}
 
-	// return this.findOne({"user_id": id, "user_pw": pw});
+User.statics.changePw = async function(id,pw){
+	console.log("hi");
+	bcrypt.genSalt(10, (err,salt) => {
+		if (err) return next(err);
+		bcrypt.hash(pw, salt, async (err, hash) => {
+			if (err) return next(err);
+			console.log(hash);
+			await this.updateOne({"user_id":id},{"user_pw":hash});
+		});
+	});
+
 }
 module.exports = mongoose.model('user',User);

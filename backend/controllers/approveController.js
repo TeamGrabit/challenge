@@ -6,9 +6,9 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 function CreateApprove(req, res) {
-	const { ch_id, user_id, type, message } = req.body;
+	const { ch_id, user_id, type, message, request_date } = req.body;
 
-	Approve.create(ch_id, user_id, type, message)
+	Approve.create(ch_id, user_id, type, message, request_date)
 		.then(res.send(req.body))
 		.catch((err) => {
 			console.error(err);
@@ -18,7 +18,7 @@ function CreateApprove(req, res) {
 }
 
 function DeleteApprove(req, res) {
-	const approve_id = req.params.approveId;
+	const approve_id = req.params.approve_id;
 	const id = ObjectID(approve_id);
 
 	Approve.findByIdAndDelete(id, (err, doc) => {
@@ -50,9 +50,9 @@ function GetApproveList(req, res) {
 }
 
 
-async function ConfirmApprove(req, res) {
+async function ConfirmApprove(req, res) {		// approve 승인 누르면 count 증가시키는 api
 
-	const approve_id = req.params.approveId;
+	const approve_id = req.params.approve_id;
 	const Id = ObjectID(approve_id)
 	const { user_id, ch_id } = req.body;
 
@@ -109,7 +109,7 @@ async function ConfirmApprove(req, res) {
 }
 
 function GetApproveInfo(req, res) {
-	const approve_id = req.params.approveId;
+	const approve_id = req.params.approve_id;
 	const id = ObjectID(approve_id);
 	Approve.findOneById(id)
 
