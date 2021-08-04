@@ -36,21 +36,38 @@ export const ChallengeLogicProvider = ({ children }) => {
 		console.log(challengeInfo);
 		let flag = false;
 		await axios.post(`${API_URL}/challenge`, {
-			userId: challengeInfo.userId,
+			user_id: challengeInfo.userId,
 			name: challengeInfo.name,
 			challenge_start: challengeInfo.challenge_start,
 			challenge_end: challengeInfo.challenge_end,
 			private_key: challengeInfo.private_key
 		}).then((res) => {
 			flag = res.data;
+			getChallengeList();
 		});
 		return flag;
 	};
-	const saveChallenge = () => {
-
+	const saveChallenge = async (CId, challengeInfo) => {
+		let flag = false;
+		await axios.patch(`${API_URL}/challenge/${CId}`, {
+			name: challengeInfo.name,
+			challenge_start: challengeInfo.challenge_start,
+			challenge_end: challengeInfo.challenge_end,
+			challenge_leader: challengeInfo.challenge_leader,
+			user_id: challengeInfo.user_id,
+			private_key: challengeInfo.private_key
+		}).then((res) => {
+			flag = res.data;
+		});
+		return flag;
 	};
-	const deleteChallenge = () => {
-
+	const deleteChallenge = (CId) => {
+		let result;
+		axios.delete(`${API_URL}/challenge/${CId}`).then((res) => {
+			console.log(res);
+			result = res.data;
+		});
+		return result;
 	};
 	return (
 		<GetChallengeContext.Provider value={getChallengeList}>
@@ -79,5 +96,15 @@ export function useGetChallengeDetail() {
 
 export function useCreateChallenge() {
 	const context = useContext(CreateChallengeContext);
+	return context;
+}
+
+export function useDeleteChallenge() {
+	const context = useContext(DeleteChallengeContext);
+	return context;
+}
+
+export function useSaveChallenge() {
+	const context = useContext(SaveChallengeContext);
 	return context;
 }
