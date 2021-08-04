@@ -8,11 +8,13 @@ import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
+import { InviteModal } from '../components';
 
 function NowChallenge({ match }) {
 	const history = useHistory();
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
+	console.log(challengeData);
 	const userData = useUserState();
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
@@ -31,8 +33,14 @@ function NowChallenge({ match }) {
 	]]);
 	const [king, setKing] = useState(null);
 	const [poor, setPoor] = useState(null);
+	const [admit, setAdmit] = useState(null);
 	const today = new Date();
 	useEffect(() => {
+		// todo : 가입한 사람이 아니면 모달 띄우기
+		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
+			console.log(res.data);
+		});
+		// todo : grass mvvm 만들기. approve mvvm 이용하기.
 		const result = challengeData.filter((item) => item.challenge_id === CId);
 		result.map((c, i) => {
 			setTitle(c.name);
@@ -64,10 +72,8 @@ function NowChallenge({ match }) {
 			month: today.getMonth() + 1,
 			year: today.getFullYear()
 		} }).then((res) => {
-			console.log(res.data.OtherList);
 			const temp = [];
 			res.data.OtherList.map((d) => temp.push(d.flat()));
-			console.log(temp);
 			setOtherGrass(temp);
 		});
 		// king
@@ -77,6 +83,10 @@ function NowChallenge({ match }) {
 		// poor
 		axios.get(`${API_URL}/challengePoor/${CId}`).then((res) => {
 			setPoor(res.data);
+		});
+		// approve
+		axios.get(`${API_URL}/approve/list/${CId}`).then((res) => {
+			setAdmit(res.data);
 		});
 	}, [challengeData]);
 	// <-- grass carousel setting
@@ -91,6 +101,25 @@ function NowChallenge({ match }) {
 	// grass carousel setting -->
 	const grassHandler = () => {
 		history.push(`/challenge/info/${CId}/fix`);
+	};
+	const [email, setEmail] = useState("");
+	const emailHandler = (e) => {
+		e.preventDefault();
+		setEmail(e.target.value);
+	};
+	const inviteHandler = (e) => {
+		e.preventDefault();
+		axios.post(`${API_URL}/invite`, {
+			challenge_id: CId,
+			user_email: email
+		}).then((res) => {
+			console.log(res.data);
+			alert(`${email}로 초대 메일을 성공적으로 보냈습니다.`);
+			setInviteOpen(false);
+			setEmail("");
+		}).catch((e) => {
+			alert(`${e} 오류가 발생했습니다.`);
+		});
 	};
 	return (
 		<>
@@ -159,34 +188,7 @@ function NowChallenge({ match }) {
 					</Grid>
 				</Grid>
 			</Grid>
-			<Modal
-				className="modal"
-				open={inviteOpen}
-				onClose={() => setInviteOpen(false)}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}
-			>
-				<Fade in={inviteOpen}>
-					<Grid className="inviteModalPaper">
-						<Grid className="head">초대하기</Grid>
-						<Grid className="body">
-							<Grid className="input-con">
-								<TextField variant="outlined" label="E-mail" fullWidth />
-								<Button style={{ marginLeft: '1rem', backgroundColor: '#CCFCCB', height: '100%' }}>전송</Button>
-							</Grid>
-							{/* 다인 초대는 추후지원 */}
-							{/* <Grid className="icon-con">
-								<IconButton style={{ width: '2rem', height: '2rem' }}>
-									<AddIcon />
-								</IconButton>
-							</Grid> */}
-						</Grid>
-					</Grid>
-				</Fade>
-			</Modal>
+			<InviteModal open={inviteOpen} closeHandler={() => setInviteOpen(false)} CId={CId} />
 			<Modal
 				className="modal"
 				open={admitOpen}
@@ -200,15 +202,21 @@ function NowChallenge({ match }) {
 				<Fade in={admitOpen}>
 					<Grid className="inviteModalPaper">
 						<Grid className="head">인증 요청 목록</Grid>
-						{/* 백에서 불러오기 */}
 						<Grid className="admit-body">
-							<Grid className="admit-content">
-								<Grid className="admit-name">이름</Grid>
-								<Grid className="admit-reason">내역</Grid>
-								<Grid className="admit-btn-con">
-									<Button style={{ backgroundColor: '#CCFCCB', marginTop: '5px' }}>수락</Button>
-								</Grid>
-							</Grid>
+							{/* 백에서 불러오기 */}
+							{
+								admit === null ? <p>데이터가 없습니다.</p>
+									: admit.map((d) => (
+										<Grid className="admit-content">
+											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>
+											<Grid className="admit-reason">{d.user_id}</Grid>
+											<Grid className="admit-reason">{d.message}</Grid>
+											<Grid className="admit-btn-con">
+												<Button style={{ backgroundColor: '#CCFCCB', marginTop: '5px' }}>수락</Button>
+											</Grid>
+										</Grid>
+									))
+							}
 						</Grid>
 					</Grid>
 				</Fade>
