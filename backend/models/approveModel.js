@@ -16,7 +16,8 @@ var Approve = new Schema({
         default: 0
     },
     message:{
-        type: String
+        type: String,
+		maxlength: 100
     },
     date:{
         type: Date,

@@ -7,7 +7,7 @@ const gitDataController = require('../controllers/gitDataController');
 const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
 const grassController = require('../controllers/grassController');
-const mailContriller = require('../controllers/authMailController');
+const authMailController = require('../controllers/authMailController');
 
 // <-- userCon
 router.post('/signup', userController.createUser);
@@ -17,15 +17,17 @@ router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
-router.get('/user/uniqueid/:userId', userController.checkIdDupl);
+router.get('/user/uniqueid/:user_id', userController.checkIdDupl);
 router.patch('/user/changepw', userController.changePw);
+router.patch('/user/change', userController.change);
 router.get('/user/:user_id', userController.userInfomation);
 // userCon -->
 
 // <-- mailCon
-router.post('/authmail/send', mailContriller.sendAuthMail);
-router.post('/authmail/check', mailContriller.checkAuthNum);
-router.post('/invite', mailContriller.inviteUser);
+router.post('/authmail/send', authMailController.sendAuthMail);
+router.post('/authmail/check', authMailController.checkAuthNum);
+router.post('/invite', authMailController.inviteUser);
+router.get('/authmail/id/:email', authMailController.sendId);
 // mailCon --> 
 
 // <-- gitCrawlData

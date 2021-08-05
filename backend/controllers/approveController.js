@@ -5,16 +5,22 @@ const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
-function CreateApprove(req, res) {
-	const { ch_id, user_id, type, message, request_date } = req.body;
-
-	Approve.create(ch_id, user_id, type, message, request_date)
-		.then(res.send(req.body))
-		.catch((err) => {
-			console.error(err);
-			res.send('false');
-		})
-
+async function CreateApprove(req, res) {
+	try{
+		const { ch_id, user_id, type, message, request_date } = req.body;
+		if(message.length > 100){
+			throw "message를 100자 이내로 작성바랍니다."
+		}
+		Approve.create(ch_id, user_id, type, message, request_date)
+			.then(res.send(req.body))
+			.catch((err) => {
+				console.error(err);
+				res.send('false');
+			})
+	}catch(err) {
+		console.log(err);
+		res.status(401).json({error: err})
+	}
 }
 
 function DeleteApprove(req, res) {

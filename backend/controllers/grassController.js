@@ -99,14 +99,13 @@ async function GetCommitLists(users, challenge_id, year, month){
 async function GetOtherCommitLists(users, challenge_id, year, month){
 	const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
 	var dates = [];
-	var isCommitedList = []; 
-	var tempDate = new Date(year, month-3);
+	var isCommitedList = [];
 	for(let i=0; i<users.length; i++){
 		// Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
     	const result = await Approve.findByUserChallangeMonth(users[i], challenge_id, year, month);
 		const approve = result.map(element => dateToString(element.date));
 
-		// 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
+		// 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기 (데이터가 없으면 만들어줌)
 		var gitAll = await gitData.findOneByUserId(users[i]);
 		if(gitAll === null){
 			await CreateGitData(users[i]);

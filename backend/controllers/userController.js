@@ -9,8 +9,6 @@ const { json } = require('body-parser');
 
 require("dotenv").config();
 const SecretKey = process.env.SECRET_KEY;
-
-
 function getCurrentDate() {
 	var date = new Date();
 	var year = date.getFullYear();
@@ -27,17 +25,16 @@ function getCurrentDate() {
 async function CreateUser(req, res, next) {
 	try {
 		console.log(req.body);
-		const { userId, userPw, userName, userEmail, gitId } = req.body;
+		const { user_id, user_pw, user_name, user_email, git_id } = req.body;
 		let today = getCurrentDate();
 		const in_date = today;
 		const last_update = today;
-
-		const user = await User.findOneByUsername(userId);
+		const user = await User.findOneByUsername(user_id);
 		if (user) {
 			console.log(user);
 			throw 'user exists';
 		} else {
-			await User.create(userId, userPw, userName, userEmail, gitId, in_date, last_update);
+			await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
 		}
 		res.status(201).json({ result: true });
 	} catch (err) {
@@ -48,7 +45,7 @@ async function CreateUser(req, res, next) {
 
 async function CheckIdDupl(req, res) { // id 중복체크용
 	try {
-		const input_id = req.params.userId;
+		const input_id = req.params.user_id;
 		console.log(input_id);
 		const result = await User.getUserById(input_id);
 		if (result) { // 중복 
@@ -292,8 +289,8 @@ function OutChallenge(req, res) {
 }
 
 async function LogIn(req, res, next) {
-	const id = req.body.userId;
-	const pw = req.body.userPw;
+	const id = req.body.user_id;
+	const pw = req.body.user_pw;
 	console.log("id, pw :" + id + " " + pw);
 	// DB에서 user 정보 조회 
 	try {
@@ -366,17 +363,34 @@ function VerifyToken(req, res, next) {
 
 async function ChangePw(req, res) {
 	try {
-		console.log(req.body);
+		const type = req.body.type;
+		// type : 0 
+			// 로그인전에 비밀번호 찾기 용
+			// 비밀번호 초기화 
+		// type : 1
+			// 로그인 후 마이페이지에서 비밀번호 변경 용
+			// 이전 비밀번호 확인 후, 맞으면 새 비밀번호로 변경 
 		const new_pw = req.body.new_pw;
 		const user_id = req.body.user_id;
-		const user = await User.findOne({ "user_id": user_id });
-		console.log(user);
-		if (user == undefined) {
-			res.status(201).json({ result: 'user not exists' });
-			return;
+		if (type == 0) { 
+			const user = await User.findOne({ "user_id": user_id });
+			console.log(user);
+			if (user == undefined) {
+				res.status(201).json({ result: 'user not exists' });
+				return;
+			}
+		}
+		else if (type == 1){
+			const user_pw = req.body.user_pw;
+			const user = await User.loginCheck(user_id, user_pw);
+			if (user === false) {
+				res.status(400).json({ error: 'wrong pw' });
+				return;
+			}
 		}
 		await User.changePw(user_id, new_pw);
 		res.status(201).json({ result: "success" });
+		
 	} catch (err) {
 		// console.log(err);
 		res.status(401).json({ error: err.message });
@@ -384,14 +398,36 @@ async function ChangePw(req, res) {
 }
 
 async function UserInfomation(req, res) {
-	try{
+	try {
 		const user_id = req.params.user_id;
 		const user = await User.findOneByUsername(user_id);
 
-		res.status(200).json({user_id: user.user_id, user_email: user.user_email, git_id: user.git_id});
+		res.status(200).json({ user_id: user.user_id, user_email: user.user_email, git_id: user.git_id });
+	} catch (err) {
+		console.log(err)
+		res.status(401).json({ error: 'erreor' })
+	}
+}
+
+async function Change(req, res) {
+	try{
+		const { user_id, name, git_id } = req.body;
+		User.findOneAndUpdate({ "user_id": user_id }, {
+			$set: {	
+				user_name: name.replace(/ /g,""),
+				git_id: git_id.replace(/ /g,"")
+			}
+		}, { new: true, useFindAndModify: false }, (err, doc) => {
+			if (err) {
+				throw new Error('user 정보 변경 실패')
+			}
+			else {
+				res.status(201).json({result: true})
+			}
+		})
 	}catch(err){
 		console.log(err)
-		res.status(401).json({error: 'erreor'})
+		res.status(401).json({error: 'error'})
 	}
 }
 
@@ -405,7 +441,8 @@ module.exports = {
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
 	changePw: ChangePw,
-	userInfomation: UserInfomation
+	userInfomation: UserInfomation,
+	change: Change
 };
 
 
