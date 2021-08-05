@@ -5,7 +5,8 @@
 	"scripts": {
 		"start": "node backend/app.js",
 		"backend": "node --watch backend/app.js",
-		"heroku-postbuild": "npm install --prefix backend"
+		"frontend": "npm run start --prefix frontend",
+		"heroku-postbuild": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
 	},
 	"author": "",
 	"license": "ISC",
