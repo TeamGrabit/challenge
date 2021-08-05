@@ -45,7 +45,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/',router);
 
-app.use(express.static("../frontend/build"));
+let root = path.join(__dirname, '../frontend/build')
+app.use(express.static(root));
 app.get("*", (req,res) => {
 	res.sendFile(path.join(__dirname+"/../frontend/build/index.html"));
 })
