@@ -1,22 +1,24 @@
 import React from 'react';
-import { Button, Grid, Box, Link } from '@material-ui/core';
+import { Button, Grid, Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 function ChallengeList({ list, index }) {
+	console.log(list);
 	return (
 		<div>
 			<div className="challengeList">
 				<Grid container spacing={3} className="cha_list">
-					{list.map((c) => (
-						index === c.isEnd &&
+					{list.map((c, i) => (
+						index === c.state &&
 						<Grid item lg={3} md={4} sm={6} xs={12}>
-							<Link className="link" href={`/challenge/info/${c.id}`}>
+							<Link className="link" to={`/challenge/info/${c.challenge_id}`}>
 								<div className="cha_box">
 									<Box className="cha_inner">
 										<div className="inner_text">
 											{c.name}
 										</div>
 										<div className="wheel">
-											<Link className="link" href={`/challenge/manage/${c.id}`}>
+											<Link className="link" to={`/challenge/manage/${c.challenge_id}`}>
 												<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
 											</Link>
 										</div>
@@ -27,7 +29,7 @@ function ChallengeList({ list, index }) {
 					))}
 					{index === 0 && (
 						<Grid item lg={3} md={4} sm={6} xs={12}>
-							<Link className="link" href="/challenge/make">
+							<Link className="link" to="/challenge/make">
 								<div className="cha_box">
 									<Box className="cha_make">
 										<div className="inner_text">

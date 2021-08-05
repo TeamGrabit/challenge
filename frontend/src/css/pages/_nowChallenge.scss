@@ -6,24 +6,33 @@
 	.head {
 		display:flex;
 		flex-direction: row;
-		justify-content: space-between;
 		margin-top: 1rem;
 
-		.headTitle {
-			font-size: 1.6rem;
-			margin-left: 5%;
-			background-color: $green1;
+		.head-left {
+			display:flex;
+			flex-direction: column;
 			width:50%;
-			text-align: center;
-			border-radius: 10px;
+
+			.headTitle {
+				font-size: 1.6rem;
+				background-color: $green1;
+				text-align: center;
+				border-radius: 10px;
+				margin-bottom: 0.51rem;
+			}
 		}
-		.btnCon {
-			justify-content: space-between;
+		.head-right {
+			display:flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width:50%;
 		}
 		.btn {
 			background-color: $green1 !important;
-			margin-right: 1rem;
 			letter-spacing: 2px;
+			margin-bottom: 1rem;
+			width: 80%;
 		}
 	}
 
@@ -87,11 +96,16 @@
 		.right-con{
 			width: 47%;
 
-			.commit-log{
-				height: 60%;
+			.commitKing{
 				display: flex;
-				justify-content: center;
+				flex-direction: column;
 				align-items: center;
+				justify-content: center;
+				height: 80%;
+
+				.rank{
+					margin-bottom: 10px;
+				}
 			}
 		}
 	}
@@ -134,29 +148,14 @@
 			}
 		}
 		.middle-con{
-			width: 23%;
+			width: 47%;
 
 			.failKing{
-				margin-top: 30%;
-
-				.rank{
-					text-align: center;
-				}
-			}
-		}
-		.right-con{
-			width: 23%;
-
-			.commitKing{
-				margin-top: 2rem;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				justify-content: space-between;
-
-				.rank{
-					margin-bottom: 10px;
-				}
+				justify-content: center;
+				height: 85%;
 			}
 		}
 	}
@@ -164,5 +163,63 @@
 	// slick 조정
 	.slick-prev:before, .slick-next:before {
 		color: $green4 !important;
+	}
+}
+
+.inviteModalPaper {
+	background-color: white;
+	width: 50vw;
+	max-height: 70vh;
+
+	.head {
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 1rem 1rem;
+		background-color: $green2;
+		max-height: 20vh;
+	}
+	.body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+
+		.input-con {
+			display: flex;
+			align-items: center;
+		}
+		.icon-con {
+			display: flex;
+			justify-content: center;
+			margin-top: 1rem;
+		}
+	}
+	.admit-body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		max-height: 45vh;
+		overflow: auto;
+
+		.admit-content {
+			border: 1px solid gray;
+			border-radius: 5px;
+			margin-bottom: 1rem;
+			padding: 1rem;
+
+			.admit-name {
+				font-weight: bold;
+			}
+
+			.admit-btn-con{
+				display: flex;
+				justify-content: center;
+			}
+		}
+	}
+	.MuiFormLabel-root {
+		color: black !important;
+	}
+	.MuiOutlinedInput-notchedOutline {
+		border-color: black !important;
 	}
 }

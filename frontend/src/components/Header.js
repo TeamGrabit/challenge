@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Button,
 	AppBar,
@@ -6,23 +7,28 @@ import {
 	Typography,
 	IconButton,
 	Popover,
-	MenuItem,
-	Link
+	MenuItem
 } from '@material-ui/core';
 
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useLogoutUser } from '../MVVM/ViewModel/UserViewModel';
+import { useLogoutUser, useVerifyUser } from '../MVVM/ViewModel/UserViewModel';
 
 function Header() {
 	const userState = useUserState();
 	const userlogout = useLogoutUser();
-	const git = "MOBUMIN";
+	const userVerify = useVerifyUser();
+	// const git = "MOBUMIN";
 
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
 
 	useEffect(() => {
+		userVerify();
+	}, []);
+
+	useEffect(() => {
 		if (userState.auth === "user") setIsLogined(true);
+		console.log(userState);
 	}, [userState]);
 
 	const handleClick = (e) => {
@@ -33,8 +39,14 @@ function Header() {
 		setAnchorEl(null);
 	};
 
-	const logout = () => {
-		userlogout();
+	const logout = async () => {
+		await userlogout().then((result) => {
+			console.log(result);
+			if (result) {
+				alert('로그아웃 성공');
+				window.location.href = '/';
+			} else alert('로그아웃 실패');
+		});
 		setIsLogined(false);
 	};
 
@@ -46,14 +58,14 @@ function Header() {
 			<Toolbar>
 				{
 					isLogined ?
-						<Link className="link" href="/challenge">
+						<Link className="link" to="/challenge">
 							<img className="logoImg" src="/ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
 							</Typography>
 						</Link>
 						:
-						<Link className="link" href="/">
+						<Link className="link" to="/">
 							<img className="logoImg" src="/ChallengeLogo.png" alt="logo" />
 							<Typography className="title" variant="h5">
 								세살버릇 여든까지
@@ -65,7 +77,7 @@ function Header() {
 					isLogined ?
 						<>
 							<IconButton onClick={handleClick}>
-								<img src={`https://github.com/${git}.png`} alt={`${git}`} className="profileImg" />
+								<img src={`https://github.com/${userState.gitId}.png`} alt={`${userState.gitId}`} className="profileImg" />
 							</IconButton>
 							<Popover
 								id={id}
@@ -81,16 +93,16 @@ function Header() {
 									horizontal: 'center',
 								}}
 							>
-								<Link className="link" href="/mypage"><MenuItem>마이페이지</MenuItem></Link>
+								<Link className="link" to="/mypage"><MenuItem>마이페이지</MenuItem></Link>
 								<MenuItem onClick={logout}>로그아웃</MenuItem>
 							</Popover>
 						</>
 						:
 						<>
-							<Link className="link" href="/login">
+							<Link className="link" to="/login">
 								<Button className={`${`profileBtn`} ${`loginBtn`}`}>로그인</Button>
 							</Link>
-							<Link className="link" href="/register">
+							<Link className="link" to="/register">
 								<Button className="profileBtn">회원가입</Button>
 							</Link>
 						</>
