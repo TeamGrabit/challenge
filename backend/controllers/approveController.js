@@ -6,9 +6,9 @@ const { ObjectID } = require('bson');
 const db = mongoose.connection;
 
 async function CreateApprove(req, res) {
-	try{
+	try {
 		const { ch_id, user_id, type, message, request_date } = req.body;
-		if(message.length > 100){
+		if (message.length > 100) {
 			throw "message를 100자 이내로 작성바랍니다."
 		}
 		Approve.create(ch_id, user_id, type, message, request_date)
@@ -17,9 +17,9 @@ async function CreateApprove(req, res) {
 				console.error(err);
 				res.send('false');
 			})
-	}catch(err) {
+	} catch (err) {
 		console.log(err);
-		res.status(401).json({error: err})
+		res.status(401).json({ error: err })
 	}
 }
 
@@ -40,19 +40,20 @@ function DeleteApprove(req, res) {
 
 }
 
-function GetApproveList(req, res) {
-	const ch_id = req.params.ch_id;
+async function GetApproveList(req, res) {
+	try {
+		const ch_id = req.params.ch_id;
+		const user_id = req.params.user_id;
+		console.log(user_id)
 
-	Approve.find({ $and: [{ ch_id: ch_id }, { state: false }] }).sort({ _id: -1 })
-		.then((docs) => {
-			console.log("approve 목록 받음")
-			console.log(docs)
-			res.send(docs)
-		})
-		.catch((err) => {
-			console.log(err)
-			res.send(err)
-		})
+		approves = await Approve.find({ $and: [{ ch_id: ch_id }, { state: false },
+			{user_id:{$ne: user_id}}, {approve_user:{$nin: user_id}}] }).sort({ _id: -1 })
+
+		res.status(200).json({approves})
+	} catch (err) {
+		console.log(err)
+		res.status(401).json({ error: 'erreor' })
+	}
 }
 
 
@@ -119,15 +120,15 @@ function GetApproveInfo(req, res) {
 	const id = ObjectID(approve_id);
 	Approve.findOneById(id)
 
-	.then((ap) => {
-		console.log("approve 받음")
-		console.log(ap)
-		res.send(ap)
-	})
-	.catch((err) => {
-		console.log(err)
-		res.send(err)
-	})
+		.then((ap) => {
+			console.log("approve 받음")
+			console.log(ap)
+			res.send(ap)
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send(err)
+		})
 }
 
 module.exports = {

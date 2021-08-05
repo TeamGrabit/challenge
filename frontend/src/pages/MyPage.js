@@ -13,7 +13,7 @@ function MyPage() {
 	const [open, setopen] = useState(false);
 	useEffect(() => {
 		axios.get(`${API_URL}/user/${userData.userId}`).then((res) => {
-			setName(res.data.user_id);
+			setName(res.data.user_name);
 			setEmail(res.data.user_email);
 			setGitId(res.data.git_id);
 		})
