@@ -32,8 +32,7 @@ export const UserLogicProvider = ({ children }) => {
 	};
 	const LoginUser = async (id, pw) => {
 		let flag = false;
-		console.log("Dddddddddddd");
-		await axios.post(`${API_URL}/login`, { userId: id, userPw: pw }, {
+		await axios.post(`${API_URL}/login`, { user_id: id, user_pw: pw }, {
 			withCredentials: true,
 		}).then((res) => {
 			console.log(res.data.result);
@@ -64,9 +63,9 @@ export const UserLogicProvider = ({ children }) => {
 		return flag;
 	};
 
-	const CheckAuthMail = async (email, authNum) => {
+	const CheckAuthMail = async (email, auth_num) => {
 		let flag = false;
-		await axios.post(`${API_URL}/authmail/check`, { email, authNum })
+		await axios.post(`${API_URL}/authmail/check`, { email, auth_num })
 			.then((res) => { flag = res.data.result; });
 		return flag;
 	};
@@ -77,15 +76,15 @@ export const UserLogicProvider = ({ children }) => {
 			.then((res) => { flag = !res.data.duplicate; console.log(res.data.duplicate); });
 		return flag;
 	};
-	const SignUp = async (userInfo) => {
-		console.log(userInfo);
+	const SignUp = async (user_info) => {
+		console.log(user_info);
 		let flag = false;
 		await axios.post(`${API_URL}/signup`, {
-			userId: userInfo.id,
-			userPw: userInfo.pw,
-			userName: userInfo.name,
-			userEmail: userInfo.email,
-			gitId: userInfo.githubId
+			user_id: user_info.id,
+			user_pw: user_info.pw,
+			user_name: user_info.name,
+			user_email: user_info.email,
+			git_id: user_info.githubId
 		}).then((res) => {
 			flag = res.data.result;
 		});

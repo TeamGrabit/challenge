@@ -7,3 +7,4 @@ export { default as LogInForm } from './LogInForm';
 export { default as ManageComponent } from './ManageComponent';
 export { default as useSessionStorage } from './useSessionStorage';
 export { default as PwFindAuth } from './PwFindAuth';
+export { default as InviteModal } from './InviteModal';
