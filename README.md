@@ -7,6 +7,7 @@
 * [개발 안내🚀](#개발-안내)
   1. [폴더 구조](#폴더구조)
   1. [기술 스택](#기술스택)
+  1. [협업 규칙](#협업규칙)
 * [문의사항📧](#문의사항)
 * 다른 목차
 
@@ -79,7 +80,31 @@ frontend
   * axios
   * contextAPI + MVVM Pattern
 
---------
+-----------
+
+## 협업규칙
+
+### main branch
+
+`https://alsolvechallenge.herokuapp.com/` 에 배포된다.
+
+`API_URL` 역시 `https://alsolvechallenge.herokuapp.com/` 이다.
+
+localhost에서는 위의 주소로 API 요청을 보낼 수 없다.
+
+### develop branch
+
+`https://challengeback.herokuapp.com/` 에 배포된다.
+
+`API_URL`이 `https://alsolvechallenge.herokuapp.com/` 라서 위 주소의 프론트-백 통신은 불가능하다.
+
+localhost에서 `https://challengeback.herokuapp.com/`로 통신은 가능하다.
+
+추후, cors orgin을 여러개 설정할 수 있게 하여 통신 가능하게 만들면 좋을듯 함.
+
+develop branch에 branch를 merge한 후, 이상이 없을 때 main branch로 합친다.
+
+-----------
 
 ## 문의사항
 
