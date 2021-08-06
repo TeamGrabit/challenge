@@ -1,0 +1,95 @@
+.challengeInfoFix{
+	.body{
+		display: flex;
+		height: auto;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+	.title{
+		margin-top: 10vh;
+		margin-bottom: 5vh;
+		font-size: 40px;
+		font-weight: 500;
+		font-family: 'Courier New', Courier, monospace;
+	}
+	.status_box{
+		font-family: 'Courier New', Courier, monospace;
+	}
+	.box{
+		display: flex;
+		width: 1000px;
+		height: 400px;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 5vh;
+
+		.myGrass{
+			display: flex !important;
+			flex-direction: column;
+			flex-wrap: wrap;
+			align-content: center;
+			height: 350px;
+
+			.setBtn{
+				background-color: white;
+				border: none;
+				color: white;
+				
+				.grass{
+					width: 40px;
+					height: 40px;
+					margin: 5px;
+					margin-left: 10px;
+					margin-right: 10px;
+					border-radius: 10%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+				.fill-grass{
+					background-color: $green3;
+					.text{
+						font-size: 0px;
+					}
+				}
+				.fill-grass:hover{
+					opacity: 0.5;
+					.text{
+						font-size: 15px;
+						color: black;
+					}
+				}
+				.unfill-grass{
+					background-color: antiquewhite;
+					.text{
+						font-size: 0px;
+					}
+				}
+				.unfill-grass:hover{
+					cursor: pointer;
+					opacity: 0.5;
+					.text{
+						font-size: 15px;
+						color: black;
+					}
+				}
+			}
+		}
+	}
+	.Btn{
+		font-size: 2vmin;
+		margin-left: 2vw;
+		width: 8vw;
+		background: $green3;
+		border-radius: 5%;
+	}
+	.btnSet{
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		width: 1000px;
+		height: 7vh;
+	}
+	
+}

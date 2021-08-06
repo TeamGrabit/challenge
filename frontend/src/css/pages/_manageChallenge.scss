@@ -1,0 +1,44 @@
+.manageChallenge{
+	display: inline-block;
+	flex-direction: row;
+	align-items: center;
+	overflow: hidden;
+
+    .content{
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+	.cha_nameBox{
+		background-color: $green2;
+        border: black 1px solid;
+        border-radius: 20px;
+        text-align: center;
+        width: 220px;
+        height: 80px;
+        margin-bottom: 20px;
+        display: table;
+	}
+    .cha_name{
+        display: table-cell;
+        vertical-align: middle;
+        font-size: 1.3em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+        word-break: keep-all;
+	}
+    .comp_all{
+        width: 70vw;
+    }
+}
+@media ( max-width: 600px ) {
+    .manageChallenge{
+        .content{
+            margin-left: 5vw;
+            margin-right: 5vw;
+        }
+        .cha_nameBox{
+            width: 90vw;
+            height: 50px;
+            padding-bottom: 3px;
+        }
+    }
+}

@@ -1,0 +1,225 @@
+.NowChallenge {
+	display:flex;
+	flex-direction: column;
+	padding: 0 10%;
+
+	.head {
+		display:flex;
+		flex-direction: row;
+		margin-top: 1rem;
+
+		.head-left {
+			display:flex;
+			flex-direction: column;
+			width:50%;
+
+			.headTitle {
+				font-size: 1.6rem;
+				background-color: $green1;
+				text-align: center;
+				border-radius: 10px;
+				margin-bottom: 0.51rem;
+			}
+		}
+		.head-right {
+			display:flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width:50%;
+		}
+		.btn {
+			background-color: $green1 !important;
+			letter-spacing: 2px;
+			margin-bottom: 1rem;
+			width: 80%;
+		}
+	}
+
+	.teamGrass {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		align-content: flex-start;
+		height: 210px;
+
+		.grass{
+			width: 20px;
+			height: 20px;
+			margin: 5px;
+			border-radius: 10%;
+		}
+		.fill-grass{
+			background-color: $green3;
+		}
+		.unfill-grass{
+			background-color: antiquewhite;
+		}
+	}
+
+	.secondGrid { // 나의 잔디, 커밋왕
+		display: flex;
+		justify-content: space-between;
+		margin-top: 1rem;
+
+		.sub-title {
+			text-align: center;
+			background-color: $green1;
+			border-radius: 10px;
+			font-size: 1.2rem;
+			margin-bottom: 0.5rem;
+		}
+		
+		.left-con{
+			width:47%;
+			.myGrass{
+				display: flex;
+				flex-direction: column;
+				flex-wrap: wrap;
+				align-content: flex-start;
+				height: 150px;
+	
+				.grass{
+					width: 15px;
+					height: 15px;
+					margin: 3px;
+					border-radius: 10%;
+				}
+				.fill-grass{
+					background-color: $green3;
+				}
+				.unfill-grass{
+					background-color: antiquewhite;
+				}
+			}
+		}
+		.right-con{
+			width: 47%;
+
+			.commitKing{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 80%;
+
+				.rank{
+					margin-bottom: 10px;
+				}
+			}
+		}
+	}
+
+	.lastGrid {
+		display: flex;
+		justify-content: space-between;
+		margin: 1rem 0;
+
+		.sub-title {
+			text-align: center;
+			background-color: $green1;
+			border-radius: 10px;
+			font-size: 1.2rem;
+			margin-bottom: 0.5rem;
+		}
+		
+		.left-con{
+			width:47%;
+
+			.myGrass{
+				display: flex !important;
+				flex-direction: column;
+				flex-wrap: wrap;
+				align-content: flex-start;
+				height: 150px;
+	
+				.grass{
+					width: 15px;
+					height: 15px;
+					margin: 3px;
+					border-radius: 10%;
+				}
+				.fill-grass{
+					background-color: $green3;
+				}
+				.unfill-grass{
+					background-color: antiquewhite;
+				}
+			}
+		}
+		.middle-con{
+			width: 47%;
+
+			.failKing{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				height: 85%;
+			}
+		}
+	}
+
+	// slick 조정
+	.slick-prev:before, .slick-next:before {
+		color: $green4 !important;
+	}
+}
+
+.inviteModalPaper {
+	background-color: white;
+	width: 50vw;
+	max-height: 70vh;
+
+	.head {
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 1rem 1rem;
+		background-color: $green2;
+		max-height: 20vh;
+	}
+	.body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+
+		.input-con {
+			display: flex;
+			align-items: center;
+		}
+		.icon-con {
+			display: flex;
+			justify-content: center;
+			margin-top: 1rem;
+		}
+	}
+	.admit-body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		max-height: 45vh;
+		overflow: auto;
+
+		.admit-content {
+			border: 1px solid gray;
+			border-radius: 5px;
+			margin-bottom: 1rem;
+			padding: 1rem;
+
+			.admit-name {
+				font-weight: bold;
+			}
+
+			.admit-btn-con{
+				display: flex;
+				justify-content: center;
+			}
+		}
+	}
+	.MuiFormLabel-root {
+		color: black !important;
+	}
+	.MuiOutlinedInput-notchedOutline {
+		border-color: black !important;
+	}
+}
