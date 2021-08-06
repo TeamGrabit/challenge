@@ -3,10 +3,12 @@ import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@mat
 import axios from 'axios';
 import { SideBar, ChangePassword } from '../components/index';
 import { useUserState } from '../MVVM/Model/UserModel';
+import { useChange } from '../MVVM/ViewModel/UserViewModel';
 import { API_URL } from '../CommonVariable';
 
 function MyPage() {
 	const userData = useUserState();
+	const Change = useChange();
 	const [Name, setName] = useState();
 	const [Email, setEmail] = useState();
 	const [GitId, setGitId] = useState();
@@ -31,10 +33,12 @@ function MyPage() {
 	const changeGitId = (e) => {
 		setGitId(e.currentTarget.value);
 	};
-	const save = () => {
-		console.log(Name);
-		console.log(Email);
-		console.log(GitId);
+	const save = async () => {
+		const result = await Change(userData.userId, Name, GitId);
+		console.log(result)
+		if (result) {
+			alert('정보를 수정하였습니다.');
+		} else alert('정보 수정에 실패했습니다.');
 	};
 	return (
 		<div className="mypage">

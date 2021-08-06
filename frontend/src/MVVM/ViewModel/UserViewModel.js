@@ -13,6 +13,7 @@ const SignUpUserContext = createContext((userInfo) => { });
 const ChangePwContext = createContext((user_id, new_pw) => { });
 const GetUserInfomationContext = createContext((user_id) => { });
 const MypageChangePwContext = createContext((user_id, user_pw, new_pw) => { });
+const ChangeContext = createContext((user_id, name, git_id) => { });
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -122,6 +123,17 @@ export const UserLogicProvider = ({ children }) => {
 			return res.data;
 		});
 	};
+	const Change = async (user_id, name, git_id) => {
+		let flag = false
+		await axios.patch(`${API_URL}/user/change`, {
+			user_id, name, git_id
+		}).then((res) => {
+			if (res.data.result === true) flag = true
+		}).catch((err) => {
+			console.log(err)
+		})
+		return flag
+	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
@@ -133,7 +145,9 @@ export const UserLogicProvider = ({ children }) => {
 									<ChangePwContext.Provider value={ChangePw}>
 										<MypageChangePwContext.Provider value={MypageChangePw}>
 											<GetUserInfomationContext.Provider value={GetUserInfomation}>
-												{children}
+												<ChangeContext.Provider value={Change}>
+													{children}
+												</ChangeContext.Provider>
 											</GetUserInfomationContext.Provider>
 										</MypageChangePwContext.Provider>
 									</ChangePwContext.Provider>
@@ -190,5 +204,9 @@ export function useGetUserInfomation() {
 }
 export function useMypageChangePw() {
 	const context = useContext(MypageChangePwContext);
+	return context;
+}
+export function useChange() {
+	const context = useContext(ChangeContext);
 	return context;
 }
