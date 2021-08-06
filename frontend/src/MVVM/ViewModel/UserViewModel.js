@@ -3,14 +3,17 @@ import axios from 'axios';
 import { useUserState, useUserDispatch, UserContextProvider } from '../Model/UserModel';
 import { API_URL } from '../../CommonVariable';
 
-const LoginUserContext = createContext((id, pw) => {});
-const LogoutUserContext = createContext(() => {});
-const VerifyUserContext = createContext(() => {});
-const SendAuthMailContext = createContext((email) => {});
-const CheckAuthMailContext = createContext((email, authNum) => {});
-const CheckUniqueIdContext = createContext((id) => {});
-const SignUpUserContext = createContext((userInfo) => {});
-const ChangePwContext = createContext((user_id, new_pw) => {});
+const LoginUserContext = createContext((id, pw) => { });
+const LogoutUserContext = createContext(() => { });
+const VerifyUserContext = createContext(() => { });
+const SendAuthMailContext = createContext((email) => { });
+const CheckAuthMailContext = createContext((email, authNum) => { });
+const CheckUniqueIdContext = createContext((id) => { });
+const SignUpUserContext = createContext((userInfo) => { });
+const ChangePwContext = createContext((user_id, new_pw) => { });
+const GetUserInfomationContext = createContext((user_id) => { });
+const MypageChangePwContext = createContext((user_id, user_pw, new_pw) => { });
+const ChangeContext = createContext((user_id, name, git_id) => { });
 
 export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
@@ -92,12 +95,44 @@ export const UserLogicProvider = ({ children }) => {
 		// let flag = false;
 
 		await axios.patch(`${API_URL}/user/changepw`, {
-			user_id, new_pw
+			type: 0, user_id, new_pw
 		}).then((res) => {
 			console.log(res.result);
 			if (res.result === "success") return true;
 			return false;
 		});
+	};
+	const MypageChangePw = async (user_id, user_pw, new_pw, onClose) => {
+		onClose();
+		let flag = false;
+		await axios.patch(`${API_URL}/user/changepw`, {
+			type: 1,
+			user_id,
+			user_pw,
+			new_pw
+		}).then((res) => {
+			if (res.data.result === "success") flag = true;
+		}).catch((error) => {
+			console.log(error);
+		});
+		return flag;
+	};
+	const GetUserInfomation = async (user_id) => {
+		await axios.get(`${API_URL}/user/${user_id}`).then((res) => {
+			console.log(res);
+			return res.data;
+		});
+	};
+	const Change = async (user_id, name, git_id) => {
+		let flag = false
+		await axios.patch(`${API_URL}/user/change`, {
+			user_id, name, git_id
+		}).then((res) => {
+			if (res.data.result === true) flag = true
+		}).catch((err) => {
+			console.log(err)
+		})
+		return flag
 	};
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
@@ -108,7 +143,13 @@ export const UserLogicProvider = ({ children }) => {
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
 								<SignUpUserContext.Provider value={SignUp}>
 									<ChangePwContext.Provider value={ChangePw}>
-										{children}
+										<MypageChangePwContext.Provider value={MypageChangePw}>
+											<GetUserInfomationContext.Provider value={GetUserInfomation}>
+												<ChangeContext.Provider value={Change}>
+													{children}
+												</ChangeContext.Provider>
+											</GetUserInfomationContext.Provider>
+										</MypageChangePwContext.Provider>
 									</ChangePwContext.Provider>
 								</SignUpUserContext.Provider>
 							</CheckUniqueIdContext.Provider>
@@ -155,5 +196,17 @@ export function useSignUpUser() {
 }
 export function useChangePw() {
 	const context = useContext(ChangePwContext);
+	return context;
+}
+export function useGetUserInfomation() {
+	const context = useContext(GetUserInfomationContext);
+	return context;
+}
+export function useMypageChangePw() {
+	const context = useContext(MypageChangePwContext);
+	return context;
+}
+export function useChange() {
+	const context = useContext(ChangeContext);
 	return context;
 }

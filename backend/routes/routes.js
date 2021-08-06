@@ -59,15 +59,7 @@ router.post('/approve', approveController.createApprove);
 router.delete('/approve/:approve_id', approveController.deleteApprove);
 router.get('/approve/:approve_id', approveController.getApproveInfo);
 router.patch('/approve/:approve_id', approveController.confirmApprove);
-router.get('/approve/list/:ch_id', approveController.getApproveList);
-
-
-
-router.post('/approve', approveController.createApprove);
-router.delete('/approve/:approve_id', approveController.deleteApprove);
-router.get('/approve/:approve_id', approveController.getApproveInfo);
-router.patch('/approve/:approve_id', approveController.confirmApprove);
-router.get('/approve/list/:ch_id', approveController.getApproveList);
+router.get('/approve/list/:ch_id/:user_id', approveController.getApproveList);
 
 
 module.exports = router;

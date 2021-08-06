@@ -402,7 +402,7 @@ async function UserInfomation(req, res) {
 		const user_id = req.params.user_id;
 		const user = await User.findOneByUsername(user_id);
 
-		res.status(200).json({ user_id: user.user_id, user_email: user.user_email, git_id: user.git_id });
+		res.status(200).json({ user_name: user.user_name, user_email: user.user_email, git_id: user.git_id });
 	} catch (err) {
 		console.log(err)
 		res.status(401).json({ error: 'erreor' })
