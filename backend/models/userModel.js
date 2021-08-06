@@ -7,7 +7,7 @@ var User = new Schema({
 	user_id:{type: String, required: true, unique: true, trim: true, lowercase: true,},
 	user_pw: {type: String, required: true, trim: true},
 	user_name: {type: String, required: true, trim: true},
-	user_email: {type: String, required: true, trim: true},
+	user_email: {type: String, required: true, unique: true, trim: true},
 	git_id:{type: String, required: true, trim: true},
 	ch_list:{type : Array, required: true}, //challenge 스키마 배열로 변경해도 좋을듯 
 	in_date:{type: Date, required: false},
@@ -16,6 +16,7 @@ var User = new Schema({
 });
 
 User.pre("save", function(next) {
+	console.log("aaaaaaaaa");
 	var user = this;
 	if (user.isModified("user_pw")) {
 		bcrypt.genSalt(10, (err,salt) => {
@@ -54,18 +55,35 @@ User.statics.findOneByUsername = function(user_id) {
   }).exec()
 }
 
-User.statics.getUserById = function(id) {
-	return this.find({"user_id": id});
+
+User.statics.getUserById = async function(id) {
+	const result = await this.findOne({"user_id": id});
+	return result;
 }
 
 User.statics.loginCheck = async function(id,pw) {
 	const user = await this.findOne({"user_id": id});
 	console.log("user :"+user);
-	
-	if (bcrypt.compare(pw, user.user_pw)){
+	console.log(pw);
+	const result = await bcrypt.compare(pw, user.user_pw)
+	console.log(result);
+	if(result){
+		console.log(user);
 		return user;
 	}
+	return result;
+}
 
-	// return this.findOne({"user_id": id, "user_pw": pw});
+User.statics.changePw = async function(id,pw){
+	console.log("hi");
+	bcrypt.genSalt(10, (err,salt) => {
+		if (err) return next(err);
+		bcrypt.hash(pw, salt, async (err, hash) => {
+			if (err) return next(err);
+			console.log(hash);
+			await this.updateOne({"user_id":id},{"user_pw":hash});
+		});
+	});
+
 }
 module.exports = mongoose.model('user',User);

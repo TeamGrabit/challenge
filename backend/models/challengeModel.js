@@ -1,26 +1,36 @@
 const { date } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt');
+const { ObjectID } = require('mongodb');
 
 
 const CommitSchema = new Schema({
-	_id: {
+	user_id: {
 		type: String,
 	},
 	count: {
 		type: Number,
 		default: 0
+	},
+	join_time: {
+		type: Date,
+		default: new Date()
+	},
+	user_id:{
+		type:String
 	}
 });
 
 var Challenge = new Schema({
 	name: {
 		type: String,
-		required: true
+		required: true,
+		trim: true
 	},
 	challenge_start: {
 		type: Date,
-		default: Date.now,
+		default: new Date(),
 	},
 	challenge_end: {
 		type: Date
@@ -36,27 +46,32 @@ var Challenge = new Schema({
 		type: String,
 		required: true
 	},
-	state:{
+	state: {
 		type: Number,
 		default: 0
+	},
+	private_key: {
+		type: String,
+		trim: true
 	},
 	commitCount: [CommitSchema]
 }, {
 	versionKey: false
 });
 
-
-Challenge.statics.create = function (userId, name, challenge_start, challenge_end) {
+Challenge.statics.create = function (userId, name, challenge_start, challenge_end, private_key) {
 	const challenge = new this({
 		name,
 		challenge_start,
 		challenge_end,
-		challenge_leader: userId
+		challenge_leader: userId,
+		private_key
 	})
 
-	const commitCount = challenge.commitCount.create({_id: userId})
+	const commitCount = challenge.commitCount.create({ user_id: userId })
+
 	challenge.commitCount = commitCount
-	
+
 	challenge.challenge_users.push(userId)
 	//commitCount 추가.
 
@@ -65,7 +80,6 @@ Challenge.statics.create = function (userId, name, challenge_start, challenge_en
 	// return the Promise
 	return challenge.save()
 }
-
 
 Challenge.statics.findOneById = function (id) {
 	return this.findOne({

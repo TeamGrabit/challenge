@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const expressSession = require('express-session');
-const port = 5000;
+const path = require('path');
+
+const port = process.env.PORT || 5000;
+
+const bodyParser = require('body-parser')
 
 const router = require('./routes/routes');
+
 
 const config = require('./config/key');
 
@@ -22,9 +26,11 @@ mongoose.connect(config.mongoURI,{
 .catch(err => console.log(err));
 
 app.use(cors({
-    origin: true,
+    origin: process.env.CORSORIGIN,
     credentials: true,
 }));
+//app.use(cors());
+
 app.use(expressSession({
     resave: false,
     saveUninitialized: false,
@@ -37,5 +43,11 @@ app.use(expressSession({
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/',router);
+
+let root = path.join(__dirname, '../frontend/build')
+app.use(express.static(root));
+app.get("*", (req,res) => {
+	res.sendFile(path.join(__dirname+"/../frontend/build/index.html"));
+})
 
 app.listen(port, () => console.log(`app listening on port ${port}!`))

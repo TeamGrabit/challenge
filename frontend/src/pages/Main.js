@@ -5,6 +5,7 @@ import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function Main() {
 	const challengeData = useChallengeState();
+	console.log(challengeData);
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event, newValue) => {

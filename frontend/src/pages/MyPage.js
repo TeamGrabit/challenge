@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, Button, Input, TextField, Modal, Backdrop, Fade } from '@material-ui/core';
+import axios from 'axios';
 import { SideBar, ChangePassword } from '../components/index';
+import { useUserState } from '../MVVM/Model/UserModel';
+import { useChange } from '../MVVM/ViewModel/UserViewModel';
+import { API_URL } from '../CommonVariable';
 
 function MyPage() {
-	const [Name, setName] = useState("name");
-	const [Email, setEmail] = useState("test@gmail.com");
-	const [GitId, setGitId] = useState("gitId");
+	const userData = useUserState();
+	const Change = useChange();
+	const [Name, setName] = useState();
+	const [Email, setEmail] = useState();
+	const [GitId, setGitId] = useState();
 	const [open, setopen] = useState(false);
+	useEffect(() => {
+		axios.get(`${API_URL}/user/${userData.userId}`).then((res) => {
+			setName(res.data.user_name);
+			setEmail(res.data.user_email);
+			setGitId(res.data.git_id);
+		})
+			.catch((error) => { console.log(error); });
+	}, []);
 	const handleOpen = () => {
 		setopen(true);
 	};
@@ -19,10 +33,12 @@ function MyPage() {
 	const changeGitId = (e) => {
 		setGitId(e.currentTarget.value);
 	};
-	const save = () => {
-		console.log(Name);
-		console.log(Email);
-		console.log(GitId);
+	const save = async () => {
+		const result = await Change(userData.userId, Name, GitId);
+		console.log(result)
+		if (result) {
+			alert('정보를 수정하였습니다.');
+		} else alert('정보 수정에 실패했습니다.');
 	};
 	return (
 		<div className="mypage">
@@ -32,9 +48,7 @@ function MyPage() {
 					<Grid container spacing={3} justify="center">
 						<Grid item>
 							<Box className="pro_img">
-								<div>
-									프로필 사진
-								</div>
+								<img src={`https://github.com/${userData.gitId}.png`} alt={`${userData.gitId}`} className="pro_img" />
 							</Box>
 						</Grid>
 					</Grid>
@@ -116,7 +130,7 @@ function MyPage() {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<ChangePassword onClose={handleClose} />
+						<ChangePassword onClose={handleClose} id={userData.userId} />
 					</div>
 				</Fade>
 			</Modal>
