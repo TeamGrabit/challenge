@@ -117,6 +117,7 @@ async function GetOtherCommitLists(users, challenge_id, year, month){
 		dates[i] = Array.from(new Set(approve.concat(git))).sort();
 
 		let tempMonth = [];
+		var tempDate = new Date(year, month-3);
 		dateCounts.forEach(dateCount => {
 			var monthList = new Array(dateCount).fill(false);
 			for(var j=0; j< dateCount; j++){
