@@ -9,6 +9,7 @@ const challengeController = require('../controllers/challengeController');
 const approveController = require('../controllers/approveController');
 const grassController = require('../controllers/grassController');
 const authMailController = require('../controllers/authMailController');
+const alarmController = require('../controllers/alarmController');
 
 // <-- userCon
 router.post('/signup', userController.createUser);
@@ -62,5 +63,9 @@ router.get('/approve/:approve_id', approveController.getApproveInfo);
 router.patch('/approve/:approve_id', approveController.confirmApprove);
 router.get('/approve/list/:ch_id/:user_id', approveController.getApproveList);
 
+router.post('/alarm', alarmController.createAlarm);
+router.get('/alarm/:user_id', alarmController.getAlarms);
+router.delete('/alarm', alarmController.deleteAlarm);
+router.patch('/alarm', alarmController.readAlarm);
 
 module.exports = router;
