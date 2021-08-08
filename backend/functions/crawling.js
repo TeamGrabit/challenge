@@ -142,14 +142,18 @@ const isLastDay = (date) => {
 	else return false;
 }
 
-/* 유저의 깃 데이터가 없을 때 처리해주는 함수 */
+/* 유저의 깃 데이터 만들기. 이미 있으면 최신화, 없으면 새로 만들어줌! */
 async function CreateGitData(userId) {
 	const user = await User.findOneByUsername(userId);
 	if (user) {
 		// 이미 생성된 grass가 있는지?
 		const grass = await gitData.findOneByUserId(userId)
-		if(grass) throw 'grass already exists'
-
+		if(grass) {
+			gitData.findOneAndDelete({ user_id: userId }, function (err,dos) {
+				if (err) { console.log(err) }
+				else { console.log("Deleted: ", docs); }
+			})
+		}
 		// 깃 크롤링
 		const commit_data = await crawlingModule(user.git_id);
 		await gitData.create(userId, user.git_id, commit_data);
