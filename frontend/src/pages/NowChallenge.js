@@ -91,9 +91,13 @@ function NowChallenge({ match }) {
 			setPoor(res.data);
 		});
 		// approve
-		axios.get(`${API_URL}/approve/list/${CId}/${userData.userId}`).then((res) => {
-			setAdmit(res.data.approves);
-		});
+		axios.get(`${API_URL}/approve/list/${CId}`, {
+			params: {
+				user_id: userData.userId
+			}
+		}).then((res) => {
+			setAdmit(res.data.result);
+		}).catch((error) => { console.log(error) });
 	}, [challengeData]);
 	// <-- grass carousel setting
 	const settings = {
