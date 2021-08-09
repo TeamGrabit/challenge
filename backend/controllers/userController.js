@@ -30,6 +30,7 @@ async function CreateUser(req, res, next) {
 		let today = getCurrentDate();
 		const in_date = today;
 		const last_update = today;
+
 		const user = await User.findOneByUsername(user_id);
 		if (user) {
 			console.log(user);
@@ -302,12 +303,14 @@ async function LogIn(req, res, next) {
 		const user = await User.loginCheck(id, pw);
 		// 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
 		console.log(user);
-		//같으면 jwtToken 발급 
-		if (user === false) {
-			res.status(400).json({ error: 'wrong pw' });
+		if (user === null) {
+			res.status(400).json({ error: "id doesn't exist. (Please sign up)" });
+		}
+		else if (user === false) {
+			res.status(400).json({ error: "password isn't correct." });
 			return;
 		}
-		if (user) {
+		else {//같으면 jwtToken 발급 
 			// const token = jwt.createToken(user);
 			const token = jwt.sign({
 				user_id: user.user_id,
@@ -323,9 +326,7 @@ async function LogIn(req, res, next) {
 			res.status(201).json({
 				result: true
 			});
-		}
-		else
-			res.status(400).json({ error: 'invalid user' });
+		}	
 	} catch (err) {
 		res.status(401).json({ error: err });
 		console.error(err);
@@ -451,5 +452,3 @@ module.exports = {
 	userInfomation: UserInfomation,
 	change: Change
 };
-
-

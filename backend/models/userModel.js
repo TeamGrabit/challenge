@@ -63,14 +63,16 @@ User.statics.getUserById = async function(id) {
 User.statics.loginCheck = async function(id,pw) {
 	const user = await this.findOne({"user_id": id});
 	console.log("user :"+user);
+	if (user === null)
+		return null // user_id doesn't exist
 	console.log(pw);
 	const result = await bcrypt.compare(pw, user.user_pw)
 	console.log(result);
 	if(result){
 		console.log(user);
-		return user;
+		return user; // success
 	}
-	return result;
+	return result; // (false) wrong password
 }
 
 User.statics.changePw = async function(id,pw){
