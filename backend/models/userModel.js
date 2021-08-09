@@ -55,7 +55,6 @@ User.statics.findOneByUsername = function(user_id) {
   }).exec()
 }
 
-
 User.statics.getUserById = async function(id) {
 	const result = await this.findOne({"user_id": id});
 	return result;
