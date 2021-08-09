@@ -24,7 +24,7 @@ const CssTextField = withStyles({
 
 function LogInForm({ loginHandler, id, setId, pw, setPw }) {
 	return (
-		<div className="form">
+		<form className="form" onSubmit={loginHandler}>
 			<Grid>
 				<Box mt={2}>
 					<CssTextField variant="outlined" label="ID" placeholder="아이디를 입력하세요" value={id} onChange={(e) => setId(e.target.value)} />
@@ -33,8 +33,9 @@ function LogInForm({ loginHandler, id, setId, pw, setPw }) {
 					<CssTextField variant="outlined" label="PW" type="password" placeholder="비밀번호를 입력하세요" value={pw} onChange={(e) => setPw(e.target.value)} />
 				</Box>
 			</Grid>
-			<Button className="loginBtn" variant="contained" onClick={loginHandler}>LogIn</Button>
-		</div>
+			<Button type="submit" className="loginBtn" variant="contained" >LogIn</Button> 
+			{/* onClick={loginHandler} */}
+		</form>
 	);
 }
 
