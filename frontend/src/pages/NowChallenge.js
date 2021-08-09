@@ -206,6 +206,7 @@ function NowChallenge({ match }) {
 							{/* 백에서 불러오기 */}
 							{
 								admit === null ? <p>데이터가 없습니다.</p>
+									: admit === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: admit.map((d) => (
 										<Grid className="admit-content">
 											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>
