@@ -47,37 +47,31 @@ function NowChallenge({ match }) {
 			return 1;
 		});
 		// team grass
-		axios.get(`${API_URL}/grass/challenge`, {
-			params: {
-				challenge_id: CId,
-				month: today.getMonth() + 1,
-				year: today.getFullYear()
-			}
-		}).then((res) => {
+		axios.get(`${API_URL}/grass/challenge`, { params: {
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
 			setChallengeGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
 		// my grass
-		axios.get(`${API_URL}/grass/personal`, {
-			params: {
-				user_id: userData.userId,
-				challenge_id: CId,
-				month: today.getMonth() + 1,
-				year: today.getFullYear()
-			}
-		}).then((res) => {
+		axios.get(`${API_URL}/grass/personal`, { params: {
+			user_id: userData.userId,
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
 			setMyGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
 		// other grass
-		axios.get(`${API_URL}/grass/other`, {
-			params: {
-				user_id: userData.userId,
-				challenge_id: CId,
-				month: today.getMonth() + 1,
-				year: today.getFullYear()
-			}
-		}).then((res) => {
+		axios.get(`${API_URL}/grass/other`, { params: {
+			user_id: userData.userId,
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
 			const temp = [];
 			res.data.OtherList.map((d) => temp.push(d.flat()));
 			setOtherGrass(temp);
@@ -91,13 +85,9 @@ function NowChallenge({ match }) {
 			setPoor(res.data);
 		});
 		// approve
-		axios.get(`${API_URL}/approve/list/${CId}`, {
-			params: {
-				user_id: userData.userId
-			}
-		}).then((res) => {
-			setAdmit(res.data.result);
-		}).catch((error) => { console.log(error) });
+		axios.get(`${API_URL}/approve/list/${CId}/${userData.userId}`).then((res) => {
+			setAdmit(res.data.approves);
+		});
 	}, [challengeData]);
 	// <-- grass carousel setting
 	const settings = {
