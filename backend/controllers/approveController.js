@@ -57,6 +57,21 @@ async function GetApproveList(req, res) {
 	}
 }
 
+async function GetAllApproveList(req, res) {
+	try {
+		const ch_id = req.params.ch_id;
+
+		approves = await Approve.find({
+			$and: [{ ch_id: ch_id }, { state: false }]
+		}).sort({ _id: -1 })
+
+		res.status(200).json({ result: approves })
+	} catch (err) {
+		console.log(err)
+		res.status(401).json({ error: 'erreor' })
+	}
+}
+
 
 async function ConfirmApprove(req, res) {		// approve 승인 누르면 count 증가시키는 api
 
@@ -137,5 +152,6 @@ module.exports = {
 	deleteApprove: DeleteApprove,
 	getApproveList: GetApproveList,
 	confirmApprove: ConfirmApprove,
-	getApproveInfo: GetApproveInfo
+	getApproveInfo: GetApproveInfo,
+	getAllApproveList: GetAllApproveList
 };
