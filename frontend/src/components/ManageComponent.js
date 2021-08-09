@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Box, Button, TextField, Typography, Modal, Fade } from '@material-ui/core';
+import { Grid, Box, Button, TextField, Typography, Backdrop, Modal, Fade } from '@material-ui/core';
 import DatePicker from 'react-datepicker';
 import ExpelMember from './ExpelMember';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useDeleteChallenge, useSaveChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
+import { useExpelChallenge, useDeleteChallenge, useSaveChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function ManageComponent({ value, index, challengeData, setChallengeData, CId }) {
 	const user_id = useUserState();
+	const expelChallenge = useExpelChallenge();
 	const deleteChallenge = useDeleteChallenge();
 	const saveChallenge = useSaveChallenge();
 	const [title, setTitle] = useState("");
@@ -17,6 +18,7 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 	const [expel, setExpel] = useState("");
 	const [leader, setLeader] = useState();
 	const [password, setPW] = useState();
+	const [inviteOpen, setInviteOpen] = useState(false);
 	const changeTitle = (e) => {
 		setTitle(e.currentTarget.value);
 	};
@@ -54,7 +56,6 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			alert("저장 실패");
 		} else {
 			alert("저장 완료");
-			// history.push('/challenge');
 			setChallengeData({
 				name: title,
 				challenge_users: user,
@@ -63,9 +64,23 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			});
 		}
 	};
-	const handleExpel = () => {
-		alert("추방하였습니다");
+	const handleExpel = async (member) => {
+		const result = await expelChallenge(CId, member);
+		console.log(result);
+		if (!result) {
+			alert("추방 실패");
+		} else {
+			alert("추방 완료");
+			setChallengeData({
+				name: title,
+				challenge_users: user,
+				challenge_start: sDate,
+				challenge_end: eDate
+			});
+		}
 		setopen(false);
+	};
+	const handleInvite = () => {
 	};
 	useEffect(() => {
 		setTitle(challengeData.name);
@@ -100,7 +115,6 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 				<div className="comp_box">
 					<div className="title_box">
 						<div className="comp_title">챌린지 멤버 관리</div>
-						<Button className="saveBtn">저장</Button>
 					</div>
 					<div className="content_box">
 						<Grid container spacing={1}>
@@ -113,6 +127,13 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 									</div>
 								</Grid>
 							))}
+							<Grid item lg={3} md={4} sm={6} xs={12}>
+								<div className="member_box">
+									<Box className="invite_inner" onClick={() => setInviteOpen(true)}>
+										+ Invite
+									</Box>
+								</div>
+							</Grid>
 						</Grid>
 					</div>
 				</div>
@@ -163,6 +184,28 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			>
 				<Fade in={open}>
 					<ExpelMember onClose={handleClose} handleExpel={handleExpel} member={expel} />
+				</Fade>
+			</Modal>
+			<Modal
+				className="modal"
+				open={inviteOpen}
+				onClose={() => setInviteOpen(false)}
+				closeAfterTransition
+				BackdropComponent={Backdrop}
+				BackdropProps={{
+					timeout: 500,
+				}}
+			>
+				<Fade in={inviteOpen}>
+					<Grid className="inviteModalPaper">
+						<Grid className="head">초대하기</Grid>
+						<Grid className="body">
+							<Grid className="input-con">
+								<TextField variant="outlined" label="E-mail" fullWidth />
+								<Button style={{ marginLeft: '1rem', backgroundColor: '#CCFCCB', height: '100%' }}>전송</Button>
+							</Grid>
+						</Grid>
+					</Grid>
 				</Fade>
 			</Modal>
 		</div>

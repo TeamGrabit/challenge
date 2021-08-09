@@ -7,6 +7,7 @@ import { API_URL } from '../../CommonVariable';
 const GetChallengeContext = createContext(() => {});
 const GetChallengeDetailContext = createContext(() => {});
 const CreateChallengeContext = createContext(() => {});
+const ExpelChallengeContext = createContext(() => {});
 const SaveChallengeContext = createContext(() => {});
 const DeleteChallengeContext = createContext(() => {});
 
@@ -47,6 +48,16 @@ export const ChallengeLogicProvider = ({ children }) => {
 		});
 		return flag;
 	};
+	const expelChallenge = async (CId, user_id) => {
+		let flag = false;
+		await axios.patch(`/challengeOut/user`, {
+			userId: user_id,
+			challengeId: CId
+		}).then((res) => {
+			flag = res.data;
+		});
+		return flag;
+	};
 	const saveChallenge = async (CId, challengeInfo) => {
 		let flag = false;
 		await axios.patch(`${API_URL}/challenge/${CId}`, {
@@ -73,11 +84,13 @@ export const ChallengeLogicProvider = ({ children }) => {
 		<GetChallengeContext.Provider value={getChallengeList}>
 			<GetChallengeDetailContext.Provider value={getChallengeDetail}>
 				<CreateChallengeContext.Provider value={createChallenge}>
-					<SaveChallengeContext.Provider value={saveChallenge}>
-						<DeleteChallengeContext.Provider value={deleteChallenge}>
-							{children}
-						</DeleteChallengeContext.Provider>
-					</SaveChallengeContext.Provider>
+					<ExpelChallengeContext.Provider value={expelChallenge}>
+						<SaveChallengeContext.Provider value={saveChallenge}>
+							<DeleteChallengeContext.Provider value={deleteChallenge}>
+								{children}
+							</DeleteChallengeContext.Provider>
+						</SaveChallengeContext.Provider>
+					</ExpelChallengeContext.Provider>
 				</CreateChallengeContext.Provider>
 			</GetChallengeDetailContext.Provider>
 		</GetChallengeContext.Provider>
@@ -99,12 +112,17 @@ export function useCreateChallenge() {
 	return context;
 }
 
-export function useDeleteChallenge() {
-	const context = useContext(DeleteChallengeContext);
+export function useExpelChallenge() {
+	const context = useContext(ExpelChallengeContext);
 	return context;
 }
 
 export function useSaveChallenge() {
 	const context = useContext(SaveChallengeContext);
+	return context;
+}
+
+export function useDeleteChallenge() {
+	const context = useContext(DeleteChallengeContext);
 	return context;
 }
