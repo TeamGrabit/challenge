@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Grid, Box, Link } from '@material-ui/core';
+import { Button, Grid, Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 function ChallengeList({ list, index, user_id }) {
 	console.log(list);
@@ -10,7 +11,7 @@ function ChallengeList({ list, index, user_id }) {
 					{list.map((c, i) => (
 						index === c.state &&
 						<Grid item lg={3} md={4} sm={6} xs={12}>
-							<Link className="link" href={`/challenge/info/${c.challenge_id}`}>
+							<Link className="link" to={`/challenge/info/${c.challenge_id}`}>
 								<div className="cha_box">
 									<Box className="cha_inner">
 										<div className="inner_text">
@@ -35,7 +36,7 @@ function ChallengeList({ list, index, user_id }) {
 					))}
 					{index === 0 && (
 						<Grid item lg={3} md={4} sm={6} xs={12}>
-							<Link className="link" href="/challenge/make">
+							<Link className="link" to="/challenge/make">
 								<div className="cha_box">
 									<Box className="cha_make">
 										<div className="inner_text">

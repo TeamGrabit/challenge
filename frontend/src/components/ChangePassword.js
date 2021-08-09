@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { TextField, Button } from '@material-ui/core';
+import axios from 'axios';
+import { useMypageChangePw } from '../MVVM/ViewModel/UserViewModel';
+import { API_URL } from '../CommonVariable';
 
-function ChangePassword({ onClose }) {
+function ChangePassword({ onClose, id }) {
 	const handleCheck = () => { };
+	const MypageChangePw = useMypageChangePw();
 	const [currentPassword, setcurrentPassword] = useState("");
 	const [changedPassword, setchangedPassword] = useState("");
 	const [confirmPassword, setconfirmPassword] = useState("");
@@ -17,7 +21,7 @@ function ChangePassword({ onClose }) {
 	const changeConfirm = (e) => {
 		setconfirmPassword(e.currentTarget.value);
 	};
-	const checkPwd = () => {
+	const checkPwd = async () => {
 		if (currentPassword === "") {
 			setpwderror(true);
 			sethint("현재 비밀번호를 입력해주세요.");
@@ -28,8 +32,10 @@ function ChangePassword({ onClose }) {
 			setpwderror(true);
 			sethint("비밀번호 확인이 일치하지 않습니다.");
 		} else if (changedPassword === confirmPassword) {
-			console.log("비밀번호가 같음.");
-			onClose();
+			const result = await MypageChangePw(id, currentPassword, changedPassword, onClose);
+			if (result) {
+				alert('비밀번호가 정상적으로 변경되었습니다.');
+			} else alert('비밀번호 변경에 실패했습니다.');
 		}
 	};
 	return (

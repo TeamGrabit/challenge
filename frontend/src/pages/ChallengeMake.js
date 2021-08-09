@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
-import { Link, Button, TextField, Select, MenuItem, useMediaQuery } from '@material-ui/core';
+import { Button, TextField, Select, MenuItem, useMediaQuery } from '@material-ui/core';
 import { useUserState } from '../MVVM/Model/UserModel';
 import { useCreateChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 
@@ -219,7 +219,7 @@ function ChallengeMake({ history }) {
 				</div>
 			</div>
 			<div className="btn">
-				<Link className="link" href="/challenge">
+				<Link className="link" to="/challenge">
 					<Button className="btn_cancel">
 						취소
 					</Button>
