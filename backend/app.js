@@ -19,6 +19,7 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 const cookieSecret = process.env.COOKIE_SECRET;
 
+
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
 })
