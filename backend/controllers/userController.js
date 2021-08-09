@@ -10,7 +10,6 @@ const { CreateGitData } = require('../functions/crawling');
 
 require("dotenv").config();
 const SecretKey = process.env.SECRET_KEY;
-
 function getCurrentDate() {
 	var date = new Date();
 	var year = date.getFullYear();
@@ -21,6 +20,7 @@ function getCurrentDate() {
 	var seconds = date.getSeconds();
 	var milliseconds = date.getMilliseconds();
 	return new Date(Date.UTC(year, month, today, hours, minutes, seconds, milliseconds));
+
 }
 
 async function CreateUser(req, res, next) {
