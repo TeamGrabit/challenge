@@ -4,6 +4,7 @@
 
 (소개사진 넣기)
 
+* [Contributors](#contributors)
 * [개발 안내🚀](#개발-안내)
   1. [폴더 구조](#폴더구조)
   1. [기술 스택](#기술스택)
@@ -13,7 +14,31 @@
 
 -----------
 
+## Contributors
+
+-----------
+
+### FE
+
+[tnghd5761(강수홍)](https://github.com/tnghd5761)
+
+### BE
+
+[Hyun-git(이현광)](https://github.com/Hyun-git)
+
+### FULLSTACK
+
+[MOBUMIN(김수빈)](https://github.com/MOBUMIN)
+
+[qf9ar8nv(차현철)](https://github.com/qf9ar8nv)
+
+[sally0226(김바다)](https://github.com/sally0226)
+
+-----------
+
 ## 개발 안내
+
+-----------
 
 ### 폴더구조
 
@@ -25,7 +50,7 @@ backend
 ------ key.js (determine dev, prod)
 ------ dev.js (for local test)
 ------ prod.js (for production)
--- controllers/
+--- controllers/
 ------ approveController.js
 ------ authMailController.js
 ------ challengeController.js
@@ -33,26 +58,26 @@ backend
 ------ gitDataController.js
 ------ grassController.js
 ------ userController.js
--- functions
+--- functions/
 ------ crawling.js
--- models
+--- models/
 ------ approveModel.js
 ------ authMailModel.js
 ------ challengeModel.js
 ------ gitDataModel.js
 ------ model.js
 ------ userModel.js
--- routes
+--- routes/
 ------ routes.js
--- app.js
+--- app.js
 ```
 
 frontend
 
 ```frontend
 - frontend/
--- public
--- src/
+--- public
+--- src/
 ------ assets
 ------ components
 ------ css
