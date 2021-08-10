@@ -47,37 +47,31 @@ function NowChallenge({ match }) {
 			return 1;
 		});
 		// team grass
-		axios.get(`${API_URL}/grass/challenge`, {
-			params: {
-				challenge_id: CId,
-				month: today.getMonth() + 1,
-				year: today.getFullYear()
-			}
-		}).then((res) => {
+		axios.get(`${API_URL}/grass/challenge`, { params: {
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
 			setChallengeGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
 		// my grass
-		axios.get(`${API_URL}/grass/personal`, {
-			params: {
-				user_id: userData.userId,
-				challenge_id: CId,
-				month: today.getMonth() + 1,
-				year: today.getFullYear()
-			}
-		}).then((res) => {
+		axios.get(`${API_URL}/grass/personal`, { params: {
+			user_id: userData.userId,
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
 			setMyGrass(res.data.isCommitedList.flat());
 		})
 			.catch((error) => { console.log(error); });
 		// other grass
-		axios.get(`${API_URL}/grass/other`, {
-			params: {
-				user_id: userData.userId,
-				challenge_id: CId,
-				month: today.getMonth() + 1,
-				year: today.getFullYear()
-			}
-		}).then((res) => {
+		axios.get(`${API_URL}/grass/other`, { params: {
+			user_id: userData.userId,
+			challenge_id: CId,
+			month: today.getMonth() + 1,
+			year: today.getFullYear()
+		} }).then((res) => {
 			const temp = [];
 			res.data.OtherList.map((d) => temp.push(d.flat()));
 			setOtherGrass(temp);
@@ -91,9 +85,11 @@ function NowChallenge({ match }) {
 			setPoor(res.data);
 		});
 		// approve
-		axios.get(`${API_URL}/approve/list/${CId}/${userData.userId}`).then((res) => {
-			setAdmit(res.data.approves);
-		});
+		axios.get(`${API_URL}/approve/list/${CId}`, { params: {
+			user_id: userData.userId
+		}}).then((res) => {
+			setAdmit(res.data.result);
+		}).catch((error) => {console.log(error); });
 	}, [challengeData]);
 	// <-- grass carousel setting
 	const settings = {
@@ -209,9 +205,9 @@ function NowChallenge({ match }) {
 					<Grid className="inviteModalPaper">
 						<Grid className="head">인증 요청 목록</Grid>
 						<Grid className="admit-body">
-							{/* 백에서 불러오기 */}
 							{
 								admit === null ? <p>데이터가 없습니다.</p>
+									: admit === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: admit.map((d) => (
 										<Grid className="admit-content">
 											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>
