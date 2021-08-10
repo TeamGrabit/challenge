@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { makeStyles, withStyles, Tabs, Tab } from '@material-ui/core';
+import { Button, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
+import ChallengeTable from '../components/ChallengeTable';
+import Paging from '../components/Paging';
 import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useGetChallengeAll } from '../MVVM/ViewModel/ChallengeViewModel';
 
 function ChallengeAll() {
-	// const user_id = useUserState();
-	// const getChallengeAll = useGetChallengeAll();
-	// console.log('challengeAll');
+	const user_id = useUserState();
 	const [allData, setAllData] = useState([]);
+	const [page, setPage] = useState(1);
+	const postsPerPage = 10;
+	const indexOfLast = page * postsPerPage;
+	const indexOfFirst = indexOfLast - postsPerPage;
+	const handlePage = (newValue) => {
+		setPage(newValue);
+	};
+	function currentPosts(tmp) {
+	  let currentPosts = 0;
+	  currentPosts = tmp.slice(indexOfFirst, indexOfLast);
+	  return currentPosts;
+	}
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge`).then((res) => {
 			console.log(res.data);
@@ -19,9 +30,10 @@ function ChallengeAll() {
 	console.log(allData);
 	return (
 		<div className="challengeAll">
-			{allData !== undefined && allData.map((c) => (
-				<div className="cha_name">{c.name}</div>
-			))}
+			<div className="table_page">
+				<ChallengeTable data={currentPosts(allData)} user_id={user_id}/>
+				<Paging page={postsPerPage} count={allData.length} setPage={handlePage}/>
+			</div>
 		</div>
 	);
 }

@@ -1,6 +1,38 @@
 .challengeAll{
-	display: flex;
+	width: 100%;
 	flex-direction: row;
 	align-items: center;
-	overflow: hidden;
+
+	.table_page{
+		height: 640px;
+	}
+	.cha_Table{
+		margin-top: 20px;
+		width: 1280px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.cha_TableHead, .cha_TableBody, .headRow, .bodyRow{
+		// height: 5%;
+	}
+	.headCate, .headTitle, .headLeader, .headJoin, .bodyCate, .bodyTitle, .bodyLeader, .bodyJoin{
+		padding-top: 10px;
+		padding-bottom: 10px;
+		text-align: center;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.headCate, .headLeader, .headJoin{
+		font-size: 1em;
+		width: 180px;
+	}
+	.headTitle{
+		font-size: 1em;
+		width: 560px;
+	}
+	.headRow, .bodyRow{
+		// text-align: center;
+	}
+	.joinBtn{
+		padding: 0px;
+	}
 }
