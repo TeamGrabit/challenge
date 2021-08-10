@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Backdrop, Fade, Grid } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import Slider from 'react-slick';
 import { RequestApproval } from '../components/index';
@@ -8,6 +9,7 @@ import { useUserState } from '../MVVM/Model/UserModel';
 import { API_URL } from '../CommonVariable';
 
 function ChallengeInfoFix(props) {
+	const history = useHistory();
 	const _props = props;
 	const _challengeId = _props.match.params.challengeId;
 	const challengeData = useChallengeState();
@@ -28,7 +30,7 @@ function ChallengeInfoFix(props) {
 		setopen(false);
 	};
 	const grassHandler = () => {
-		window.location.href = `/challenge/info/${_challengeId}`;
+		history.push(`/challenge/info/${_challengeId}`);
 	};
 	useEffect(() => {
 		axios.get(`${API_URL}/grass/personal`, {

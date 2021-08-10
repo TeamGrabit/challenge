@@ -85,9 +85,11 @@ function NowChallenge({ match }) {
 			setPoor(res.data);
 		});
 		// approve
-		axios.get(`${API_URL}/approve/list/${CId}`).then((res) => {
-			setAdmit(res.data);
-		});
+		axios.get(`${API_URL}/approve/list/${CId}`, { params: {
+			user_id: userData.userId
+		}}).then((res) => {
+			setAdmit(res.data.result);
+		}).catch((error) => {console.log(error); });
 	}, [challengeData]);
 	// <-- grass carousel setting
 	const settings = {
@@ -203,9 +205,9 @@ function NowChallenge({ match }) {
 					<Grid className="inviteModalPaper">
 						<Grid className="head">인증 요청 목록</Grid>
 						<Grid className="admit-body">
-							{/* 백에서 불러오기 */}
 							{
 								admit === null ? <p>데이터가 없습니다.</p>
+									: admit === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: admit.map((d) => (
 										<Grid className="admit-content">
 											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>

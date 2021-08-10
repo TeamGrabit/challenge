@@ -10,7 +10,8 @@ export const ApproveLogicProvider = ({ children }) => {
 	const approve = useApproveState();
 	const approveDispatch = useApproveDispatch();
 
-	const createApprove = async (approveInfo) => {
+	const createApprove = async (approveInfo, onClose) => {
+		onClose();
 		console.log(approveInfo);
 		let flag = false;
 		await axios.post(`${API_URL}/approve`, {

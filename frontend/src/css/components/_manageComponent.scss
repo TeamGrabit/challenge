@@ -40,7 +40,17 @@
 		font-size: 1.1em;
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
 	}
-	.member_inner:hover{
+	.invite_inner{
+		text-align: center;
+		background-color: $green3;
+		border: black 1px dashed;
+		border-radius: 1.5em;
+		padding-top: 10%;
+		padding-bottom: 10%;
+		font-size: 1.1em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.member_inner:hover, .invite_inner:hover{
 		background-color: $green4;
 		transition-duration: 0.4s;
 	}
@@ -72,6 +82,34 @@
 		border-radius: 5px;
 		margin-top: 300px;
 		color: white;
+	}
+}
+.inviteModalPaper {
+	background-color: white;
+	width: 50vw;
+	max-height: 70vh;
+
+	.head {
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 1rem 1rem;
+		background-color: $green2;
+		max-height: 20vh;
+	}
+	.body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+
+		.input-con {
+			display: flex;
+			align-items: center;
+		}
+		.icon-con {
+			display: flex;
+			justify-content: center;
+			margin-top: 1rem;
+		}
 	}
 }
 @media ( max-width: 600px ) {

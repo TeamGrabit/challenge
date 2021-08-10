@@ -23,13 +23,12 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 			message: Message,
 			request_date: `${month}/${day}`
 		};
-		const result = await createApprove(approveInfo);
+		const result = await createApprove(approveInfo, onClose);
 		if (result === false || result === undefined) {
 			alert('요청 실패');
 		} else {
 			alert('요청 성공');
 		}
-		onClose();
 	};
 	return (
 		<div className="requestApproval">

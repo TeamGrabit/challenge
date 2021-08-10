@@ -22,6 +22,6 @@ gitData.statics.findOneByUserId = function(user_id) {
 	return this.findOne({
 		  user_id
 	}).exec()
-  }
+}
 
 module.exports = mongoose.model('gitData',gitData);

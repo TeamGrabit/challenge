@@ -8,13 +8,15 @@ import { useCreateChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 function ChallengeMake({ history }) {
 	const user = useUserState();
 	const createChallenge = useCreateChallenge();
+	const today = new Date();
+	const endday = new Date(2099, 11, 31);
 	const [Name, setName] = useState("");
 	const [Password, setPassword] = useState("");
 	const [PWcheck, setPWcheck] = useState("");
 	const [Category, setCategory] = useState("");
 	const [CateSel, setCateSel] = useState("notsel");
-	const [sDate, setsDate] = useState("");
-	const [eDate, seteDate] = useState("");
+	const [sDate, setsDate] = useState(today);
+	const [eDate, seteDate] = useState(endday);
 	const [Intro, setIntro] = useState("");
 	const [dateRef, setDateRef] = useState(true);
 	const [selRef, setSelRef] = useState(true);
@@ -50,6 +52,8 @@ function ChallengeMake({ history }) {
 	};
 	const handleCheck = () => {
 		if (dateRef === true) {
+			setsDate(today);
+			seteDate(endday);
 			setDateRef(false);
 		} else {
 			setDateRef(true);

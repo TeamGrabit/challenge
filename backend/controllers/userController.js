@@ -1,10 +1,11 @@
-
 const User = require('../models/userModel');
+const GitData = require('../models/gitDataModel');
 const jwt = require('jsonwebtoken');
 const Challenge = require('../models/challengeModel');
 const { ObjectID } = require('bson');
 const { find } = require('../models/userModel');
 const { json } = require('body-parser');
+const { CreateGitData } = require('../functions/crawling');
 
 
 require("dotenv").config();
@@ -35,6 +36,7 @@ async function CreateUser(req, res, next) {
 			throw 'user exists';
 		} else {
 			await User.create(user_id, user_pw, user_name, user_email, git_id, in_date, last_update);
+			await CreateGitData(user_id);
 		}
 		res.status(201).json({ result: true });
 	} catch (err) {
@@ -71,8 +73,6 @@ function DeleteUser(req, res) {
 
 	}
 
-
-
 	User.findOneAndDelete({ user_id: _id }, function (err, docs) {
 		if (err) {
 			console.log(err)
@@ -81,6 +81,11 @@ function DeleteUser(req, res) {
 			console.log("Deleted : ", docs);
 		}
 	});
+	
+	GitData.findOneAndDelete({ user_id: _id }, function (err,dos) {
+		if (err) { console.log(err) }
+		else { console.log("Deleted: ", docs); }
+	})
 	res.end('Delete')
 
 }
@@ -313,6 +318,8 @@ async function LogIn(req, res, next) {
 			}
 			);
 			res.cookie('user', token, { sameSite: 'none', secure: true });
+			console.log('git data 교체 --------------------',id)
+			await CreateGitData(id);
 			res.status(201).json({
 				result: true
 			});
@@ -402,7 +409,7 @@ async function UserInfomation(req, res) {
 		const user_id = req.params.user_id;
 		const user = await User.findOneByUsername(user_id);
 
-		res.status(200).json({ user_id: user.user_id, user_email: user.user_email, git_id: user.git_id });
+		res.status(200).json({ user_name: user.user_name, user_email: user.user_email, git_id: user.git_id });
 	} catch (err) {
 		console.log(err)
 		res.status(401).json({ error: 'erreor' })
