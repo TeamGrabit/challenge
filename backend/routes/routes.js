@@ -64,7 +64,7 @@ router.get('/approve/list/:ch_id', approveController.getApproveList);
 router.get('/approve/all/:ch_id', approveController.getAllApproveList);
 
 router.post('/alarm', alarmController.createAlarm);
-router.get('/alarm/:user_id', alarmController.getAlarms);
+router.get('/alarm', alarmController.getAlarms);
 router.delete('/alarm', alarmController.deleteAlarm);
 router.patch('/alarm', alarmController.readAlarm);
 

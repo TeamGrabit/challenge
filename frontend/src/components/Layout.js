@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import Header from './Header';
 import { UserProvider } from '../MVVM/Provider';
+import { AlarmProvider } from '../MVVM/Provider';
 import AlarmModal from './AlarmModal';
 
 function Layout({ children }) {
@@ -12,13 +13,15 @@ function Layout({ children }) {
 	}
 	return (
 		<UserProvider>
-			<Grid className="layout">
-				<Header alarmHandler={openHandler} />
-				<Grid id="wrap">
-					{children}
+			<AlarmProvider>
+				<Grid className="layout">
+					<Header alarmHandler={openHandler} />
+					<Grid id="wrap">
+						{children}
+					</Grid>
 				</Grid>
-			</Grid>
-			<AlarmModal open={alarmOpen} closeHandler={()=>setAlarmOpen(false)} />
+				<AlarmModal open={alarmOpen} closeHandler={() => setAlarmOpen(false)} />
+			</AlarmProvider>
 		</UserProvider>
 	);
 }

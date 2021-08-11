@@ -15,9 +15,10 @@ async function CreateAlarm(req, res) {
 
 async function GetAlarms(req, res) {
 	try {
-		const user_id = req.params.user_id;
+		const { user_id } = req.query;
+
 		alarms = await Alarm.find({ user_id: user_id });
-		res.status(200).json({ alarms });
+		res.status(200).json({ result: alarms });
 	} catch (err) {
 		console.log(err);
 		res.status(401).json({ error: err });
