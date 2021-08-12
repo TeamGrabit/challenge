@@ -42,14 +42,30 @@ function DeleteApprove(req, res) {
 
 async function GetApproveList(req, res) {
 	try {
+		const { user_id } = req.query;
 		const ch_id = req.params.ch_id;
-		const user_id = req.params.user_id;
-		console.log(user_id)
 
-		approves = await Approve.find({ $and: [{ ch_id: ch_id }, { state: false },
-			{user_id:{$ne: user_id}}, {approve_user:{$nin: user_id}}] }).sort({ _id: -1 })
+		approves = await Approve.find({
+			$and: [{ ch_id: ch_id }, { state: false },
+			{ user_id: { $ne: user_id } }, { approve_user: { $nin: user_id } }]
+		}).sort({ _id: -1 })
 
-		res.status(200).json({approves})
+		res.status(200).json({ result: approves })
+	} catch (err) {
+		console.log(err)
+		res.status(401).json({ error: 'erreor' })
+	}
+}
+
+async function GetAllApproveList(req, res) {
+	try {
+		const ch_id = req.params.ch_id;
+
+		approves = await Approve.find({
+			$and: [{ ch_id: ch_id }, { state: false }]
+		}).sort({ _id: -1 })
+
+		res.status(200).json({ result: approves })
 	} catch (err) {
 		console.log(err)
 		res.status(401).json({ error: 'erreor' })
@@ -136,5 +152,6 @@ module.exports = {
 	deleteApprove: DeleteApprove,
 	getApproveList: GetApproveList,
 	confirmApprove: ConfirmApprove,
-	getApproveInfo: GetApproveInfo
+	getApproveInfo: GetApproveInfo,
+	getAllApproveList: GetAllApproveList
 };

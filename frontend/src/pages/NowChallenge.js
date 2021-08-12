@@ -8,13 +8,12 @@ import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { InviteModal } from '../components';
+import { EntrancePwModal, InviteModal } from '../components';
 
 function NowChallenge({ match }) {
 	const history = useHistory();
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
-	console.log(challengeData);
 	const userData = useUserState();
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
@@ -35,10 +34,13 @@ function NowChallenge({ match }) {
 	const [poor, setPoor] = useState(null);
 	const [admit, setAdmit] = useState(null);
 	const today = new Date();
+	const [pwModal, setPwModal] = useState(false);
 	useEffect(() => {
-		// todo : 가입한 사람이 아니면 모달 띄우기
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
-			console.log(res.data);
+			// console.log(userData.userId);
+			// console.log(res.data.challenge_users.includes(userData.userId));
+			if(res.data.challenge_users.includes(userData.userId) === false) setPwModal(true);
+			if(res.data.challenge_users.includes(userData.userId) === true) setPwModal(false);
 		});
 		// todo : grass mvvm 만들기. approve mvvm 이용하기.
 		const result = challengeData.filter((item) => item.challenge_id === CId);
@@ -85,9 +87,11 @@ function NowChallenge({ match }) {
 			setPoor(res.data);
 		});
 		// approve
-		axios.get(`${API_URL}/approve/list/${CId}/${userData.userId}`).then((res) => {
-			setAdmit(res.data.approves);
-		});
+		axios.get(`${API_URL}/approve/list/${CId}`, { params: {
+			user_id: userData.userId
+		}}).then((res) => {
+			setAdmit(res.data.result);
+		}).catch((error) => {console.log(error); });
 	}, [challengeData]);
 	// <-- grass carousel setting
 	const settings = {
@@ -144,9 +148,14 @@ function NowChallenge({ match }) {
 					<Grid className="left-con" style={{ cursor: 'pointer' }} onClick={grassHandler}>
 						<Typography className="sub-title">나의 잔디</Typography>
 						<Grid className="myGrass">
-							{myGrass !== undefined && myGrass.map((data) => (
-								<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
-							))}
+							{
+								pwModal !== true ?
+									myGrass !== undefined && myGrass.map((data) => (
+										<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
+									))
+									:
+									'가입이 되어있지 않습니다.'
+							}
 						</Grid>
 					</Grid>
 					<Grid className="right-con">
@@ -203,9 +212,9 @@ function NowChallenge({ match }) {
 					<Grid className="inviteModalPaper">
 						<Grid className="head">인증 요청 목록</Grid>
 						<Grid className="admit-body">
-							{/* 백에서 불러오기 */}
 							{
 								admit === null ? <p>데이터가 없습니다.</p>
+									: admit === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: admit.map((d) => (
 										<Grid className="admit-content">
 											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>
@@ -221,6 +230,7 @@ function NowChallenge({ match }) {
 					</Grid>
 				</Fade>
 			</Modal>
+			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={CId} UId={userData.userId} />
 		</>
 	);
 }

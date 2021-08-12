@@ -9,15 +9,14 @@ import {
 	Popover,
 	MenuItem
 } from '@material-ui/core';
-
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useUserState } from '../MVVM/Model/UserModel';
 import { useLogoutUser, useVerifyUser } from '../MVVM/ViewModel/UserViewModel';
 
-function Header() {
+function Header({ alarmHandler }) {
 	const userState = useUserState();
 	const userlogout = useLogoutUser();
 	const userVerify = useVerifyUser();
-	// const git = "MOBUMIN";
 
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -76,6 +75,10 @@ function Header() {
 				{
 					isLogined ?
 						<>
+							<IconButton onClick={(e)=>alarmHandler(e)}>
+								<NotificationsIcon fontSize="large" />
+								<div className="alarm">1</div>
+							</IconButton>
 							<IconButton onClick={handleClick}>
 								<img src={`https://github.com/${userState.gitId}.png`} alt={`${userState.gitId}`} className="profileImg" />
 							</IconButton>

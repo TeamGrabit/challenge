@@ -48,6 +48,17 @@
 	.grow {
 		flex-grow: 1;
 	}
+	.alarm {
+		position: absolute;
+		width: 15px;
+		height: 15px;
+		border-radius: 15px;
+		background-color: red;
+		color: white;
+		font-size: small;
+		top: 20%;
+		right: 20%;
+	}
 	.profileImg {
 		width: 2rem;
 		border-radius: 50%;

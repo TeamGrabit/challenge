@@ -149,7 +149,7 @@ async function CreateGitData(userId) {
 		// 이미 생성된 grass가 있는지?
 		const grass = await gitData.findOneByUserId(userId)
 		if(grass) {
-			gitData.findOneAndDelete({ user_id: userId }, function (err,dos) {
+			gitData.findOneAndDelete({ user_id: userId }, function (err,docs) {
 				if (err) { console.log(err) }
 				else { console.log("Deleted: ", docs); }
 			})
