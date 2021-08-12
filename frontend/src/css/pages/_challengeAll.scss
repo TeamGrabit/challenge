@@ -3,8 +3,9 @@
 	flex-direction: row;
 	align-items: center;
 
-	.table_page{
-		height: 640px;
+	.container_table{
+		height: 500px;
+		max-height: 100%;
 	}
 	.cha_Table{
 		margin-top: 20px;
@@ -13,21 +14,21 @@
 		margin-right: auto;
 	}
 	.cha_TableHead, .cha_TableBody, .headRow, .bodyRow{
-		// height: 5%;
+		//height: 60px;
 	}
-	.headCate, .headTitle, .headLeader, .headJoin, .bodyCate, .bodyTitle, .bodyLeader, .bodyJoin{
+	.headCate, .headTitle, .headStart, .headEnd, .headLeader, .headJoin, .bodyCate, .bodyTitle, .bodyStart, .bodyEnd, .bodyLeader, .bodyJoin{
 		padding-top: 10px;
 		padding-bottom: 10px;
 		text-align: center;
 		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
 	}
-	.headCate, .headLeader, .headJoin{
+	.headCate, .headLeader, .headStart, .headEnd, .headJoin{
 		font-size: 1em;
-		width: 180px;
+		width: 140px;
 	}
 	.headTitle{
 		font-size: 1em;
-		width: 560px;
+		width: 440px;
 	}
 	.headRow, .bodyRow{
 		// text-align: center;

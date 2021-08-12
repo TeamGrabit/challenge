@@ -1,7 +1,6 @@
 .pagination{
 	display: flex;
 	justify-content: center;
-	margin-top: 15px;
 }
 
 ul {
@@ -17,6 +16,11 @@ ul.pagination li {
 	justify-content: center;
 	align-items: center;
 	font-size: 1rem;
+	cursor: pointer;
+}
+
+ul.pagination li:hover{
+	background-color: $green3;
 }
 
 ul.pagination li:first-child{
@@ -29,24 +33,27 @@ ul.pagination li:last-child{
 
 ul.pagination li a {
 	text-decoration: none;
-	color: #337ab7;
+	color: $green4;
 	font-size: 1rem;
 }
 
-ul.pagination li.active a {
-	color: white;
-}
-
 ul.pagination li.active {
-	background-color: #337ab7;
+	background-color: $green2;
 }
+//ul.pagination li.active a {
+//	color: white;
+//}
 
-ul.pagination li a:hover, ul.pagination li a.active {
-	color: blue;
-}
+//ul.pagination li.active {
+//	background-color: #337ab7;
+//}
 
-.page-selection {
-	width: 48px;
-	height: 30px;
-	color: #337ab7;
-}
+//ul.pagination li a:hover, ul.pagination li a.active {
+//	color: blue;
+//}
+
+//.page-selection {
+//	width: 48px;
+//	height: 30px;
+//	color: #337ab7;
+//}

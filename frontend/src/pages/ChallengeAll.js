@@ -14,6 +14,7 @@ function ChallengeAll() {
 	const indexOfLast = page * postsPerPage;
 	const indexOfFirst = indexOfLast - postsPerPage;
 	const handlePage = (newValue) => {
+		console.log(newValue);
 		setPage(newValue);
 	};
 	function currentPosts(tmp) {
@@ -24,15 +25,15 @@ function ChallengeAll() {
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge`).then((res) => {
 			console.log(res.data);
-			setAllData(res.data.challenges);
+			setAllData(res.data.challenges.filter( info => info.state == 0));
 		});
 	}, []);
-	console.log(allData);
+	// console.log(allData);
 	return (
 		<div className="challengeAll">
-			<div className="table_page">
+			<div>
 				<ChallengeTable data={currentPosts(allData)} user_id={user_id}/>
-				<Paging page={postsPerPage} count={allData.length} setPage={handlePage}/>
+				<Paging page={page} count={allData.length} setPage={handlePage}/>
 			</div>
 		</div>
 	);
