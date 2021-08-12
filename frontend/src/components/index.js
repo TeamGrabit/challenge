@@ -9,3 +9,4 @@ export { default as useSessionStorage } from './useSessionStorage';
 export { default as PwFindAuth } from './PwFindAuth';
 export { default as InviteModal } from './InviteModal';
 export { default as AlarmModal } from './AlarmModal';
+export { default as EntrancePwModal } from './EntrancePwModal';
