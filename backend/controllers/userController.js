@@ -304,11 +304,12 @@ async function LogIn(req, res, next) {
 		// 해당 user 정보 속 pw와 입력으로 들어온 pw가 같은지 확인
 		console.log(user);
 		if (user === null) {
-			res.status(400).json({ error: "id doesn't exist. (Please sign up)" });
+			console.log("id doesn't exist.");
+			res.status(400).json({ error: "login failed" });
 		}
 		else if (user === false) {
-			res.status(400).json({ error: "password isn't correct." });
-			return;
+			console.log("password isn't correct.");
+			res.status(400).json({ error: "login failed" });
 		}
 		else {//같으면 jwtToken 발급 
 			// const token = jwt.createToken(user);
