@@ -3,6 +3,7 @@ import { Button, Grid, Box } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 function ChallengeList({ list, index, user_id }) {
+	console.log(user_id);
 	console.log(list);
 	return (
 		<div>
@@ -19,12 +20,12 @@ function ChallengeList({ list, index, user_id }) {
 										</div>
 										<div className="wheel">
 											{
-												c.challenge_leader === user_id ?
-													<Link className="link" href={`/challenge/manage/${c.challenge_id}`}>
+												c.challenge_leader === user_id.userId ?
+													<Link className="link" to={`/challenge/manage/${c.challenge_id}`}>
 														<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
 													</Link>
 													:
-													<Link className="link" href={`/challenge/member/${c.challenge_id}`}>
+													<Link className="link" to={`/challenge/member/${c.challenge_id}`}>
 														<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
 													</Link>
 											}
