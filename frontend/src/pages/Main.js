@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles, Tabs, Tab } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import ChallengeList from '../components/ChallengeList';
 import { useUserState } from '../MVVM/Model/UserModel';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
@@ -49,16 +50,23 @@ function Main() {
 	return (
 		<div className="main">
 			<div className="info">
-				<AntTabs
-					className="tab_sel"
-					value={value}
-					onChange={handleChange}
-					aria-label="ant example"
-				>
-					<AntTab label="참여중인 챌린지" />
-					<AntTab label="종료된 챌린지" />
-				</AntTabs>
-				<ChallengeList list={challengeData} index={value} user_id={user_id} />
+				<Link className="link" to={`/challenge/all`}>
+					<div className="all_list">
+						전체 챌린지 리스트
+					</div>
+				</Link>
+				<div className="now_list">
+					<AntTabs
+						className="tab_sel"
+						value={value}
+						onChange={handleChange}
+						aria-label="ant example"
+					>
+						<AntTab label="참여중인 챌린지" />
+						<AntTab label="종료된 챌린지" />
+					</AntTabs>
+					<ChallengeList list={challengeData} index={value} user_id={user_id} />
+				</div>
 			</div>
 		</div>
 	);
