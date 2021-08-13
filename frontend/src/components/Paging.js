@@ -2,7 +2,6 @@ import React from "react";
 import Pagination from "react-js-pagination";
 
 const Paging = ({ page, count, setPage }) => {
-	console.log(page);
 	return (
 		<Pagination
 			activePage={page}

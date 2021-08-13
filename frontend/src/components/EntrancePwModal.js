@@ -11,6 +11,7 @@ function EntrancePwModal({ open, CId, UId }) {
 		setPw(e.target.value);
 	}
 	const submitHandler = (e) => {
+		console.log(CId);
 		console.log(pw);
 		axios.patch(`${API_URL}/challenge/${CId}/in`, {
 			user_id: UId,

@@ -36,4 +36,22 @@
 	.joinBtn{
 		padding: 0px;
 	}
+	.search{
+		margin-top: 20px;
+		align-items: center;
+		text-align: center;
+	}
+	.select{
+		width: 140px;
+		padding: 2px;
+		margin-right: 10px;
+		font-size: 1em;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.filter{
+		width: 160px;
+		padding: 2px 2px 2px 5px;
+		font-size: 1em;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
 }
