@@ -38,8 +38,13 @@
 	}
 	.search{
 		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
 		align-items: center;
 		text-align: center;
+	}
+	.search_field{
+		display: flex;
 	}
 	.select{
 		width: 140px;
@@ -53,5 +58,17 @@
 		padding: 2px 2px 2px 5px;
 		font-size: 1em;
 		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.searchBtn, .resetBtn{
+		padding: 2px;
+		margin-left: 10px;
+		font-size: 1em;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.searchBtn{
+		background-color: $green2;
+	}
+	.resetBtn{
+		background-color: $green3;
 	}
 }
