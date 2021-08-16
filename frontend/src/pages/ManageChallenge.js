@@ -83,63 +83,63 @@ function ManageChallenge({ match }) {
 
 	return (
 		<>
-		<UserRedirect />
-		<div className="manageChallenge">
-			<div className="content">
-				<div className="cha_nameBox">
-					<div className="cha_name">
-						<div>{challengeData.name}</div>
+			<UserRedirect />
+			<div className="manageChallenge">
+				<div className="content">
+					<div className="cha_nameBox">
+						<div className="cha_name">
+							<div>{challengeData.name}</div>
+						</div>
 					</div>
-				</div>
-				<div className={classes.root}>
-					{
-						isMobile ?
-							<Tabs
-								orientation="vertical"
-								className={classes.tabs}
-								value={value}
-								onChange={handleChange}
-								aria-label="ant example"
-								indicatorColor="transparent"
-							>
-								<MobileTab label="이름" />
-								<MobileTab label="멤버" />
-								<MobileTab label="날짜" />
-								<MobileTab label="..." />
-								<MobileTab label="탈퇴" />
-								<MobileTab label="중단" />
-							</Tabs>
-							:
-							<Tabs
-								orientation="vertical"
-								className={classes.tabs}
-								value={value}
-								onChange={handleChange}
-								aria-label="ant example"
-								indicatorColor="transparent"
-							>
-								<ManTab label="챌린지 이름 관리" />
-								<ManTab label="챌린지 멤버 관리" />
-								<ManTab label="챌린지 날짜 관리" />
-								<ManTab label="..." />
-								<ManTab label="챌린지 탈퇴" />
-								<ManTab label="챌린지 중단" />
-							</Tabs>
-					}
-					<div className="comp_all">
-						{compo_number.map((c) => (
-							<ManageComponent
-								value={value}
-								index={c}
-								challengeData={challengeData}
-								setChallengeData={setChallengeData}
-								CId={CId}
-							/>
-						))}
+					<div className={classes.root}>
+						{
+							isMobile ?
+								<Tabs
+									orientation="vertical"
+									className={classes.tabs}
+									value={value}
+									onChange={handleChange}
+									aria-label="ant example"
+									indicatorColor="transparent"
+								>
+									<MobileTab label="이름" />
+									<MobileTab label="멤버" />
+									<MobileTab label="날짜" />
+									<MobileTab label="..." />
+									<MobileTab label="탈퇴" />
+									<MobileTab label="중단" />
+								</Tabs>
+								:
+								<Tabs
+									orientation="vertical"
+									className={classes.tabs}
+									value={value}
+									onChange={handleChange}
+									aria-label="ant example"
+									indicatorColor="transparent"
+								>
+									<ManTab label="챌린지 이름 관리" />
+									<ManTab label="챌린지 멤버 관리" />
+									<ManTab label="챌린지 날짜 관리" />
+									<ManTab label="..." />
+									<ManTab label="챌린지 탈퇴" />
+									<ManTab label="챌린지 중단" />
+								</Tabs>
+						}
+						<div className="comp_all">
+							{compo_number.map((c) => (
+								<ManageComponent
+									value={value}
+									index={c}
+									challengeData={challengeData}
+									setChallengeData={setChallengeData}
+									CId={CId}
+								/>
+							))}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 		</>
 	);
 }
