@@ -11,3 +11,4 @@ export { default as ManageChallenge } from './ManageChallenge';
 export { default as ResignChallenge } from './ResignChallenge';
 export { default as PwFind } from './PwFind';
 export { default as ChallengeAll } from './ChallengeAll';
+export { default as NotFound } from './NotFound';
