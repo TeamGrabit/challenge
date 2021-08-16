@@ -16,21 +16,19 @@
 
 ## Contributors
 
-### FE
+### FULLSTACK
 
 [tnghd5761(강수홍)](https://github.com/tnghd5761)
 
-### BE
-
-[Hyun-git(이현광)](https://github.com/Hyun-git)
-
-### FULLSTACK
+[sally0226(김바다)](https://github.com/sally0226)
 
 [MOBUMIN(김수빈)](https://github.com/MOBUMIN)
 
 [qf9ar8nv(차현철)](https://github.com/qf9ar8nv)
 
-[sally0226(김바다)](https://github.com/sally0226)
+### BE
+
+[Hyun-git(이현광)](https://github.com/Hyun-git)
 
 -----------
 
