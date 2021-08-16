@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { Button, Grid, Typography, Modal, Fade, Backdrop, TextField, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Slider from 'react-slick';
@@ -9,6 +9,7 @@ import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
 import { EntrancePwModal, InviteModal } from '../components';
+import UserRedirect from '../auth/UserRedirect';
 
 function NowChallenge({ match }) {
 	const history = useHistory();
@@ -127,6 +128,7 @@ function NowChallenge({ match }) {
 	};
 	return (
 		<>
+			<UserRedirect />
 			<Grid className="NowChallenge">
 				<Grid className="head">
 					<Grid className="head-left">

@@ -5,6 +5,7 @@ import ManageComponent from '../components/ManageComponent';
 import { API_URL } from '../CommonVariable';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useUserState } from '../MVVM/Model/UserModel';
+import UserRedirect from '../auth/UserRedirect';
 
 function ManageChallenge({ match }) {
 	const user_id = useUserState();
@@ -81,6 +82,8 @@ function ManageChallenge({ match }) {
 	}))((props) => <Tab disableRipple {...props} />);
 
 	return (
+		<>
+		<UserRedirect />
 		<div className="manageChallenge">
 			<div className="content">
 				<div className="cha_nameBox">
@@ -137,6 +140,7 @@ function ManageChallenge({ match }) {
 				</div>
 			</div>
 		</div>
+		</>
 	);
 }
 
