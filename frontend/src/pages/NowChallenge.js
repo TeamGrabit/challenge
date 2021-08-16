@@ -38,10 +38,10 @@ function NowChallenge({ match }) {
 	const [pwModal, setPwModal] = useState(false);
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
-			// console.log(userData.userId);
-			// console.log(res.data.challenge_users.includes(userData.userId));
-			if(res.data.challenge_users.includes(userData.userId) === false) setPwModal(true);
-			if(res.data.challenge_users.includes(userData.userId) === true) setPwModal(false);
+			if(userData.auth){
+				if(res.data.challenge_users.includes(userData.userId) === false) setPwModal(true);
+				if(res.data.challenge_users.includes(userData.userId) === true) setPwModal(false);
+			}
 		});
 		// todo : grass mvvm 만들기. approve mvvm 이용하기.
 		const result = challengeData.filter((item) => item.challenge_id === CId);
