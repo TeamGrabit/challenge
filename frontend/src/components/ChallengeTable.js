@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DateToString from '../functions/DateToString';
+import { EntrancePwModal } from '../components';
 import { Button, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 
 function ChallengeTable({ data, user_id }) {
+	const [pwModal, setPwModal] = useState(false);
+	const [selChallenge, setSelChallenge] = useState("");
+	const JoinHandler = (sel_id) => {
+		setSelChallenge(sel_id);
+		setPwModal(true);
+	};
 	return (
 		<div className="container_table">
 			<Table className="cha_Table">
@@ -30,7 +37,9 @@ function ChallengeTable({ data, user_id }) {
 							<TableCell className="bodyLeader">{c.challenge_leader}</TableCell>
 							<TableCell className="bodyJoin">
 								{c.challenge_users.includes(user_id.userId) === false ?
-									<Button className="joinBtn" variant="contained" color="secondary">Join</Button>
+									<div>
+										<Button className="joinBtn" variant="contained" color="secondary" onClick={() => JoinHandler(c._id)}>Join</Button>
+									</div>
 									:
 									<div>참여중</div>
 								}
@@ -39,6 +48,7 @@ function ChallengeTable({ data, user_id }) {
 					))}
 				</TableBody>
 			</Table>
+			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={selChallenge} UId={user_id.userId} />
 		</div>
 	)
 }
