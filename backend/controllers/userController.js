@@ -176,16 +176,24 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 }
 
 function OutChallenge(req, res) {
+	//user의 ch_list에서 해당 ch 삭제
+	//ch의 challenge_user에서 해당 user 삭제 
+	// 둘다 성공시에만 success return 
+
+	// TODO : 
+		// 1 - 실패시에도 res 보내줘야함
+		// 2 - 유저스키마 건드린 후, 챌린지 스키마 완료되기 전에 에러 발생한다면 rollback 시켜줘야함 
 	const { userId, challengeId } = req.body;
 
 	const id = ObjectID(challengeId);
 
-	var chArray
+	var chArray;
 
 	User.findOneByUsername(userId)
 		.then((user) => {
-			chArray = user.ch_list
-
+			chArray = user.ch_list; // user의 ch_list
+			
+			// user의 ch_list에서 해당 challenge를 찾아보고 있으면 1, 없으면 0 return
 			for (let i = 0; i < chArray.length; i++) {
 				_id = ObjectID(chArray[i]);
 				temp1 = JSON.stringify(id);
@@ -193,7 +201,7 @@ function OutChallenge(req, res) {
 
 				if (temp1 == temp2) {
 					console.log(chArray[i]);
-					chArray.splice(i, i);
+					chArray.splice(i, i); // i번째 요소 제거 
 					return 1;
 				}
 			}
@@ -202,7 +210,7 @@ function OutChallenge(req, res) {
 		.then((state) => {
 			if (state === 0)
 				throw new Error('user DB에 해당 challenge 없음.')
-			outch(chArray)
+			outch(chArray) // user의 ch_list에서 해당 challenge 제거 (탈퇴진행)
 		})
 		.catch((err) => {
 			console.error(err);
@@ -290,7 +298,7 @@ function OutChallenge(req, res) {
 			console.log(doc._id)
 			res.send("success")
 		}
-	})
+	});
 }
 
 async function LogIn(req, res, next) {
