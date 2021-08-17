@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { Button, Grid, Typography, Modal, Fade, Backdrop, TextField, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Slider from 'react-slick';
@@ -8,13 +8,13 @@ import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useGetChallenge } from '../MVVM/ViewModel/ChallengeViewModel';
 import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { InviteModal } from '../components';
+import { EntrancePwModal, InviteModal } from '../components';
+import UserRedirect from '../auth/UserRedirect';
 
 function NowChallenge({ match }) {
 	const history = useHistory();
 	const CId = match.params.challengeId;
 	const challengeData = useChallengeState();
-	console.log(challengeData);
 	const userData = useUserState();
 	const [title, setTitle] = useState("");
 	const [inviteOpen, setInviteOpen] = useState(false);
@@ -35,10 +35,13 @@ function NowChallenge({ match }) {
 	const [poor, setPoor] = useState(null);
 	const [admit, setAdmit] = useState(null);
 	const today = new Date();
+	const [pwModal, setPwModal] = useState(false);
 	useEffect(() => {
-		// todo : 가입한 사람이 아니면 모달 띄우기
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
-			console.log(res.data);
+			if(userData.auth){
+				if(res.data.challenge_users.includes(userData.userId) === false) setPwModal(true);
+				if(res.data.challenge_users.includes(userData.userId) === true) setPwModal(false);
+			}
 		});
 		// todo : grass mvvm 만들기. approve mvvm 이용하기.
 		const result = challengeData.filter((item) => item.challenge_id === CId);
@@ -125,6 +128,7 @@ function NowChallenge({ match }) {
 	};
 	return (
 		<>
+			<UserRedirect />
 			<Grid className="NowChallenge">
 				<Grid className="head">
 					<Grid className="head-left">
@@ -146,9 +150,14 @@ function NowChallenge({ match }) {
 					<Grid className="left-con" style={{ cursor: 'pointer' }} onClick={grassHandler}>
 						<Typography className="sub-title">나의 잔디</Typography>
 						<Grid className="myGrass">
-							{myGrass !== undefined && myGrass.map((data) => (
-								<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
-							))}
+							{
+								pwModal !== true ?
+									myGrass !== undefined && myGrass.map((data) => (
+										<Grid className={['grass', data ? 'fill-grass' : 'unfill-grass']} />
+									))
+									:
+									'가입이 되어있지 않습니다.'
+							}
 						</Grid>
 					</Grid>
 					<Grid className="right-con">
@@ -223,6 +232,7 @@ function NowChallenge({ match }) {
 					</Grid>
 				</Fade>
 			</Modal>
+			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={CId} UId={userData.userId} />
 		</>
 	);
 }

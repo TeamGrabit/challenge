@@ -7,6 +7,19 @@
 	.info{
 		margin-left: 20px;
 		margin-top: 20px;
+		position: relative;
+	}
+	.all_list{
+		position: absolute;
+		z-index: 1;
+		width: 150px;
+		text-align: center;
+		margin-left: 82.5%;
+		margin-top: 5px;
+		padding: 5px 10px 5px 10px;
+		border : black 1px solid;
+		border-radius: 8px;
+		cursor: pointer;
 	}
 	.tab_sel{
 		border-bottom: black 1px solid;
