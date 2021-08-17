@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Box, Tabs, Tab, makeStyles, withStyles, useMediaQuery } from '@material-ui/core';
 import ManageComponent from '../components/ManageComponent';
+import Spinner from '../components/Spinner';
 import { API_URL } from '../CommonVariable';
-import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 import { useUserState } from '../MVVM/Model/UserModel';
 import UserRedirect from '../auth/UserRedirect';
 
@@ -11,12 +11,12 @@ function ManageChallenge({ match }) {
 	const user_id = useUserState();
 	const CId = match.params.challengeId;
 	const compo_number = [0, 1, 2, 3, 4, 5];
+	const [loading, setLoading] = useState(true);
 	const [challengeData, setChallengeData] = useState([]);
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
-			console.log(res.data);
 			setChallengeData(res.data);
-			console.log(challengeData);
+			setLoading(false);
 		});
 	}, [CId]);
 	const [value, setValue] = useState(0);
@@ -84,6 +84,7 @@ function ManageChallenge({ match }) {
 	return (
 		<>
 			<UserRedirect />
+			{loading ? <Spinner /> :
 			<div className="manageChallenge">
 				<div className="content">
 					<div className="cha_nameBox">
@@ -139,7 +140,7 @@ function ManageChallenge({ match }) {
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>}
 		</>
 	);
 }
