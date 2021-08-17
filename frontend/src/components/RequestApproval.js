@@ -6,12 +6,15 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 	const createApprove = useCreateApprove();
 	const [Type, setType] = useState(0);
 	const [Message, setMessage] = useState("");
-	const chooseExemption = () => {
+	const choosePass = () => {
 		setType(0);
 	};
 	const chooseApprove = () => {
 		setType(1);
 	};
+	const chooseVacation = () => {
+		setType(2);
+	}
 	const changeMessage = (e) => {
 		setMessage(e.currentTarget.value);
 	};
@@ -47,9 +50,9 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 					className="typeLabel"
 					value="pass"
 					control={<Radio className="radioBtn" color="primary" />}
-					label="면제"
+					label="패스"
 					labelPlacement="end"
-					onClick={chooseExemption}
+					onClick={choosePass}
 				/>
 				<FormControlLabel
 					className="typeLabel"
@@ -58,6 +61,14 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 					label="승인"
 					labelPlacement="end"
 					onClick={chooseApprove}
+				/>
+				<FormControlLabel
+					className="typeLabel"
+					value="vacation"
+					control={<Radio className="radioBtn" color="primary" />}
+					label="청원휴가"
+					labelPlacement="end"
+					onClick={chooseVacation}
 				/>
 			</RadioGroup>
 			<TextareaAutosize
