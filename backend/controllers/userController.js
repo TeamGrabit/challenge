@@ -183,13 +183,13 @@ function OutChallenge(req, res) {
 	// TODO : 
 		// 1 - 실패시에도 res 보내줘야함
 		// 2 - 유저스키마 건드린 후, 챌린지 스키마 완료되기 전에 에러 발생한다면 rollback 시켜줘야함 
-	const { userId, challengeId } = req.body;
+	const { user_id, challenge_id } = req.body;
 
-	const id = ObjectID(challengeId);
+	const id = ObjectID(challenge_id);
 
 	var chArray;
 
-	User.findOneByUsername(userId)
+	User.findOneByUsername(user_id)
 		.then((user) => {
 			chArray = user.ch_list; // user의 ch_list
 			
@@ -216,7 +216,7 @@ function OutChallenge(req, res) {
 			console.error(err);
 		})
 
-	const outch = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
+	const outch = (chArray) => User.findOneAndUpdate({ user_id: user_id }, {
 		$set: {
 			ch_list: chArray
 		}
@@ -239,7 +239,7 @@ function OutChallenge(req, res) {
 
 			for (let i = 0; i < userAry.length; i++) {
 				_id = userAry[i]
-				temp1 = JSON.stringify(userId);
+				temp1 = JSON.stringify(user_id);
 				temp2 = JSON.stringify(_id);
 
 				if (temp1 == temp2) {
@@ -255,7 +255,7 @@ function OutChallenge(req, res) {
 			for (let i = 0; i < userCommitAry.length; i++) {
 				_id = userCommitAry[i]
 
-				temp1 = JSON.stringify(userId);
+				temp1 = JSON.stringify(user_id);
 				temp2 = JSON.stringify(_id.user_id);
 
 				if (temp1 == temp2) {
