@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import DateToString from '../functions/DateToString';
-import { EntrancePwModal } from '../components';
+import { EntrancePwModal, Spinner } from '../components';
 import { Button, Table, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 
-function ChallengeTable({ data, user_id }) {
+function ChallengeTable({ data, user_id, loading}) {	
 	const [pwModal, setPwModal] = useState(false);
 	const [selChallenge, setSelChallenge] = useState("");
 	const JoinHandler = (sel_id) => {
@@ -12,6 +12,7 @@ function ChallengeTable({ data, user_id }) {
 	};
 	return (
 		<div className="container_table">
+			{loading ? <Spinner /> :
 			<Table className="cha_Table">
 				<TableHead className="cha_TableHead">
 					<TableRow className="headRow">
@@ -48,6 +49,7 @@ function ChallengeTable({ data, user_id }) {
 					))}
 				</TableBody>
 			</Table>
+			}
 			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={selChallenge} UId={user_id.userId} />
 		</div>
 	)

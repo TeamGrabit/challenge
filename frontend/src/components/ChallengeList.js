@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, Grid, Box } from '@material-ui/core';
+import { Spinner } from '../components';
 import { Link } from 'react-router-dom';
 
 function ChallengeList({ list, index, user_id }) {
-	console.log(user_id);
-	console.log(list);
 	return (
 		<div>
 			<div className="challengeList">
+				{user_id.userId === undefined ? <Spinner /> :
 				<Grid container spacing={3} className="cha_list">
 					{list.map((c, i) => (
 						index === c.state &&
@@ -49,6 +49,7 @@ function ChallengeList({ list, index, user_id }) {
 						</Grid>
 					)}
 				</Grid>
+				}
 			</div>
 		</div>
 	);

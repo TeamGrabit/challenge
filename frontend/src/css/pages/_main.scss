@@ -3,11 +3,13 @@
 	flex-direction: row;
 	align-items: center;
 	overflow: hidden;
+	width: 100%;
 
 	.info{
 		margin-left: 20px;
 		margin-top: 20px;
 		position: relative;
+		width: 95%;
 	}
 	.all_list{
 		position: absolute;

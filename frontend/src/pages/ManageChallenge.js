@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Box, Tabs, Tab, makeStyles, withStyles, useMediaQuery } from '@material-ui/core';
-import ManageComponent from '../components/ManageComponent';
-import Spinner from '../components/Spinner';
+import { ManageComponent, Spinner } from '../components';
 import { API_URL } from '../CommonVariable';
 import { useUserState } from '../MVVM/Model/UserModel';
 import UserRedirect from '../auth/UserRedirect';
