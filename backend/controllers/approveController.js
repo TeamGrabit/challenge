@@ -1,9 +1,7 @@
-const express = require('express');
 const Approve = require('../models/approveModel');
 const Challenge = require('../models/challengeModel');
 const mongoose = require('mongoose');
 const { ObjectID } = require('bson');
-const db = mongoose.connection;
 
 async function CreateApprove(req, res) {
 	try {
