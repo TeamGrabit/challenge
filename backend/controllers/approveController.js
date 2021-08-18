@@ -6,15 +6,25 @@ const { ObjectID } = require('bson');
 async function CreateApprove(req, res) {
 	try {
 		const { ch_id, user_id, type, message, request_date } = req.body;
+		const _id = ObjectID(ch_id);
+		const date = request_date.split("-")
+		const equal_month = date[0] + "-" + date[1]
 		if (message.length > 100) {
 			throw "message를 100자 이내로 작성바랍니다."
 		}
-		Approve.create(ch_id, user_id, type, message, request_date)
-			.then(res.send(req.body))
-			.catch((err) => {
-				console.error(err);
-				res.send('false');
-			})
+		if (type == 0) {						// pass 요청
+			const vacation_cnt = await Challenge.findById(_id).then((doc) => { return doc.vacation_count })
+			const pass_cnt = await Approve.find({ $and: [{ request_date: { $regex: equal_month } }, { type: 0 }] }).then((docs) => { return docs.length })
+			if (pass_cnt < vacation_cnt) {
+				Approve.create(ch_id, user_id, type, message, request_date, true)
+				res.status(201).json({ result: true })
+			}else{
+				res.status(401).json({result: false})
+			}
+		} else {								// 승인 or 휴가 요청
+			Approve.create(ch_id, user_id, type, message, request_date, false)
+			res.status(201).json({ result: true })
+		}
 	} catch (err) {
 		console.log(err);
 		res.status(401).json({ error: err })
