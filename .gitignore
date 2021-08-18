@@ -23,6 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 dev.js
+CommonVariable.js
 
 .env
 backend/.env

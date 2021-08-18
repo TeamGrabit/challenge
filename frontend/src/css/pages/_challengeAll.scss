@@ -1,0 +1,74 @@
+.challengeAll{
+	width: 100%;
+	flex-direction: row;
+	align-items: center;
+
+	.container_table{
+		height: 500px;
+		max-height: 100%;
+	}
+	.cha_Table{
+		margin-top: 20px;
+		width: 1280px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.cha_TableHead, .cha_TableBody, .headRow, .bodyRow{
+		//height: 60px;
+	}
+	.headCate, .headTitle, .headStart, .headEnd, .headLeader, .headJoin, .bodyCate, .bodyTitle, .bodyStart, .bodyEnd, .bodyLeader, .bodyJoin{
+		padding-top: 10px;
+		padding-bottom: 10px;
+		text-align: center;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.headCate, .headLeader, .headStart, .headEnd, .headJoin{
+		font-size: 1em;
+		width: 140px;
+	}
+	.headTitle{
+		font-size: 1em;
+		width: 440px;
+	}
+	.headRow, .bodyRow{
+		// text-align: center;
+	}
+	.joinBtn{
+		padding: 0px;
+	}
+	.search{
+		margin-top: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+	.search_field{
+		display: flex;
+	}
+	.select{
+		width: 140px;
+		padding: 2px;
+		margin-right: 10px;
+		font-size: 1em;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.filter{
+		width: 160px;
+		padding: 2px 2px 2px 5px;
+		font-size: 1em;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.searchBtn, .resetBtn{
+		padding: 2px;
+		margin-left: 10px;
+		font-size: 1em;
+		font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.searchBtn{
+		background-color: $green2;
+	}
+	.resetBtn{
+		background-color: $green3;
+	}
+}

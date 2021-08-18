@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowChallenge, ChallengeMake, ManageChallenge, PwFind, ResignChallenge } from "../pages";
+import { Main, colorTest, LogIn, MyPage, Register, Intro, ChallengeInfoFix, NowChallenge, ChallengeMake, ManageChallenge, PwFind, ResignChallenge, ChallengeAll, NotFound } from "../pages";
 
 import '../css/main.scss';
 import { Layout } from '../components';
@@ -21,9 +21,11 @@ function Router() {
 					<ContextRoute exact path="/challenge/manage/:challengeId" Component={ManageChallenge} Provider={ChallengeProvider} />
 					<ContextRoute exact path="/challenge/make" Component={ChallengeMake} Provider={ChallengeProvider} />
 					<ContextRoute exact path="/challenge/member/:challengeId" Component={ResignChallenge} Provider={ChallengeProvider} />
+					<ContextRoute exact path="/challenge/all" Component={ChallengeAll} Provider={ChallengeProvider} />
 					<Route exact path="/color" component={colorTest} />
 					<ContextRoute exact path="/mypage" Component={MyPage} Provider={MultiProvider} />
 					<Route exact path="/findpw" component={PwFind} />
+					<Route exact path="*" component={NotFound} />
 				</Switch>
 			</Layout>
 		</BrowserRouter>

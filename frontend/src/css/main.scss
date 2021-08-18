@@ -16,6 +16,7 @@
 @import './pages/register';
 @import './pages/resignChallenge';
 @import './pages/pwfind';
+@import './pages/challengeAll';
 
 // components
 @import './components/requestApproval';
@@ -26,6 +27,7 @@
 @import './components/challengeList';
 @import './components/manageComponent';
 @import './components/expelMember';
+@import './components/paging';
 
 // library
 @import "~slick-carousel/slick/slick.css"; 
