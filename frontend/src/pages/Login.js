@@ -7,7 +7,8 @@ function LogIn({ history }) {
 	const [id, setId] = useState("");
 	const [pw, setPw] = useState("");
 	const userLogin = useLoginUser();
-	const loginHandler = async () => {
+	const loginHandler = async (event) => {
+		event.preventDefault();
 		const status = await userLogin(id, pw);
 		console.log(status);
 		if (status) {

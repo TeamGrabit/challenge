@@ -38,6 +38,9 @@ export const UserLogicProvider = ({ children }) => {
 		}).then((res) => {
 			console.log(res.data.result);
 			if (res.data.result) flag = true;
+		}).catch((err)=> {
+			//console.log(error.response.data);
+			alert(err.response.data.error);
 		});
 		await VerifyUser();
 		return flag;
