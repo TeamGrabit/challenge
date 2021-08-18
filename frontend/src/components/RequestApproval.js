@@ -26,8 +26,8 @@ function RequestApproval({ onClose, challengeId, userId, year, month, day }) {
 			message: Message,
 			request_date: `${year}-${month}-${day}`
 		};
-		const result = await createApprove(approveInfo, onClose);
-		if (result === false || result === undefined) {
+		const response = await createApprove(approveInfo, onClose);
+		if (response === undefined || response.result === false) {
 			alert('요청 실패');
 		} else {
 			alert('요청 성공');

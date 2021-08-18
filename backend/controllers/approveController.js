@@ -18,8 +18,8 @@ async function CreateApprove(req, res) {
 			if (pass_cnt < vacation_cnt) {
 				Approve.create(ch_id, user_id, type, message, request_date, true)
 				res.status(201).json({ result: true })
-			}else{
-				res.status(401).json({result: false})
+			} else {
+				res.status(201).json({ result: false })
 			}
 		} else {								// 승인 or 휴가 요청
 			Approve.create(ch_id, user_id, type, message, request_date, false)
