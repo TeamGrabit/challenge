@@ -12,3 +12,4 @@ export { default as AlarmModal } from './AlarmModal';
 export { default as EntrancePwModal } from './EntrancePwModal';
 export { default as Spinner } from './Spinner';
 export { default as ChallengeList } from './ChallengeList';
+export { default as ResignComponent } from './ResignComponent';
