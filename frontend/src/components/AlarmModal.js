@@ -30,7 +30,7 @@ function AlarmModal({ open, closeHandler }) {
 					<Grid className="head">알림</Grid>
 					<Grid className="admit-body">
 						{
-							Alarms === null ? <p>데이터가 없습니다.</p>
+							Alarms.length === 0 ? <p>데이터가 없습니다.</p>
 								: Alarms === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: Alarms.map((d) => (
 										<Grid className="admit-content">

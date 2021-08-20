@@ -17,15 +17,19 @@ var Alarm = new Schema({
     date:{
         type: Date,
         default: new Date()
-    }
+    },
+	api:{
+		type: String
+	}
 }, {
 	versionKey: false
 });
 
-Alarm.statics.create = function (user_id, message) {
+Alarm.statics.create = function (user_id, message, api) {
 	const alarm = new this({
 		user_id,
-		message
+		message,
+		api
 	})
 
 	console.log("alarm 생성");
