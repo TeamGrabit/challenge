@@ -6,7 +6,7 @@ const { ObjectID } = require('bson');
 const { find } = require('../models/userModel');
 const { json } = require('body-parser');
 const { CreateGitData } = require('../functions/crawling');
-
+const mongoose = require('mongoose');
 
 require("dotenv").config();
 const SecretKey = process.env.SECRET_KEY;
@@ -175,130 +175,49 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 }
 
-function OutChallenge(req, res) {
+/**
+ * 이것은 무슨 함수이다.
+ * @param {json} req 
+ * @param {json} res 
+ */
+async function OutChallenge(req, res) {
 	//user의 ch_list에서 해당 ch 삭제
 	//ch의 challenge_user에서 해당 user 삭제 
-	// 둘다 성공시에만 success return 
+	// 둘다 성공시에만 success return (transaction 처리)
+	try {
+		const { user_id, challenge_id } = req.body;
+		const ch_id = ObjectID(challenge_id);
 
-	// TODO : 
-		// 1 - 실패시에도 res 보내줘야함
-		// 2 - 유저스키마 건드린 후, 챌린지 스키마 완료되기 전에 에러 발생한다면 rollback 시켜줘야함 
-	const { user_id, challenge_id } = req.body;
+		const ch = await Challenge.findById(ch_id);
 
-	const id = ObjectID(challenge_id);
+		// 해당 user가 챌린지 장이면 err
+		if (ch.challenge_leader === user_id) throw new Error('챌린지 장은 탈퇴가 불가능합니다.');
 
-	var chArray;
+		const user = await User.findOneByUsername(user_id);
+		
+		// user한테 ch가 없거나, ch에 user가 없으면 error
+		if (user.ch_list.length === 0 || user.ch_list.find(element => element === challenge_id) === undefined) throw new Error('user DB에 해당 challenge 없음.');
+		if (ch.challenge_users.length === 0 || ch.challenge_users.find(element => element === user_id) === undefined) throw new Error('challege DB에 해당 user 없음.');
 
-	User.findOneByUsername(user_id)
-		.then((user) => {
-			chArray = user.ch_list; // user의 ch_list
-			
-			// user의 ch_list에서 해당 challenge를 찾아보고 있으면 1, 없으면 0 return
-			for (let i = 0; i < chArray.length; i++) {
-				_id = ObjectID(chArray[i]);
-				temp1 = JSON.stringify(id);
-				temp2 = JSON.stringify(_id);
-
-				if (temp1 == temp2) {
-					console.log(chArray[i]);
-					chArray.splice(i, i); // i번째 요소 제거 
-					return 1;
-				}
-			}
-			return 0;
-		})
-		.then((state) => {
-			if (state === 0)
-				throw new Error('user DB에 해당 challenge 없음.')
-			outch(chArray) // user의 ch_list에서 해당 challenge 제거 (탈퇴진행)
-		})
-		.catch((err) => {
-			console.error(err);
-		})
-
-	const outch = (chArray) => User.findOneAndUpdate({ user_id: user_id }, {
-		$set: {
-			ch_list: chArray
-		}
-	}, { new: true, useFindAndModify: false }, (err, doc) => {
-		if (err) {
-			console.log(err)
-		}
-		else {
-			console.log("user의 challenge 삭제")
-			console.log(doc._id)
-		}
-	})
-
-	Challenge.findById(id)
-		.then((challenge) => {
-			userAry = challenge.challenge_users
-			userCommitAry = challenge.commitCount
-
-			var k = 0;
-
-			for (let i = 0; i < userAry.length; i++) {
-				_id = userAry[i]
-				temp1 = JSON.stringify(user_id);
-				temp2 = JSON.stringify(_id);
-
-				if (temp1 == temp2) {
-					console.log(userAry)
-					console.log(userAry[i], i)
-					userAry.splice(i, i);
-					console.log(userAry)
-					k = k + 1;
-					break
-				}
-			}
-
-			for (let i = 0; i < userCommitAry.length; i++) {
-				_id = userCommitAry[i]
-
-				temp1 = JSON.stringify(user_id);
-				temp2 = JSON.stringify(_id.user_id);
-
-				if (temp1 == temp2) {
-					console.log(userCommitAry)
-					console.log(userCommitAry[i], i)
-					userCommitAry.splice(i, i);
-					console.log(userCommitAry)
-					k = k + 1;
-					break
-				}
-			}
-			console.log(k)
-			if (k == 2) {
-				return 1
-			} else {
-				return 0
-			}
-
-		}).then((state) => {
-			if (state === 0)
-				throw new Error('Challege DB에 해당 유저 없어!')
-			outuser(userAry, userCommitAry)
-		})
-		.catch((err) => {
-			console.error(err);
-
-		})
-
-	const outuser = (userAry, userCommitAry) => Challenge.findOneAndUpdate({ _id: id }, {
-		$set: {
-			challenge_users: userAry,
-			commitCount: userCommitAry
-		}
-	}, { new: true, useFindAndModify: false }, (err, doc) => {
-		if (err) {
-			console.log(err)
-		}
-		else {
-			console.log("challenge에서 user 삭제")
-			console.log(doc._id)
-			res.send("success")
-		}
-	});
+		const session = await mongoose.startSession(); // 무결성 보장을 위한 transation 처리
+		await session.withTransaction(async () =>  {
+			//user의 ch_list에서 해당 ch 삭제
+			await User.findOneAndUpdate(
+				{'user_id':user_id},
+				{ $pull: {'ch_list': challenge_id}}
+			);
+			//ch의 challenge_user에서 해당 user 삭제 
+			await Challenge.findOneAndUpdate(
+				{_id : ch_id},
+				{$pull:{'challenge_users': user_id}}
+			);
+		});
+		session.endSession();	
+		res.send({"success":true});
+	} catch (err) {
+		console.log(err);
+		res.status(400).json({ error: err.message });
+	}
 }
 
 async function LogIn(req, res, next) {
