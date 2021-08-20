@@ -201,18 +201,23 @@ async function OutChallenge(req, res) {
 
 		const session = await mongoose.startSession(); // 무결성 보장을 위한 transation 처리
 		await session.withTransaction(async () =>  {
-			//user의 ch_list에서 해당 ch 삭제
-			await User.findOneAndUpdate(
-				{'user_id':user_id},
-				{ $pull: {'ch_list': challenge_id}}
-			);
 			//ch의 challenge_user에서 해당 user 삭제 
 			await Challenge.findOneAndUpdate(
 				{_id : ch_id},
-				{$pull:{'challenge_users': user_id}}
+				{
+					$pull: {'challenge_users': user_id, 'commitCount': {'user_id' :user_id}},
+					$inc: {'challenge_user_num' : -1},
+					//$pull : {'commitCount': {'user_id' :user_id}}
+				}
+			);
+			//user의 ch_list에서 해당 ch 삭제
+			await User.findOneAndUpdate(
+				{'user_id':user_id},
+				{
+					$pull: {'ch_list': challenge_id}}
 			);
 		});
-		session.endSession();	
+		await session.endSession();	
 		res.send({"success":true});
 	} catch (err) {
 		console.log(err);
