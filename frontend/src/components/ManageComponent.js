@@ -30,15 +30,14 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 	const handleClose = () => {
 		setopen(false);
 	};
-	const handleDelete = () => {
-		const result = deleteChallenge(CId);
-		console.log(CId);
+	const handleDelete = async () => {
+		const result = await deleteChallenge(CId);
 		console.log(result);
 		if (!result) {
 			alert("삭제 실패");
 		} else {
 			alert("삭제 완료");
-			// history.push('/challenge');
+			window.location.replace(`/challenge`);
 		}
 	};
 	const handleSave = async () => {
