@@ -175,11 +175,6 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 
 }
 
-/**
- * 이것은 무슨 함수이다.
- * @param {json} req 
- * @param {json} res 
- */
 async function OutChallenge(req, res) {
 	//user의 ch_list에서 해당 ch 삭제
 	//ch의 challenge_user에서 해당 user 삭제 
@@ -204,17 +199,13 @@ async function OutChallenge(req, res) {
 			//ch의 challenge_user에서 해당 user 삭제 
 			await Challenge.findOneAndUpdate(
 				{_id : ch_id},
-				{
-					$pull: {'challenge_users': user_id, 'commitCount': {'user_id' :user_id}},
-					$inc: {'challenge_user_num' : -1},
-					//$pull : {'commitCount': {'user_id' :user_id}}
-				}
+				{$pull: {'challenge_users': user_id, 'commitCount': {'user_id' :user_id}},
+				$inc: {'challenge_user_num' : -1}}
 			);
 			//user의 ch_list에서 해당 ch 삭제
 			await User.findOneAndUpdate(
 				{'user_id':user_id},
-				{
-					$pull: {'ch_list': challenge_id}}
+				{$pull: {'ch_list': challenge_id}}
 			);
 		});
 		await session.endSession();	
