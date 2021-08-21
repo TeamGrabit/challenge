@@ -92,6 +92,9 @@ function NowChallenge({ match }) {
 			user_id: userData.userId
 		}}).then((res) => {
 			setAdmit(res.data.result);
+			if(res.data.result.length === 0) setAdmit(null);
+			else setAdmit(res.data.result);
+			console.log(res.data.result);
 		}).catch((error) => {console.log(error); });
 	}, [challengeData]);
 	// <-- grass carousel setting
@@ -211,7 +214,7 @@ function NowChallenge({ match }) {
 				}}
 			>
 				<Fade in={admitOpen}>
-					<Grid className="inviteModalPaper">
+					<Grid className="admitModalPaper">
 						<Grid className="head">인증 요청 목록</Grid>
 						<Grid className="admit-body">
 							{
@@ -219,10 +222,13 @@ function NowChallenge({ match }) {
 									: admit === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: admit.map((d) => (
 										<Grid className="admit-content">
-											<Grid className="admit-name">{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</Grid>
-											<Grid className="admit-reason">{d.user_id}</Grid>
+											<Grid className="admit-name">
+												<p>{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</p>
+												<p>{d.user_id}</p>	
+											</Grid>
 											<Grid className="admit-reason">{d.message}</Grid>
 											<Grid className="admit-btn-con">
+												<p>({d.approve_cnt}/총인원)</p>
 												<Button style={{ backgroundColor: '#CCFCCB', marginTop: '5px' }}>수락</Button>
 											</Grid>
 										</Grid>
