@@ -32,13 +32,16 @@ async function CreateInvite(req, res) {
 		const challenge = await Challenge.findById(challenge_id);
 		if (challenge === null) throw 'not exist challenge'
 
+		const invited_user = await User.findOne({ user_email: invite_email })
+		if(challenge.challenge_users.findIndex((v) => v === invited_user.user_id) >= 0) throw 'already join'
+
 		const auth_num = authMailController.makeAuthNum(12)
 
 		const result = await transporter.sendMail({
 			from: `1day 1commit <${process.env.NODEMAILER_USER}>`,
 			to: invite_email,
 			subject: `"${challenge.name}"에서 당신을 초대했습니다.`,
-			text: `링크 : http://localhost:5000/challenge/${challenge_id}/invite/${auth_num}`,
+			text: `링크 : https://alsolvechallenge.herokuapp.com/challenge/${challenge_id}/invite/${auth_num}`,
 		}, (err, info) => {
 			if (err) {
 				console.log(err)
@@ -47,8 +50,8 @@ async function CreateInvite(req, res) {
 		});
 		if (result === false) throw "메일 전송 실패"
 
-		const invited_user = await User.findOne({ user_email: invite_email })		// 가입된 유저면 알람에도 추가
-		if (invited_user) await Alarm.create(invited_user.user_id, `${challenge.name}에서 당신을 초대했습니다.`, `http://localhost:5000/challenge/${challenge_id}/invite/${auth_num}`);
+		// 가입된 유저면 알람에도 추가
+		if (invited_user) await Alarm.create(invited_user.user_id, `${challenge.name}에서 당신을 초대했습니다.`, `https://alsolvechallenge.herokuapp.com/challenge/${challenge_id}/invite/${auth_num}`);
 
 		await Invite.create(invite_email, ch_id, send_user, auth_num)
 		res.status(201).json({ result: true })
@@ -78,9 +81,11 @@ async function DeleteInvite(req, res) {		// mail 링크 누를 시 기능 구현
 		console.log(join_result)
 		if(join_result === false) throw "challenge와 user에 추가 실패"
 
+		// challenge에서 여러번 보낸 초대가 있으면 전부 삭제함.
+		await Invite.deleteMany({$and: [{ invite_email: invite.invite_email }, { challenge_id: ch_id }] })
+
 		res.status(201).json({ result: "성공" });
 	} catch (err) {
-		console.log(111)
 		console.log(err);
 		res.status(401).json({ error: err });
 	}
