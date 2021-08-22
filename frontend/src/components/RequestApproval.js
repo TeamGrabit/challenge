@@ -6,14 +6,11 @@ function RequestApproval({ onClose, challengeId, userId, year, month, day }) {
 	const createApprove = useCreateApprove();
 	const [Type, setType] = useState(0);
 	const [Message, setMessage] = useState("");
-	const choosePass = () => {
+	const chooseApprove = () => {
 		setType(0);
 	};
-	const chooseApprove = () => {
-		setType(1);
-	};
 	const chooseVacation = () => {
-		setType(2);
+		setType(1);
 	}
 	const changeMessage = (e) => {
 		setMessage(e.currentTarget.value);
@@ -40,20 +37,12 @@ function RequestApproval({ onClose, challengeId, userId, year, month, day }) {
 			</div>
 			<RadioGroup
 				className="selectType"
-				defaultValue="pass"
+				defaultValue="approval"
 				row
 				aria-label="type"
 				name="type"
-				defaultChecked="pass"
+				defaultChecked="approval"
 			>
-				<FormControlLabel
-					className="typeLabel"
-					value="pass"
-					control={<Radio className="radioBtn" color="primary" />}
-					label="패스"
-					labelPlacement="end"
-					onClick={choosePass}
-				/>
 				<FormControlLabel
 					className="typeLabel"
 					value="approval"

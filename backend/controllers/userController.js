@@ -146,7 +146,8 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 					name: Info.name,
 					state: Info.state,
 					challenge_id: Info._id,
-					challenge_leader: Info.challenge_leader
+					challenge_leader: Info.challenge_leader,
+					challenge_user_num: Info.challenge_users.length
 				}
 				challengeList.push(infoList)
 			})
