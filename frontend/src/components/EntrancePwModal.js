@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Grid, Fade, Modal, TextField, Button, Backdrop } from '@material-ui/core';
 import { API_URL } from '../CommonVariable';
 
-function EntrancePwModal({ open, CId, UId }) {
+function EntrancePwModal({ open, CId, UId, closeHandler }) {
 	const history = useHistory();
 	const [pw, setPw] = useState('');
 	const changeHandler = (e) => {
@@ -34,6 +34,7 @@ function EntrancePwModal({ open, CId, UId }) {
 		<Modal
 			className="modal"
 			open={open}
+			onClose={closeHandler}
 			closeAfterTransition
 			BackdropComponent={Backdrop}
 			BackdropProps={{
@@ -41,14 +42,14 @@ function EntrancePwModal({ open, CId, UId }) {
 			}}
 		>
 			<Fade in={open}>
-				<Grid className="pwModalPaper">
+				<Grid className="modal-background-4">
 					<Grid className="head">비밀번호</Grid>
 					<Grid className="body">
 						<form onSubmit={submitHandler}>
 							<Grid className="input-con">
 								<TextField
 									variant="outlined"
-									label="PassWord"
+									label="Password"
 									fullWidth
 									value={pw}
 									onChange={changeHandler}

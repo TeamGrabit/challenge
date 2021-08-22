@@ -214,14 +214,14 @@ function NowChallenge({ match }) {
 				}}
 			>
 				<Fade in={admitOpen}>
-					<Grid className="admitModalPaper">
+					<Grid className="modal-background-4">
 						<Grid className="head">인증 요청 목록</Grid>
-						<Grid className="admit-body">
+						<Grid className="body">
 							{
 								admit === null ? <p>데이터가 없습니다.</p>
 									: admit === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: admit.map((d) => (
-										<Grid className="admit-content">
+										<Grid className="body-content-card">
 											<Grid className="admit-name">
 												<p>{`${d.request_date} ${d.type === 0 ? '면제' : '인증'}`}</p>
 												<p>{d.user_id}</p>	
@@ -238,7 +238,7 @@ function NowChallenge({ match }) {
 					</Grid>
 				</Fade>
 			</Modal>
-			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={CId} UId={userData.userId} />
+			<EntrancePwModal open={pwModal} closeHandler={()=>null} CId={CId} UId={userData.userId} />
 		</>
 	);
 }
