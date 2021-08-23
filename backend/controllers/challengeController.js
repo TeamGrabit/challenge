@@ -11,10 +11,10 @@ const bcrypt = require('bcrypt');
 const { checkPreferences } = require('joi');
 
 async function CreateChallenge(req, res) {
-	const { user_id, name, challenge_start, challenge_end, private_key } = req.body;
+	const { user_id, name, challenge_start, challenge_end, private_key, vacation_count } = req.body;
 
 	try {
-		Challenge.create(user_id, name, challenge_start, challenge_end, private_key)
+		Challenge.create(user_id, name, challenge_start, challenge_end, private_key, vacation_count)
 			.then((doc) => {
 				console.log("challenge 생성");
 				console.log(doc._id);

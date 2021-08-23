@@ -1,0 +1,47 @@
+.resignComponent{
+
+	.comp_box{
+		width: 90%;
+		margin-left: 40px;
+	}
+	.title_box{
+		display: flex;
+		justify-content: space-between;
+		border-bottom: gray 1px solid;
+	}
+	.comp_title{
+		margin-bottom: 20px;
+		font-size: 1.3em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.resignBtn{
+		margin-bottom: 10px;
+		color: white;
+		background-color: #F33;
+		border: black 1px solid;
+	}
+	.content_box{
+		margin-top: 20px;
+		display: flex;
+	}
+	.member_box{
+		margin: 0 10% 10% 10%;
+		justify-content: center;
+	}
+	.member_inner{
+		text-align: center;
+		background-color: $green2;
+		border-radius: 1.5em;
+		padding-top: 10%;
+		padding-bottom: 10%;
+		font-size: 1.1em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+}
+@media ( max-width: 600px ) {
+    .resignComponent{
+		.comp_box{
+			margin-left: 10px;
+		}
+    }
+}

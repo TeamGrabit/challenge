@@ -72,13 +72,12 @@ export const ChallengeLogicProvider = ({ children }) => {
 		});
 		return flag;
 	};
-	const deleteChallenge = (CId) => {
-		let result;
-		axios.delete(`${API_URL}/challenge/${CId}`).then((res) => {
-			console.log(res);
-			result = res.data;
+	const deleteChallenge = async (CId) => {
+		let flag = false;
+		await axios.delete(`${API_URL}/challenge/${CId}`).then((res) => {
+			flag = res.data;
 		});
-		return result;
+		return flag;
 	};
 	return (
 		<GetChallengeContext.Provider value={getChallengeList}>
