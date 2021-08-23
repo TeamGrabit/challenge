@@ -11,10 +11,10 @@ const bcrypt = require('bcrypt');
 const { checkPreferences } = require('joi');
 
 async function CreateChallenge(req, res) {
-	const { user_id, name, challenge_start, challenge_end, private_key } = req.body;
+	const { user_id, name, challenge_start, challenge_end, private_key, vacation_count } = req.body;
 
 	try {
-		Challenge.create(user_id, name, challenge_start, challenge_end, private_key)
+		Challenge.create(user_id, name, challenge_start, challenge_end, private_key, vacation_count)
 			.then((doc) => {
 				console.log("challenge 생성");
 				console.log(doc._id);
@@ -345,7 +345,7 @@ async function JoinChallenge(req, res) {
 			}
 		}, { new: true, useFindAndModify: false }, (err, doc) => {
 			if (err) {
-				throw new Error('user DB에 ch_list 추가 오류')
+				throw Error('user DB에 ch_list 추가 오류')
 			}
 			else {
 				console.log("user에 challenge 추가")
@@ -398,10 +398,11 @@ async function JoinChallenge(req, res) {
 			join_user(chArray)
 		}
 
-		const challenge = await Challenge.findById(id)
+		const challenge = await Challenge.findOneById(id)
 		const user = await User.findOneByUsername(user_id)
-		if (challenge.private_key === private_key){
-			if(challenge.challenge_users.indexOf(user_id) < 0 && user.ch_list.indexOf(challenge_id)) join(challenge)
+		if(challenge === null || user === null) throw "존재하지 않는 challenge 또는 user 입니다."
+		if (challenge.private_key === private_key) {
+			if (challenge.challenge_users.indexOf(user_id) < 0 && user.ch_list.indexOf(challenge_id)) join(challenge)
 			else {
 				console.log('already join user!')
 				res.send('false')
@@ -413,7 +414,7 @@ async function JoinChallenge(req, res) {
 		}
 	} catch (err) {
 		console.log(err)
-		res.send(err)
+		res.status(401).json({ error: err })
 	}
 }
 
