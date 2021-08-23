@@ -19,10 +19,7 @@ function dateToString(date) { // 시간 빼고 오직 년월일만
 async function GetCommitList(user_id, challenge_id, year, month){
     // Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
     const result = await Approve.findByUserChallangeMonth(user_id, challenge_id, year, month);
-        
-    // 위에서 filter한 데이터에서 날짜만 남기기 
-    const approve = result.map(element => dateToString(element.date));
-    //console.log(approve);
+	const approve = result.map(element => { return {date:dateToString(element.date), type:element.type} });
 
     // 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
     var gitAll = await gitData.findOneByUserId(user_id);
@@ -31,22 +28,46 @@ async function GetCommitList(user_id, challenge_id, year, month){
         gitAll = await gitData.findOneByUserId(user_id);
     }
     const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
-    //console.log(git);
 
-    // approve랑 git 중복제거해서 한 배열에 담기 
-    const dates = Array.from(new Set(approve.concat(git))).sort();
-    //console.log(dates);
+	// 정렬 
+	approve.sort(function(a,b) { // 오름차순 정렬 
+		if (a.date > b.date) return 1;
+		else if (a.date < b.date) return -1;
+		else return 0;
+	})
+	git.sort();
+	console.log(approve);
+	console.log(git);
+
+	// 해당 챌린지의 pass횟수 조회 
+	const pass = 4; // TODO : 챌린지에 pass 필드 생기면 그거 가져오는걸로 변경 
 
     // 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 true, false 배열로 만들기 
     const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
     const isCommitedList = []; 
-    var tempDate = new Date(year, month-3);
+    let tempDate = new Date(year, month-3);
+	let approveIdx = 0; let gitIdx = 0; let count = 0;
     dateCounts.forEach(dateCount => {
-        var monthList = new Array(dateCount).fill(false);
-        for(var i=0; i< dateCount;i++){
-            if (dates.find(element => element == dateToString(tempDate)) !== undefined)
-                monthList[i] = true;
-            tempDate.setDate(tempDate.getDate()+1);
+		let monthList = new Array(dateCount).fill(0);
+		count = 0;
+        for(let i=0; i<dateCount; i++){
+			const temp = dateToString(tempDate);
+            if (approveIdx < approve.length && temp === approve[approveIdx].date) {
+				if (approve[approveIdx].type === 1) // 휴가
+					monthList[i] = 3;
+				else // 승인
+					monthList[i] = 1;
+				approveIdx++;
+			}
+			else if (gitIdx < git.length && temp === git[gitIdx]) {
+				monthList[i] = 1;
+				gitIdx++;
+			}
+			else {
+				count++;
+				if (pass >= count) monthList[i] = 2;
+			}
+			tempDate.setDate(tempDate.getDate()+1);
         }
         isCommitedList.push(monthList);
     });
@@ -137,7 +158,6 @@ async function GetOtherCommitLists(users, challenge_id, year, month){
 async function GetPersonalGrass(req, res){
     try {
 		const { user_id, challenge_id, year, month } = req.query;
-        
         const isCommitedList = await GetCommitList(user_id, challenge_id, year, month);
         res.status(201).json({isCommitedList: isCommitedList});
     }catch(err) {
