@@ -75,7 +75,9 @@ Approve.statics.findByUserChallangeMonth =async function(user_id, ch_id, year, m
     console.log(start);
     const end = new Date(year, month);
     console.log(end);
-    const result = await this.find({"user_id": user_id, "ch_id": ch_id, "state": true,
+
+    // !! 원래 승인 관련 데이터만 가져오도록 되어있었는데, 잔디 표시 방식 바꾸면서 type상관없이 모든 데이터 return하도록 변경함
+    const result = await this.find({"user_id": user_id, "ch_id": ch_id, "state": true, 
                             "date": {"$gte": start, "$lte": end} //두 날짜 사이에 있는 값 가져옴     
                         });
     return result;
