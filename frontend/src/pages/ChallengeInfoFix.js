@@ -18,11 +18,17 @@ function ChallengeInfoFix(props) {
 	const [open, setopen] = useState(false);
 	const [Month, setMonth] = useState(0);
 	const [Day, setDay] = useState(0);
+	const [Year, setYear] = useState(0);
 	const today = new Date();
-	const handleOpen = (check_true, a, b) => {
+	const handleOpen = (check_true, _year, _month, _day) => {
+		if(_month<1){
+			_month += 12
+			_year -= 1
+		}
 		if (!check_true) {
-			setMonth(a);
-			setDay(b);
+			setYear(_year);
+			setMonth(_month);
+			setDay(_day);
 			setopen(true);
 		}
 	};
@@ -47,6 +53,7 @@ function ChallengeInfoFix(props) {
 	}, [challengeData]);
 	const day = new Date();
 	const month = day.getMonth() + 1;
+	const year = day.getFullYear();
 	return (
 		<div className="challengeInfoFix">
 			<div className="body">
@@ -57,7 +64,7 @@ function ChallengeInfoFix(props) {
 					<Grid className="myGrass">
 						{MyGrass !== undefined && MyGrass[0].map((data) => (
 							<div className="setBtn">
-								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen(data[0], (month + 10) % 12, data[1])} role="button" tabIndex={0}>
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen(data[0], year, month - 2, data[1])} role="button" tabIndex={0}>
 									<div className="text">
 										{(month + 10) % 12}
 										/
@@ -68,7 +75,7 @@ function ChallengeInfoFix(props) {
 						))}
 						{MyGrass !== undefined && MyGrass[1].map((data) => (
 							<div className="setBtn">
-								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen(data[0], (month + 11) % 12, data[1])} role="button" tabIndex={0}>
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen(data[0], year, month - 1, data[1])} role="button" tabIndex={0}>
 									<div className="text">
 										{(month + 11) % 12}
 										/
@@ -79,7 +86,7 @@ function ChallengeInfoFix(props) {
 						))}
 						{MyGrass !== undefined && MyGrass[2].map((data) => (
 							<div className="setBtn">
-								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen(data[0], (month + 12) % 12, data[1])} role="button" tabIndex={0}>
+								<Grid className={['grass', data[0] ? 'fill-grass' : 'unfill-grass']} onClick={() => handleOpen(data[0], year, month, data[1])} role="button" tabIndex={0}>
 									<div className="text">
 										{(month + 12) % 12}
 										/
@@ -108,7 +115,7 @@ function ChallengeInfoFix(props) {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<RequestApproval onClose={handleClose} challengeId={_challengeId} userId={userData.userId} month={Month} day={Day} />
+						<RequestApproval onClose={handleClose} challengeId={_challengeId} userId={userData.userId} year={Year} month={Month} day={Day} />
 					</div>
 				</Fade>
 			</Modal>

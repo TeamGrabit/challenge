@@ -13,6 +13,7 @@ function ChallengeAll() {
 	const [page, setPage] = useState(1);
 	const [sel, setSel] = useState("name");
 	const [filter, setFilter] = useState("");
+	const [loading, setLoading] = useState(true);
 	const postsPerPage = 10;
 	const indexOfLast = page * postsPerPage;
 	const indexOfFirst = indexOfLast - postsPerPage;
@@ -51,13 +52,14 @@ function ChallengeAll() {
 			console.log(res.data);
 			setAllData(res.data.challenges.filter(info => info.state == 0));
 			setShowData(res.data.challenges.filter(info => info.state == 0));
+			setLoading(false);
 		});
 	}, []);
 	// console.log(allData);
 	return (
 		<div className="challengeAll">
 			<div>
-				<ChallengeTable data={currentPosts(showData)} user_id={user_id}/>
+				<ChallengeTable data={currentPosts(showData)} user_id={user_id} loading={loading}/>
 				<Paging page={page} count={showData.length} setPage={handlePage}/>
 				<div className="search">
 					<div className="search_field">
