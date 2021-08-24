@@ -70,11 +70,11 @@ Approve.statics.findByUserChallangeMonth =async function(user_id, ch_id, year, m
      * year, month를 기준으로 3달치 정보 return 
      * ex ) 2021, 7 이라고 하면 2021-05-01 ~ 2021-07-31 까지 
      */
-    console.log(year + " " +month);
+    //console.log(year + " " +month);
     const start = new Date(year, month-3);
-    console.log(start);
+    //console.log(start);
     const end = new Date(year, month);
-    console.log(end);
+    //console.log(end);
 
     // !! 원래 승인 관련 데이터만 가져오도록 되어있었는데, 잔디 표시 방식 바꾸면서 type상관없이 모든 데이터 return하도록 변경함
     const result = await this.find({"user_id": user_id, "ch_id": ch_id, "state": true, 

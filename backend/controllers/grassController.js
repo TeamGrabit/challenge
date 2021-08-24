@@ -74,43 +74,18 @@ async function GetCommitList(user_id, challenge_id, year, month){
     return isCommitedList;
 }
 
-// month-2,month-1,month 세 달치 commit 기록을 true, false배열로 반환. 
+// month-2,month-1,month 세 달치 commit 기록을 반환
 // return 형태 : [[전전달],[전달],[이번달]]
-// 챌린지 내 모든 유저의 기록을 합쳐서 출력
+// 챌린지 내 모든 유저의 기록을 합쳐서 출력 (해당 날짜에 커밋한 그룹원 수)
 async function GetCommitLists(users, challenge_id, year, month){
-	var dates = [];
-	for(let i=0; i<users.length; i++){
-		// Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
-    	const result = await Approve.findByUserChallangeMonth(users[i], challenge_id, year, month);
-		const approve = result.map(element => dateToString(element.date));
+	let isCommitedList = await GetCommitList(users[0], challenge_id, year, month);
+	isCommitedList = isCommitedList.map((month) => month.map((day) => {if (day !== 1) return 0; else return day;}));
 
-		// 해당 유저의 gitData에서 세 달에 대한 날짜 가져오기
-		var gitAll = await gitData.findOneByUserId(users[i]);
-		if(gitAll === null){
-			await CreateGitData(users[i]);
-			gitAll = await gitData.findOneByUserId(users[i]);
-		}
-		const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
-
-		// approve, git, 모든 user 중복 제거해서 담기
-		const temp = Array.from(new Set(dates.concat(approve))).sort()
-		dates = Array.from(new Set(temp.concat(git))).sort();
+	for(let i=1; i<users.length; i++){
+		const temp = await GetCommitList(users[i], challenge_id, year, month);
+		isCommitedList = isCommitedList.map((month, i) => month.map((day, j) => {if (temp[i][j] == 1) return day+1; else return day;}));
 	}
-
-	// 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 true, false 배열로 만들기 
-	const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
-	const isCommitedList = []; 
-	var tempDate = new Date(year, month-3);
-	dateCounts.forEach(dateCount => {
-		var monthList = new Array(dateCount).fill(false);
-		for(var i=0; i< dateCount;i++){
-			if (dates.find(element => element == dateToString(tempDate)) !== undefined)
-				monthList[i] = true;
-			tempDate.setDate(tempDate.getDate()+1);
-		}
-		isCommitedList.push(monthList);
-	});
-
+	//console.log(isCommitedList);
 	return isCommitedList;
 }
 
