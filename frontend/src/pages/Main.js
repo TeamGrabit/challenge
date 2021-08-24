@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles, Tabs, Tab } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import ChallengeList from '../components/ChallengeList';
+import { ChallengeList } from '../components';
 import { useUserState } from '../MVVM/Model/UserModel';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function Main() {
 	const user_id = useUserState();
 	const challengeData = useChallengeState();
-	console.log(challengeData);
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event, newValue) => {

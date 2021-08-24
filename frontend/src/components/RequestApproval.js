@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Button, Input, RadioGroup, FormControlLabel, Radio, TextareaAutosize } from '@material-ui/core';
 import { useCreateApprove } from '../MVVM/ViewModel/ApproveViewModel';
 
-function RequestApproval({ onClose, challengeId, userId, month, day }) {
+function RequestApproval({ onClose, challengeId, userId, year, month, day }) {
 	const createApprove = useCreateApprove();
 	const [Type, setType] = useState(0);
 	const [Message, setMessage] = useState("");
-	const chooseExemption = () => {
+	const chooseApprove = () => {
 		setType(0);
 	};
-	const chooseApprove = () => {
+	const chooseVacation = () => {
 		setType(1);
-	};
+	}
 	const changeMessage = (e) => {
 		setMessage(e.currentTarget.value);
 	};
@@ -21,10 +21,10 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 			user_id: userId,
 			type: Type,
 			message: Message,
-			request_date: `${month}/${day}`
+			request_date: `${year}-${month}-${day}`
 		};
-		const result = await createApprove(approveInfo, onClose);
-		if (result === false || result === undefined) {
+		const response = await createApprove(approveInfo, onClose);
+		if (response === undefined || response.result === false) {
 			alert('요청 실패');
 		} else {
 			alert('요청 성공');
@@ -37,20 +37,12 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 			</div>
 			<RadioGroup
 				className="selectType"
-				defaultValue="pass"
+				defaultValue="approval"
 				row
 				aria-label="type"
 				name="type"
-				defaultChecked="pass"
+				defaultChecked="approval"
 			>
-				<FormControlLabel
-					className="typeLabel"
-					value="pass"
-					control={<Radio className="radioBtn" color="primary" />}
-					label="면제"
-					labelPlacement="end"
-					onClick={chooseExemption}
-				/>
 				<FormControlLabel
 					className="typeLabel"
 					value="approval"
@@ -58,6 +50,14 @@ function RequestApproval({ onClose, challengeId, userId, month, day }) {
 					label="승인"
 					labelPlacement="end"
 					onClick={chooseApprove}
+				/>
+				<FormControlLabel
+					className="typeLabel"
+					value="vacation"
+					control={<Radio className="radioBtn" color="primary" />}
+					label="청원휴가"
+					labelPlacement="end"
+					onClick={chooseVacation}
 				/>
 			</RadioGroup>
 			<TextareaAutosize

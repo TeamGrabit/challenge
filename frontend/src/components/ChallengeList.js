@@ -1,19 +1,19 @@
 import React from 'react';
 import { Button, Grid, Box } from '@material-ui/core';
+import { Spinner } from '../components';
 import { Link } from 'react-router-dom';
 
 function ChallengeList({ list, index, user_id }) {
-	console.log(user_id);
-	console.log(list);
 	return (
 		<div>
 			<div className="challengeList">
+				{user_id.userId === undefined ? <Spinner /> :
 				<Grid container spacing={3} className="cha_list">
 					{list.map((c, i) => (
 						index === c.state &&
 						<Grid item lg={3} md={4} sm={6} xs={12}>
-							<Link className="link" to={`/challenge/info/${c.challenge_id}`}>
-								<div className="cha_box">
+							<div className="cha_box">
+								<Link className="link" to={`/challenge/info/${c.challenge_id}`}>
 									<Box className="cha_inner">
 										<div className="inner_text">
 											{c.name}
@@ -31,8 +31,8 @@ function ChallengeList({ list, index, user_id }) {
 											}
 										</div>
 									</Box>
-								</div>
-							</Link>
+								</Link>
+							</div>
 						</Grid>
 					))}
 					{index === 0 && (
@@ -49,6 +49,7 @@ function ChallengeList({ list, index, user_id }) {
 						</Grid>
 					)}
 				</Grid>
+				}
 			</div>
 		</div>
 	);

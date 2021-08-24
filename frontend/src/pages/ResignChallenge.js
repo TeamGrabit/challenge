@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Grid, Box, Tabs, Tab, makeStyles, withStyles, useMediaQuery } from '@material-ui/core';
+import { ResignComponent, Spinner } from '../components';
 import { API_URL } from '../CommonVariable';
-import { useUserState } from '../MVVM/Model/UserModel';
+import UserRedirect from '../auth/UserRedirect';
 
 function ResignChallenge({ match }) {
 	const CId = match.params.challengeId;
 	const [challengeData, setChallengeData] = useState([]);
+	const [loading, setLoading] = useState(true);
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
-			console.log(res.data);
 			setChallengeData(res.data);
-			console.log(challengeData);
+			setLoading(false);
 		});
 	}, [CId]);
 	const [value, setValue] = useState(0);
@@ -77,61 +78,65 @@ function ResignChallenge({ match }) {
 	}))((props) => <Tab disableRipple {...props} />);
 
 	return (
-		<div className="resignChallenge">
-			<div className="content">
-				<div className="cha_nameBox">
-					<div className="cha_name">
-						<div>{challengeData.name}</div>
+		<>
+			<UserRedirect />
+			{loading ? <Spinner /> :
+			<div className="resignChallenge">
+				<div className="content">
+					<div className="cha_nameBox">
+						<div className="cha_name">
+							<div>{challengeData.name}</div>
+						</div>
 					</div>
-				</div>
-				<div className={classes.root}>
-					{
-						isMobile ?
-							<Tabs
-								orientation="vertical"
-								className={classes.tabs}
-								value={value}
-								onChange={handleChange}
-								aria-label="ant example"
-								indicatorColor="transparent"
-							>
-								<MobileTab label="멤버" />
-							</Tabs>
-							:
-							<Tabs
-								orientation="vertical"
-								className={classes.tabs}
-								value={value}
-								onChange={handleChange}
-								aria-label="ant example"
-								indicatorColor="transparent"
-							>
-								<ManTab label="챌린지 멤버" />
-							</Tabs>
-					}
-					<div className="comp_all">
-						<div className="comp_box">
-							{/* <div className="title_box">
-								<div className="comp_title">챌린지 멤버 관리</div>
-							</div>
-							<div className="content_box">
-								<Grid container spacing={1}>
-									{challengeData.challenge_users.map((c) => (
-										<Grid item lg={3} md={4} sm={6} xs={12}>
-											<div className="member_box">
-												<Box className="member_inner" value={c}>
-													{c}
-												</Box>
-											</div>
-										</Grid>
-									))}
-								</Grid>
-							</div> */}
+					<div className={classes.root}>
+						{
+							isMobile ?
+								<Tabs
+									orientation="vertical"
+									className={classes.tabs}
+									value={value}
+									onChange={handleChange}
+									aria-label="ant example"
+									indicatorColor="transparent"
+								>
+									<MobileTab label="멤버" />
+								</Tabs>
+								:
+								<Tabs
+									orientation="vertical"
+									className={classes.tabs}
+									value={value}
+									onChange={handleChange}
+									aria-label="ant example"
+									indicatorColor="transparent"
+								>
+									<ManTab label="챌린지 멤버" />
+								</Tabs>
+						}
+						<div className="comp_all">
+							<ResignComponent challengeData={challengeData} loading={loading} />
+								{/* <div className="title_box">
+									<div className="comp_title">챌린지 멤버 관리</div>
+								</div>
+								<div className="content_box">
+									<Grid container spacing={1}>
+										{challengeData.challenge_users.map((c) => (
+											<Grid item lg={3} md={4} sm={6} xs={12}>
+												<div className="member_box">
+													<Box className="member_inner" value={c}>
+														{c}
+													</Box>
+												</div>
+											</Grid>
+										))}
+									</Grid>
+								</div> */}
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+			}
+		</>
 	);
 }
 
