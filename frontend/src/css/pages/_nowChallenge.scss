@@ -166,119 +166,22 @@
 	}
 }
 
-.inviteModalPaper {
-	background-color: white;
-	width: 40vw;
-	max-height: 70vh;
+.admit-name {
+	display: flex;
+	justify-content: space-between;
+}
 
-	.head {
-		font-size: 1.5rem;
-		font-weight: bold;
-		padding: 1rem 1rem;
-		background-color: $green2;
-		max-height: 20vh;
-	}
-	.body {
-		padding: 1rem 1rem;
-		display: flex;
-		flex-direction: column;
+.admit-btn-con{
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 
-		.input-con {
-			display: flex;
-			align-items: center;
-		}
-		.icon-con {
-			display: flex;
-			justify-content: center;
-			margin-top: 1rem;
-		}
-	}
-	.admit-body {
-		padding: 1rem 1rem;
-		display: flex;
-		flex-direction: column;
-		max-height: 45vh;
-		overflow: auto;
-
-		.admit-content {
-			border: 1px solid gray;
-			border-radius: 5px;
-			margin-bottom: 1rem;
-			padding: 1rem;
-
-			.admit-name {
-				font-weight: bold;
-			}
-
-			.admit-btn-con{
-				display: flex;
-				justify-content: center;
-			}
-		}
-	}
-	.MuiFormLabel-root {
-		color: black !important;
-	}
-	.MuiOutlinedInput-notchedOutline {
-		border-color: black !important;
+	p{
+		padding-right: 10px;
 	}
 }
 
-
-.pwModalPaper {
-	background-color: white;
-	width: 300px;
-	max-height: 70vh;
-
-	.head {
-		font-size: 1.5rem;
-		font-weight: bold;
-		padding: 1rem 1rem;
-		background-color: $green2;
-		max-height: 20vh;
-	}
-	.body {
-		padding: 1rem 1rem;
-		display: flex;
-		flex-direction: column;
-
-		.input-con {
-			display: flex;
-			align-items: center;
-		}
-		.icon-con {
-			display: flex;
-			justify-content: center;
-			margin-top: 1rem;
-		}
-	}
-	.admit-body {
-		padding: 1rem 1rem;
-		display: flex;
-		flex-direction: column;
-		max-height: 45vh;
-		overflow: auto;
-
-		.admit-content {
-			border: 1px solid gray;
-			border-radius: 5px;
-			margin-bottom: 1rem;
-			padding: 1rem;
-
-			.admit-name {
-				font-weight: bold;
-			}
-
-			.admit-btn-con{
-				display: flex;
-				justify-content: center;
-			}
-		}
-	}
-	.MuiFormLabel-root {
-		color: black !important;
-	}
-	.MuiOutlinedInput-notchedOutline {
-		border-color: black !important;
-	}
+.input-con {
+	display: flex;
+	align-items: center;
 }

@@ -26,14 +26,14 @@ function AlarmModal({ open, closeHandler }) {
 			}}
 		>
 			<Fade in={open}>
-				<Grid className="inviteModalPaper">
+				<Grid className="modal-background-4">
 					<Grid className="head">알림</Grid>
-					<Grid className="admit-body">
+					<Grid className="body">
 						{
-							Alarms.length === 0 ? <p>데이터가 없습니다.</p>
+							Alarms === null || Alarms.length === 0 ? <p>데이터가 없습니다.</p>
 								: Alarms === undefined ? <p>데이터를 불러오는 중입니다.</p>
 									: Alarms.map((d) => (
-										<Grid className="admit-content">
+										<Grid className="body-content-card">
 											{d.message}
 										</Grid>
 									))

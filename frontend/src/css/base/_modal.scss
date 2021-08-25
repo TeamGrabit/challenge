@@ -1,0 +1,50 @@
+.modal-background-4 {
+	background-color: white;
+	width: 400px;
+	max-height: 70vh;
+
+	.head {
+		font-size: 1.5rem;
+		font-weight: bold;
+		padding: 1rem 1rem;
+		background-color: $green2;
+		max-height: 20vh;
+	}
+	.body {
+		padding: 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		max-height: 45vh;
+		overflow: auto;
+
+		.body-content-card {
+			border: 1px solid gray;
+			border-radius: 5px;
+			margin-bottom: 1rem;
+			padding: 1rem;
+		}
+		
+	}
+	.MuiFormLabel-root {
+		color: black !important;
+	}
+	.MuiOutlinedInput-notchedOutline {
+		border-color: black !important;
+	}
+}
+
+// scroll-bar custom
+.body::-webkit-scrollbar {
+	width: 6px;
+}
+.body::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+.body::-webkit-scrollbar-thumb {
+	border-radius: 3px;
+	background-color: $green4;
+}
+.body::-webkit-scrollbar-button {
+	width: 0;
+	height: 0;
+}
