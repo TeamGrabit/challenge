@@ -14,7 +14,8 @@ function dateToString(date) { // 시간 빼고 오직 년월일만
 	return year+'-'+month+'-'+day;
 }
 
-// month-2,month-1,month 세 달치 commit 기록을 true, false배열로 반환. 
+// 유저 한명의 month-2,month-1,month 세 달치 commit 기록을 int배열로 반환. 
+// 0 : 안함(벌금), 1 : 함+승인, 2 : 패스, 3 : 휴가
 // return 형태 : [[전전달],[전달],[이번달]]
 async function GetCommitList(user_id, challenge_id, year, month){
     // Approve 모델에서, 해당 유저, 해당 챌린지, 해당 년도,달에 대한 정보 긁어오기 
@@ -29,20 +30,18 @@ async function GetCommitList(user_id, challenge_id, year, month){
     }
     const git = await crawling.getCommitDate(gitAll.commit_data, year, month);
 
-	// 정렬 
-	approve.sort(function(a,b) { // 오름차순 정렬 
+	// 오름차순 정렬 
+	approve.sort(function(a,b) { 
 		if (a.date > b.date) return 1;
 		else if (a.date < b.date) return -1;
 		else return 0;
 	})
 	git.sort();
-	//console.log(approve);
-	//console.log(git);
-
+	
 	// 해당 챌린지의 pass횟수 조회 
 	const pass = 4; // TODO : 챌린지에 pass 필드 생기면 그거 가져오는걸로 변경 
 
-    // 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 true, false 배열로 만들기 
+    // 세달동안 , 1~마지막일 까지의 커밋 여부를 달별로 int 배열로 만들기 
     const dateCounts = [new Date(year, month-2, 0).getDate(),new Date(year, month-1, 0).getDate(),new Date(year, month, 0).getDate()];
     const isCommitedList = []; 
     let tempDate = new Date(year, month-3);
@@ -52,20 +51,21 @@ async function GetCommitList(user_id, challenge_id, year, month){
 		count = 0;
         for(let i=0; i<dateCount; i++){
 			const temp = dateToString(tempDate);
+			// approve에 있는 날짜면
             if (approveIdx < approve.length && temp === approve[approveIdx].date) {
-				if (approve[approveIdx].type === 1) // 휴가
-					monthList[i] = 3;
-				else // 승인
-					monthList[i] = 1;
+				if (approve[approveIdx].type === 1) monthList[i] = 3; // 휴가
+				else monthList[i] = 1; // 승인
 				approveIdx++;
 			}
+			// git data에 있는 날짜면
 			else if (gitIdx < git.length && temp === git[gitIdx]) {
 				monthList[i] = 1;
 				gitIdx++;
 			}
+			// 두 군데 아무데도 없으면 (안한 날)
 			else {
 				count++;
-				if (pass >= count) monthList[i] = 2;
+				if (pass >= count) monthList[i] = 2; // pass 횟수 만큼은 2로 바꿔주기 
 			}
 			tempDate.setDate(tempDate.getDate()+1);
         }
@@ -74,24 +74,24 @@ async function GetCommitList(user_id, challenge_id, year, month){
     return isCommitedList;
 }
 
-// month-2,month-1,month 세 달치 commit 기록을 반환
-// return 형태 : [[전전달],[전달],[이번달]]
-// 챌린지 내 모든 유저의 기록을 합쳐서 출력 (해당 날짜에 커밋한 그룹원 수)
+// 챌린지 내 모든 유저의 세달치 기록을 합쳐서 return
+// return 형태 : [[전전달],[전달],[이번달]] 
+// 배열 값의 의미 : 해당 날짜에 커밋한 그룹원 수
 async function GetCommitLists(users, challenge_id, year, month){
 	let isCommitedList = await GetCommitList(users[0], challenge_id, year, month);
-	isCommitedList = isCommitedList.map((month) => month.map((day) => {if (day !== 1) return 0; else return day;}));
+	isCommitedList = isCommitedList.map((month) => month.map((day) => {if (day === 1) return day; else return 0;}));
 
 	for(let i=1; i<users.length; i++){
 		const temp = await GetCommitList(users[i], challenge_id, year, month);
-		isCommitedList = isCommitedList.map((month, i) => month.map((day, j) => {if (temp[i][j] == 1) return day+1; else return day;}));
+		isCommitedList = isCommitedList.map((month, i) => month.map((day, j) => {if (temp[i][j] === 1) return day+1; else return day;}));
 	}
 	//console.log(isCommitedList);
 	return isCommitedList;
 }
 
-// month-2,month-1,month 세 달치 commit 기록을 true, false배열로 반환. 
+// 챌린지 내 다른 유저의 세 달치 기록을 각각 return
 // return 형태 : [[[전전달],[전달],[이번달]], [유저2의 기록], ...]
-// 챌린지 내 다른 유저의 기록을 출력
+// 0 : 안함(벌금), 1 : 함+승인, 2 : 패스, 3 : 휴가
 async function GetOtherCommitLists(users, challenge_id, year, month){
 	var isCommitedList = [];
 	for(let i=0; i<users.length; i++){
@@ -145,7 +145,6 @@ async function GetOtherGrass(req, res){
 				others.splice(i,1);
 			}
 		}
-		console.log(others);
         const isCommitedList = await GetOtherCommitLists(others, challenge_id, year, month);
         res.status(201).json({OtherList: isCommitedList});
     }catch(err) {
