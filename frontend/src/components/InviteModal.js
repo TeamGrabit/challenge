@@ -35,7 +35,7 @@ function InviteModal({ open, closeHandler, CId }) {
 			}}
 		>
 			<Fade in={open}>
-				<Grid className="inviteModalPaper">
+				<Grid className="modal-background-4">
 					<Grid className="head">초대하기</Grid>
 					<Grid className="body">
 						<form onSubmit={inviteHandler}>
