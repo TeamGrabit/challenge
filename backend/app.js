@@ -4,21 +4,15 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const expressSession = require('express-session');
 const path = require('path');
-
 const port = process.env.PORT || 5000;
-
 const bodyParser = require('body-parser')
-
 const router = require('./routes/routes');
-
-
 const config = require('./config/key');
-
+const { jwtMiddleware } = require('./lib/token');
 const mongoose = require('mongoose');
 
 require("dotenv").config();
 const cookieSecret = process.env.COOKIE_SECRET;
-
 
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
@@ -48,6 +42,7 @@ app.use(expressSession({
 }))
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(jwtMiddleware);
 app.use('/',router);
 
 if(process.env.NODE_ENV=='production') {

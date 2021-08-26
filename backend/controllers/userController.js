@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const GitData = require('../models/gitDataModel');
 const jwt = require('jsonwebtoken');
+const { createToken, jwtMiddleware } = require('../lib/token');
 const Challenge = require('../models/challengeModel');
 const { ObjectID } = require('bson');
 const { find } = require('../models/userModel');
@@ -313,16 +314,22 @@ async function LogIn(req, res, next) {
 			res.status(400).json({ error: "login failed" });
 		}
 		else {//같으면 jwtToken 발급 
-			// const token = jwt.createToken(user);
-			const token = jwt.sign({
+			const payload = {
 				user_id: user.user_id,
-				git_id: user.git_id,
+			  	git_id: user.git_id,
 			}
-				, SecretKey, {
-				expiresIn: '1h'
-			}
-			);
-			res.cookie('user', token, { sameSite: 'none', secure: true });
+			const token = createToken(payload);
+			console.log(token);
+			// const token = jwt.sign({
+			// 	user_id: user.user_id,
+			// 	git_id: user.git_id,
+			// }
+			// 	, SecretKey, {
+			// 	expiresIn: '1h'
+			// }
+			// );
+			res.cookie('user', token, { //httpOnly:true, 
+				sameSite: 'none', secure: true });
 			console.log('git data 교체 --------------------',id)
 			await CreateGitData(id);
 			res.status(201).json({
@@ -340,34 +347,24 @@ async function LogIn(req, res, next) {
 function LogOut(req, res, next) {
 	try {
 		console.log("logout");
-		res.cookie("user", "", { sameSite: 'none', secure: true }).json({ logoutSuccess: true });
+		res.cookie("user", null, { httpOnly: true, sameSite: 'none', secure: true }).json({ logoutSuccess: true });
 	} catch (err) {
 		res.status(401).json({ error: 'error' });
 		console.error(err);
 		next(err);
 	}
 }
-function VerifyToken(req, res, next) {
+function Check(req, res, next) {
 	try {
-		console.log("verify Token");
-		// console.log(req.cookies);
-		// console.log(req.cookies.user);
-		const clientToken = req.cookies.user;
-
-		const decoded = jwt.verify(clientToken, SecretKey);
-		console.log(decoded);
-		if (decoded) {
-			// console.log(decoded);
-			// res.locals.userId = decoded.user_id;
-			res.status(201).json({ userId: decoded.user_id, gitId: decoded.git_id });
-			next();
+		const { user_id, git_id } = req.user;
+		const user = { user_id, git_id };
+		if (!user) {
+			throw new Error;
 		}
-		else {
-			res.status(401).json({ error: 'unauthorized' });
-		}
+		res.json(user);
 	} catch (err) {
-		// console.log(err);
-		res.status(401).json({ error: 'token expired' });
+		console.log(err);
+		res.status(401).json({ error: 'error' });
 	}
 }
 
@@ -447,7 +444,7 @@ module.exports = {
 	logIn: LogIn,
 	logOut: LogOut,
 	getChallengeList: GetChallengeList,
-	verifyToken: VerifyToken,
+	check: Check,
 	outChallenge: OutChallenge,
 	checkIdDupl: CheckIdDupl,
 	changePw: ChangePw,
