@@ -25,12 +25,12 @@ async function jwtMiddleware(req, res, next) {
         if (decoded.exp - Date.now()/1000 < renewTiming) {
             const { user_id, git_id } = decoded;
             const freshToken = createToken({ user_id, git_id });
-            res.cookie('user', token, { httpOnly: true, sameSite: 'none', secure: true });
+            res.cookie('user', freshToken, { httpOnly: true, sameSite: 'none', secure: true });
         }
         req.user = decoded;
     } catch(e) {
         // token validation 실패  
-        console.log(e);
+        console.log("token validation fail");
         req.user = null;
     }
     return next();
