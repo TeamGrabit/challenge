@@ -7,7 +7,7 @@ function ChallengeList({ list, index, user_id }) {
 	return (
 		<div>
 			<div className="challengeList">
-				{user_id.userId === undefined ? <Spinner /> :
+				{list === null ? <Spinner /> :
 				<Grid container spacing={3} className="cha_list">
 					{list.map((c, i) => (
 						index === c.state &&
