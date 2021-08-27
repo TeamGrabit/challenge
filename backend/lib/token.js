@@ -14,7 +14,7 @@ function decodeToken(token) {
 
 async function jwtMiddleware(req, res, next) {
     const token = req.cookies.user;
-
+    console.log(token);
     if (!token) return next(); // 토큰이 없으면 바로 다음 작업 진행
 
     try {
@@ -29,7 +29,8 @@ async function jwtMiddleware(req, res, next) {
         }
         req.user = decoded;
     } catch(e) {
-        // token validation 실패  
+        // token validation 실패 
+        console.log(e); 
         console.log("token validation fail");
         req.user = null;
     }

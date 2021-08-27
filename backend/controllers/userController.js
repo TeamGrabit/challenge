@@ -71,7 +71,7 @@ function DeleteUser(req, res) {
 	var length = len(chlist);
 
 	for (let i = 0; i < length; i++) {
-		OutChallenge({ userId: _id, challengeId: chlist[i] },)
+		OutChallenge({ user_id: _id, challengeId: chlist[i] },)
 
 	}
 
@@ -92,8 +92,8 @@ function DeleteUser(req, res) {
 
 }
 
-function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list반환.
-	const userId = req.params.userId;
+function GetChallengeList(req, res) {		// user_id를 기반으로 user의 ch_list반환.
+	const user_id = req.params.user_id;
 
 	var challengeList = [];
 
@@ -156,7 +156,7 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 			return challengeList
 		}
 
-		User.findOneByUsername(userId)
+		User.findOneByUsername(user_id)
 			.then((user) => {
 				if (user) {
 					list = user.ch_list;
@@ -179,13 +179,13 @@ function GetChallengeList(req, res) {		// userId를 기반으로 user의 ch_list
 }
 
 function OutChallenge(req, res) {
-	const { userId, challengeId } = req.body;
+	const { user_id, challengeId } = req.body;
 
 	const id = ObjectID(challengeId);
 
 	var chArray
 
-	User.findOneByUsername(userId)
+	User.findOneByUsername(user_id)
 		.then((user) => {
 			chArray = user.ch_list
 
@@ -211,7 +211,7 @@ function OutChallenge(req, res) {
 			console.error(err);
 		})
 
-	const outch = (chArray) => User.findOneAndUpdate({ user_id: userId }, {
+	const outch = (chArray) => User.findOneAndUpdate({ user_id: user_id }, {
 		$set: {
 			ch_list: chArray
 		}
@@ -234,7 +234,7 @@ function OutChallenge(req, res) {
 
 			for (let i = 0; i < userAry.length; i++) {
 				_id = userAry[i]
-				temp1 = JSON.stringify(userId);
+				temp1 = JSON.stringify(user_id);
 				temp2 = JSON.stringify(_id);
 
 				if (temp1 == temp2) {
@@ -250,7 +250,7 @@ function OutChallenge(req, res) {
 			for (let i = 0; i < userCommitAry.length; i++) {
 				_id = userCommitAry[i]
 
-				temp1 = JSON.stringify(userId);
+				temp1 = JSON.stringify(user_id);
 				temp2 = JSON.stringify(_id.user_id);
 
 				if (temp1 == temp2) {
@@ -319,21 +319,14 @@ async function LogIn(req, res, next) {
 			  	git_id: user.git_id,
 			}
 			const token = createToken(payload);
-			console.log(token);
-			// const token = jwt.sign({
-			// 	user_id: user.user_id,
-			// 	git_id: user.git_id,
-			// }
-			// 	, SecretKey, {
-			// 	expiresIn: '1h'
-			// }
-			// );
+			//console.log(token);
 			res.cookie('user', token, { //httpOnly:true, 
 				sameSite: 'none', secure: true });
 			console.log('git data 교체 --------------------',id)
 			await CreateGitData(id);
 			res.status(201).json({
-				result: true
+				result: true,
+				user : payload
 			});
 		}	
 	} catch (err) {

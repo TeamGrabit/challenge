@@ -113,10 +113,10 @@ Challenge.findOneById(id)
 
 
 const join = (challenge) => {
-	// challenge에 userId 추가.
+	// challenge에 user_id 추가.
 	userArray = challenge.challenge_users;
 	userCount = challenge.challenge_user_num + 1;
-	userArray.push(userId);
+	userArray.push(user_id);
 	db.collection("challenges").updateOne({ _id: id }, {
 		$set: {
 			challenge_users: userArray,

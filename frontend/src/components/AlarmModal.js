@@ -10,7 +10,7 @@ function AlarmModal({ open, closeHandler }) {
 	const GetAlarms = useGetAlarms();
 	const [Alarms, setAlarms] = useState([]);
 	useEffect(() => {
-		GetAlarms(userData.userId).then((docs) => {
+		GetAlarms(userData.user_id).then((docs) => {
 			setAlarms(docs)
 		})
 	}, [userData])

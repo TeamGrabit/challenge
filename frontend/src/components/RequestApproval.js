@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, RadioGroup, FormControlLabel, Radio, TextareaAutosize } from '@material-ui/core';
 import { useCreateApprove } from '../MVVM/ViewModel/ApproveViewModel';
 
-function RequestApproval({ onClose, challengeId, userId, year, month, day }) {
+function RequestApproval({ onClose, challengeId, user_id, year, month, day }) {
 	const createApprove = useCreateApprove();
 	const [Type, setType] = useState(0);
 	const [Message, setMessage] = useState("");
@@ -18,7 +18,7 @@ function RequestApproval({ onClose, challengeId, userId, year, month, day }) {
 	const submitApprove = async () => {
 		const approveInfo = {
 			ch_id: challengeId,
-			user_id: userId,
+			user_id: user_id,
 			type: Type,
 			message: Message,
 			request_date: `${year}-${month}-${day}`

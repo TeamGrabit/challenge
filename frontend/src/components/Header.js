@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import {
 	Button,
 	AppBar,
@@ -11,23 +12,24 @@ import {
 } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useLogoutUser, useVerifyUser } from '../MVVM/ViewModel/UserViewModel';
+import { useLogoutUser, useGetUserInfo } from '../MVVM/ViewModel/UserViewModel';
 
 function Header({ alarmHandler }) {
 	const userState = useUserState();
 	const userlogout = useLogoutUser();
-	const userVerify = useVerifyUser();
+	const getUserInfo = useGetUserInfo();
 
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
-
+	const [cookies, setCookie, removeCookie] = useCookies(['user']);
 	useEffect(() => {
-		userVerify();
+		if (cookies.user)
+			getUserInfo();
 	}, []);
 
 	useEffect(() => {
 		if (userState.auth === "user") setIsLogined(true);
-		console.log(userState);
+		//console.log(userState);
 	}, [userState]);
 
 	const handleClick = (e) => {
@@ -80,7 +82,7 @@ function Header({ alarmHandler }) {
 								<div className="alarm">1</div>
 							</IconButton>
 							<IconButton onClick={handleClick}>
-								<img src={`https://github.com/${userState.gitId}.png`} alt={`${userState.gitId}`} className="profileImg" />
+								<img src={`https://github.com/${userState.git_id}.png`} alt={`${userState.git_id}`} className="profileImg" />
 							</IconButton>
 							<Popover
 								id={id}

@@ -14,7 +14,7 @@ function MyPage() {
 	const [GitId, setGitId] = useState();
 	const [open, setopen] = useState(false);
 	useEffect(() => {
-		axios.get(`${API_URL}/user/${userData.userId}`).then((res) => {
+		axios.get(`${API_URL}/user/${userData.user_id}`).then((res) => {
 			setName(res.data.user_name);
 			setEmail(res.data.user_email);
 			setGitId(res.data.git_id);
@@ -34,7 +34,7 @@ function MyPage() {
 		setGitId(e.currentTarget.value);
 	};
 	const save = async () => {
-		const result = await Change(userData.userId, Name, GitId);
+		const result = await Change(userData.user_id, Name, GitId);
 		console.log(result)
 		if (result) {
 			alert('정보를 수정하였습니다.');
@@ -48,7 +48,7 @@ function MyPage() {
 					<Grid container spacing={3} justify="center">
 						<Grid item>
 							<Box className="pro_img">
-								<img src={`https://github.com/${userData.gitId}.png`} alt={`${userData.gitId}`} className="pro_img" />
+								<img src={`https://github.com/${userData.git_id}.png`} alt={`${userData.git_id}`} className="pro_img" />
 							</Box>
 						</Grid>
 					</Grid>
@@ -130,7 +130,7 @@ function MyPage() {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<ChangePassword onClose={handleClose} id={userData.userId} />
+						<ChangePassword onClose={handleClose} id={userData.user_id} />
 					</div>
 				</Fade>
 			</Modal>

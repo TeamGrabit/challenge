@@ -13,7 +13,7 @@ const alarmController = require('../controllers/alarmController');
 // <-- userCon
 router.post('/signup', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
-router.get('/challenge/list/:userId', userController.getChallengeList);
+router.get('/challenge/list/:user_id', userController.getChallengeList);
 router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);

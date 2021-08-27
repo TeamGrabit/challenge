@@ -46,7 +46,7 @@ function ManageComponent({ value, index, challengeData, setChallengeData, CId })
 			challenge_start: sDate,
 			challenge_end: eDate,
 			challenge_leader: leader,
-			user_id: user_id.userId,
+			user_id: user_id.user_id,
 			private_key: password
 		};
 		const result = await saveChallenge(CId, challengeInfo);

@@ -5,7 +5,7 @@ import { API_URL } from '../../CommonVariable';
 
 const LoginUserContext = createContext((id, pw) => { });
 const LogoutUserContext = createContext(() => { });
-const VerifyUserContext = createContext(() => { });
+const GetUserInfoContext = createContext(() => { });
 const SendAuthMailContext = createContext((email) => { });
 const CheckAuthMailContext = createContext((email, authNum) => { });
 const CheckUniqueIdContext = createContext((id) => { });
@@ -19,30 +19,33 @@ export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
 	const userDispatch = useUserDispatch();
 
-	const VerifyUser = async () => {
-		await axios.post(`${API_URL}/auth/jwtvalidcheck`, {}, {
+	const GetUserInfo = async () => {
+		await axios.post(`${API_URL}/check`, {}, {
 			withCredentials: true,
 		}).then((res) => {
-			console.log(res.data);
+			//console.log(res.data);
 			userDispatch({
 				...res.data,
 				auth: "user"
 			});
 		});
-		console.log(user);
+		//console.log(user);
 	};
 	const LoginUser = async (id, pw) => {
 		let flag = false;
 		await axios.post(`${API_URL}/login`, { user_id: id, user_pw: pw }, {
 			withCredentials: true,
 		}).then((res) => {
-			console.log(res.data.result);
+			//console.log(res.data.result);
 			if (res.data.result) flag = true;
+			userDispatch({
+				...res.data.user,
+				auth: "user"
+			});
 		}).catch((err)=> {
 			//console.log(error.response.data);
 			alert(err.response.data.error);
 		});
-		await VerifyUser();
 		return flag;
 	};
 
@@ -140,7 +143,7 @@ export const UserLogicProvider = ({ children }) => {
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
-				<VerifyUserContext.Provider value={VerifyUser}>
+				<GetUserInfoContext.Provider value={GetUserInfo}>
 					<SendAuthMailContext.Provider value={SendAuthMail}>
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
@@ -158,7 +161,7 @@ export const UserLogicProvider = ({ children }) => {
 							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
 					</SendAuthMailContext.Provider>
-				</VerifyUserContext.Provider>
+				</GetUserInfoContext.Provider>
 			</LogoutUserContext.Provider>
 		</LoginUserContext.Provider>
 	);
@@ -174,8 +177,8 @@ export function useLogoutUser() {
 	return context;
 }
 
-export function useVerifyUser() {
-	const context = useContext(VerifyUserContext);
+export function useGetUserInfo() {
+	const context = useContext(GetUserInfoContext);
 	return context;
 }
 
