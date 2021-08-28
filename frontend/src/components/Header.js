@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import {
 	Button,
 	AppBar,
@@ -12,24 +11,16 @@ import {
 } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useUserState } from '../MVVM/Model/UserModel';
-import { useLogoutUser, useGetUserInfo } from '../MVVM/ViewModel/UserViewModel';
-
+import { useLogoutUser } from '../MVVM/ViewModel/UserViewModel';
 function Header({ alarmHandler }) {
 	const userState = useUserState();
 	const userlogout = useLogoutUser();
-	const getUserInfo = useGetUserInfo();
 
 	const [isLogined, setIsLogined] = useState(false);
 	const [anchorEl, setAnchorEl] = useState(null);
-	const [cookies, setCookie, removeCookie] = useCookies(['user']);
-	useEffect(() => {
-		if (cookies.user)
-			getUserInfo();
-	}, []);
 
 	useEffect(() => {
 		if (userState.auth === "user") setIsLogined(true);
-		//console.log(userState);
 	}, [userState]);
 
 	const handleClick = (e) => {

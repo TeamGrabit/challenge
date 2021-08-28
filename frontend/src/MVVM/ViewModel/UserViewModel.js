@@ -5,7 +5,6 @@ import { API_URL } from '../../CommonVariable';
 
 const LoginUserContext = createContext((id, pw) => { });
 const LogoutUserContext = createContext(() => { });
-const GetUserInfoContext = createContext(() => { });
 const SendAuthMailContext = createContext((email) => { });
 const CheckAuthMailContext = createContext((email, authNum) => { });
 const CheckUniqueIdContext = createContext((id) => { });
@@ -19,21 +18,9 @@ export const UserLogicProvider = ({ children }) => {
 	const user = useUserState();
 	const userDispatch = useUserDispatch();
 
-	const GetUserInfo = async () => {
-		await axios.post(`${API_URL}/check`, {}, {
-			withCredentials: true,
-		}).then((res) => {
-			//console.log(res.data);
-			userDispatch({
-				...res.data,
-				auth: "user"
-			});
-		});
-		//console.log(user);
-	};
-	const LoginUser = async (id, pw) => {
+	const LoginUser = async (user_id, user_pw) => {
 		let flag = false;
-		await axios.post(`${API_URL}/login`, { user_id: id, user_pw: pw }, {
+		await axios.post(`${API_URL}/login`, { user_id, user_pw }, {
 			withCredentials: true,
 		}).then((res) => {
 			//console.log(res.data.result);
@@ -143,7 +130,6 @@ export const UserLogicProvider = ({ children }) => {
 	return (
 		<LoginUserContext.Provider value={LoginUser}>
 			<LogoutUserContext.Provider value={LogoutUser}>
-				<GetUserInfoContext.Provider value={GetUserInfo}>
 					<SendAuthMailContext.Provider value={SendAuthMail}>
 						<CheckAuthMailContext.Provider value={CheckAuthMail}>
 							<CheckUniqueIdContext.Provider value={CheckUniqueId}>
@@ -161,7 +147,6 @@ export const UserLogicProvider = ({ children }) => {
 							</CheckUniqueIdContext.Provider>
 						</CheckAuthMailContext.Provider>
 					</SendAuthMailContext.Provider>
-				</GetUserInfoContext.Provider>
 			</LogoutUserContext.Provider>
 		</LoginUserContext.Provider>
 	);
@@ -174,11 +159,6 @@ export function useLoginUser() {
 
 export function useLogoutUser() {
 	const context = useContext(LogoutUserContext);
-	return context;
-}
-
-export function useGetUserInfo() {
-	const context = useContext(GetUserInfoContext);
 	return context;
 }
 
