@@ -195,20 +195,27 @@ async function OutChallenge(req, res) {
 		if (ch.challenge_users.length === 0 || ch.challenge_users.find(element => element === user_id) === undefined) throw new Error('challege DB에 해당 user 없음.');
 
 		const session = await mongoose.startSession(); // 무결성 보장을 위한 transation 처리
-		await session.withTransaction(async () =>  {
-			//ch의 challenge_user에서 해당 user 삭제 
-			await Challenge.findOneAndUpdate(
-				{_id : ch_id},
-				{$pull: {'challenge_users': user_id, 'commitCount': {'user_id' :user_id}},
-				$inc: {'challenge_user_num' : -1}}
-			);
-			//user의 ch_list에서 해당 ch 삭제
-			await User.findOneAndUpdate(
-				{'user_id':user_id},
-				{$pull: {'ch_list': challenge_id}}
-			);
-		});
-		await session.endSession();	
+		try {
+			await session.withTransaction(async () =>  {
+				//ch의 challenge_user에서 해당 user 삭제 
+				await Challenge.findOneAndUpdate(
+					{_id : ch_id},
+					{$pull: {'challenge_users': user_id, 'commitCount': {'user_id' :user_id}},
+					$inc: {'challenge_user_num' : -1}}
+				);
+				//user의 ch_list에서 해당 ch 삭제
+				await User.findOneAndUpdate(
+					{'user_id':user_id},
+					{$pull: {'ch_list': challenge_id}}
+				);
+			});
+			session.endSession();	
+		}
+		catch(err){
+			await session.abortTransaction();
+			session.endSession();
+			throw new Error("transaction 처리 에러");
+		}
 		res.send({"success":true});
 	} catch (err) {
 		console.log(err);
