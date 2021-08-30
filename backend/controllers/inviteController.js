@@ -33,7 +33,7 @@ async function CreateInvite(req, res) {
 		if (challenge === null) throw 'not exist challenge'
 
 		const invited_user = await User.findOne({ user_email: invite_email })
-		if(challenge.challenge_users.findIndex((v) => v === invited_user.user_id) >= 0) throw 'already join'
+		if (challenge.challenge_users.findIndex((v) => v === invited_user.user_id) >= 0) throw 'already join'
 
 		const auth_num = authMailController.makeAuthNum(12)
 
@@ -77,12 +77,23 @@ async function DeleteInvite(req, res) {		// mail 링크 누를 시 기능 구현
 		console.log(user)
 		if (user === null) throw "유효하지 않은 user입니다."
 
-		const join_result = await challengeController.join(challenge, user)
-		console.log(join_result)
-		if(join_result === false) throw "challenge와 user에 추가 실패"
+		const session = await mongoose.startSession(); // 무결성 보장을 위한 transation 처리
+		try {
+			await session.withTransaction(async () => {
+				const join_result = await challengeController.join(challenge, user)
+				console.log(join_result)
+				if (join_result === false) throw "challenge와 user에 추가 실패"
 
-		// challenge에서 여러번 보낸 초대가 있으면 전부 삭제함.
-		await Invite.deleteMany({$and: [{ invite_email: invite.invite_email }, { challenge_id: ch_id }] })
+				// challenge에서 여러번 보낸 초대가 있으면 전부 삭제함.
+				await Invite.deleteMany({ $and: [{ invite_email: invite.invite_email }, { challenge_id: ch_id }] })
+			});
+			session.endSession();
+		}
+		catch (err) {
+			await session.abortTransaction();
+			session.endSession();
+			throw new Error("transaction 처리 에러");
+		}
 
 		res.status(201).json({ result: "성공" });
 	} catch (err) {
