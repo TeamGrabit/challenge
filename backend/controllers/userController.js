@@ -180,7 +180,8 @@ async function OutChallenge(req, res) {
 	//ch의 challenge_user에서 해당 user 삭제 
 	// 둘다 성공시에만 success return (transaction 처리)
 	try {
-		const { user_id, challenge_id } = req.body;
+		const { user_id } = req.body;
+		const { challenge_id } = req.params;
 		const ch_id = ObjectID(challenge_id);
 
 		const ch = await Challenge.findById(ch_id);
@@ -216,7 +217,7 @@ async function OutChallenge(req, res) {
 			session.endSession();
 			throw new Error("transaction 처리 에러");
 		}
-		res.send({"success":true});
+		res.send({'success':true});
 	} catch (err) {
 		console.log(err);
 		res.status(400).json({ error: err.message });
