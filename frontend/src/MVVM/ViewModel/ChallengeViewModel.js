@@ -39,7 +39,7 @@ export const ChallengeLogicProvider = ({ children }) => {
 		await axios.post(`${API_URL}/challenge`, {
 			user_id: challengeInfo.userId,
 			name: challengeInfo.name,
-			vacation_count: challengeInfo.vacation_count,
+			pass: challengeInfo.pass,
 			challenge_start: challengeInfo.challenge_start,
 			challenge_end: challengeInfo.challenge_end,
 			private_key: challengeInfo.private_key
