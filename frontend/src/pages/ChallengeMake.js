@@ -94,7 +94,7 @@ function ChallengeMake({ history }) {
 			const challengeInfo = {
 				userId: user.userId,
 				name: Name,
-				pass: Pass,
+				pass_count: Pass,
 				challenge_start: sDate,
 				challenge_end: eDate,
 				private_key: Password,
