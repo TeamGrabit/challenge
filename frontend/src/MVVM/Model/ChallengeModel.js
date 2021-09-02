@@ -4,7 +4,7 @@ const ChallengeState = createContext([]);
 const ChallengeDispatch = createContext(() => {});
 
 export const ChallengeContextProvider = ({ children }) => {
-	const [challengeData, setChallengeData] = useState([]);
+	const [challengeData, setChallengeData] = useState(null);
 	return (
 		<ChallengeState.Provider value={challengeData}>
 			<ChallengeDispatch.Provider value={setChallengeData}>
