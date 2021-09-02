@@ -64,6 +64,29 @@
         font-size: 1.2em;
         font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
 	}
+	.passtext_box{
+		display: flex;
+		align-items: center;
+	}
+	.passtext{
+		font-size: 1.2em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.passcount_txt{	
+		margin-left: 20px;
+		margin-right: 10px;
+		width: 80px;
+        font-size: 1.3em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
+	.passcount_sel{
+        text-align: center;
+        margin-left: 30px;
+        width: 80px;
+        letter-spacing: 1px;
+        font-size: 1.2em;
+        font-family: "Noto Sans KR", "맑은 고딕", Arial, Helvetica, sans-serif;
+	}
     .date_all{
         display: flex;
         align-items: center;

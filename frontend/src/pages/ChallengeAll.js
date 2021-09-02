@@ -49,7 +49,7 @@ function ChallengeAll() {
 	};
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge`).then((res) => {
-			console.log(res.data);
+			res.data.challenges.reverse();
 			setAllData(res.data.challenges.filter(info => info.state == 0));
 			setShowData(res.data.challenges.filter(info => info.state == 0));
 			setLoading(false);
