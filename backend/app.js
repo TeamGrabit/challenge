@@ -19,6 +19,11 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 const cookieSecret = process.env.COOKIE_SECRET;
 
+const http = require("http");
+setInterval(() => {
+	http.get(`${process.env.CLIENT_URL}`);
+}, 600000)
+
 
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
