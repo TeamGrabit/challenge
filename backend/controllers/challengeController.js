@@ -11,10 +11,10 @@ const bcrypt = require('bcrypt');
 const { checkPreferences } = require('joi');
 
 async function CreateChallenge(req, res) {
-	const { user_id, name, challenge_start, challenge_end, private_key, vacation_count } = req.body;
+	const { user_id, name, challenge_start, challenge_end, private_key, pass_count } = req.body;
 
 	try {
-		Challenge.create(user_id, name, challenge_start, challenge_end, private_key, vacation_count)
+		Challenge.create(user_id, name, challenge_start, challenge_end, private_key, pass_count)
 			.then((doc) => {
 				console.log("challenge 생성");
 				console.log(doc._id);
@@ -208,7 +208,7 @@ async function GetChallengeInfo(req, res) {
 async function FixChallengeInfo(req, res) {
 	const challenge_id = req.params.challenge_id;
 	const id = ObjectID(challenge_id);
-	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key } = req.body;
+	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key, pass_count } = req.body;
 
 	try {
 		Challenge.findOneById(id)
@@ -241,6 +241,9 @@ async function FixChallengeInfo(req, res) {
 			if (private_key === undefined) {
 				private_key = preChallenge.private_key;
 			}
+			if (pass_count === undefined) {
+				pass_count = preChallenge.pass_count;
+			}
 		}).then(() => {
 			Challenge.findByIdAndUpdate(id, {
 				$set: {
@@ -248,7 +251,8 @@ async function FixChallengeInfo(req, res) {
 					challenge_start: challenge_start,
 					challenge_end: challenge_end,
 					challenge_leader: challenge_leader,
-					private_key: private_key
+					private_key: private_key,
+					pass_count: pass_count
 				}
 			}, { new: true, useFindAndModify: false }, (err, doc) => {
 				if (err) {

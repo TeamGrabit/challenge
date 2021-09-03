@@ -54,7 +54,7 @@ var Challenge = new Schema({
 		type: String,
 		trim: true
 	},
-	vacation_count: {
+	pass_count: {
 		type: Number,
 		default: 0
 	},
@@ -63,14 +63,14 @@ var Challenge = new Schema({
 	versionKey: false
 });
 
-Challenge.statics.create = function (userId, name, challenge_start, challenge_end, private_key, vacation_count) {
+Challenge.statics.create = function (userId, name, challenge_start, challenge_end, private_key, pass_count) {
 	const challenge = new this({
 		name,
 		challenge_start,
 		challenge_end,
 		challenge_leader: userId,
 		private_key,
-		vacation_count
+		pass_count
 	})
 
 	const commitCount = challenge.commitCount.create({ user_id: userId })
