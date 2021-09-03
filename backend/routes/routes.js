@@ -14,7 +14,7 @@ const alarmController = require('../controllers/alarmController');
 router.post('/signup', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
 router.get('/challenge/list/:userId', userController.getChallengeList);
-router.patch('/challengeOut/user', userController.outChallenge);
+router.patch('/user/:challenge_id/out', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
 router.post('/auth/jwtvalidcheck', userController.verifyToken);
