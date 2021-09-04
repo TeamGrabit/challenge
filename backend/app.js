@@ -53,7 +53,7 @@ app.use(expressSession({
 }))
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use('/',router);
+app.use('/api',router);
 
 if(process.env.NODE_ENV=='production') {
 	let root = path.join(__dirname, '../frontend/build')
