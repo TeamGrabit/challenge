@@ -11,10 +11,10 @@ const bcrypt = require('bcrypt');
 const { checkPreferences } = require('joi');
 
 async function CreateChallenge(req, res) {
-	const { user_id, name, challenge_start, challenge_end, private_key, vacation_count } = req.body;
+	const { user_id, name, challenge_start, challenge_end, private_key, pass_count } = req.body;
 
 	try {
-		Challenge.create(user_id, name, challenge_start, challenge_end, private_key, vacation_count)
+		Challenge.create(user_id, name, challenge_start, challenge_end, private_key, pass_count)
 			.then((doc) => {
 				console.log("challenge 생성");
 				console.log(doc._id);
@@ -29,11 +29,11 @@ async function CreateChallenge(req, res) {
 				var chArray;
 				chArray = _user.ch_list
 				_challenge = await Challenge.findById(ch_id)
-				chArray.push(_challenge._id.toString());
-				join(chArray)
+				chArray.push(String(_challenge._id));
+				add_user(chArray)
 			})
 
-		const join = (chArray) => User.findOneAndUpdate({ "user_id": user_id }, {
+		const add_user = (chArray) => User.findOneAndUpdate({ "user_id": user_id }, {
 			$set: {
 				ch_list: chArray,
 			}
@@ -208,7 +208,7 @@ async function GetChallengeInfo(req, res) {
 async function FixChallengeInfo(req, res) {
 	const challenge_id = req.params.challenge_id;
 	const id = ObjectID(challenge_id);
-	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key } = req.body;
+	var { name, challenge_start, challenge_end, challenge_leader, user_id, private_key, pass_count } = req.body;
 
 	try {
 		Challenge.findOneById(id)
@@ -241,6 +241,9 @@ async function FixChallengeInfo(req, res) {
 			if (private_key === undefined) {
 				private_key = preChallenge.private_key;
 			}
+			if (pass_count === undefined) {
+				pass_count = preChallenge.pass_count;
+			}
 		}).then(() => {
 			Challenge.findByIdAndUpdate(id, {
 				$set: {
@@ -248,7 +251,8 @@ async function FixChallengeInfo(req, res) {
 					challenge_start: challenge_start,
 					challenge_end: challenge_end,
 					challenge_leader: challenge_leader,
-					private_key: private_key
+					private_key: private_key,
+					pass_count: pass_count
 				}
 			}, { new: true, useFindAndModify: false }, (err, doc) => {
 				if (err) {
@@ -315,106 +319,62 @@ async function JoinChallenge(req, res) {
 	const id = ObjectID(challenge_id);
 
 	try {
-		var userArray
-		var userCount
-		var newCommitCount
+		const challenge = await Challenge.findById(id)
+		const user = await User.findOneByUsername(user_id)
+		if(challenge === null || user === null) throw "잘못된 요청입니다."
+		if (challenge.private_key === private_key){
+			let result = await join(challenge, user);
+			if(result === false) throw "challenge와 user에 추가 오류"
+		}
+		else {
+			throw "private_key different!"
+		}
+		res.status(201).json({result: true})
+	} catch (err) {
+		console.log(err)
+		res.status(401).json({errror: err})
+	}
+}
 
-		const join_ch = (userArray, userCount, newCommitCount) => Challenge.findByIdAndUpdate(id, {
+async function join(challenge, user){
+	try{
+		if(challenge.challenge_users.indexOf(user.user_id)>=0 || user.ch_list.indexOf(String(challenge._id))>=0) throw "이미 가입된 유저입니다."
+		
+		// challenge에 user 추가
+		var userArray = [...challenge.challenge_users]
+		var userCount = challenge.challenge_user_num+1
+
+		userArray.push(user.user_id);
+		const addCommitCount = challenge.commitCount.create({user_id: user.user_id})
+		const newCommitCount = [...challenge.commitCount, addCommitCount]
+
+		let challengeResult = await Challenge.findByIdAndUpdate(challenge._id, {
 			$set: {
 				challenge_users: userArray,
 				challenge_user_num: userCount,
 				commitCount: newCommitCount
 			}
-		}, { new: true, useFindAndModify: false }, (err, doc) => {
-			if (err) {
-				throw new Error('challenge DB에 user추가 오류')
-			}
-			else {
-				console.log("challenge에 user 추가")
-				console.log(doc._id)
-			}
+		}, {new: true, useFindAndModify: false}, (err, doc) => {
+			if(err) return false
 		})
-			.catch((err) => {
-				console.error(err);
-				res.send('false');
-			})
+		if(challengeResult === false) throw "challenge에 user 추가 실패"
 
-		const join_user = (chArray) => User.findOneAndUpdate({ "user_id": user_id }, {
+		// user에 challenge 추가
+		var challengeArray = [...user.ch_list, String(challenge._id)]
+
+		let userResult = await User.findOneAndUpdate({user_id: user.user_id}, {
 			$set: {
-				ch_list: chArray,
+				ch_list: challengeArray
 			}
-		}, { new: true, useFindAndModify: false }, (err, doc) => {
-			if (err) {
-				throw Error('user DB에 ch_list 추가 오류')
-			}
-			else {
-				console.log("user에 challenge 추가")
-				console.log(doc)
-				res.send('true')
-			}
+		}, {new:true, useFindAndModify:false}, (err, doc) => {
+			if(err) return false
 		})
-			.catch((err) => {
-				console.error(err);
-				res.send('false');
-			})
+		if(userResult === false) throw "user에 challenge 추가 실패"
 
-		const join = async (challenge) => {
-			if (challenge === null) {
-				console.log('not exist challenge')
-				res.send('false')
-			}
-
-			userArray = challenge.challenge_users
-			userCount = challenge.challenge_user_num + 1
-
-			for (let i = 0; i < userArray.length; i++) {
-				if (userArray[i] === user_id) {
-					console.log('이미 가입되어 있음')
-					res.send('false')
-				}
-			}
-			userArray.push(user_id)
-
-			//commitCount 추가
-			newCommitCount = challenge.commitCount
-			const addCommitCount = challenge.commitCount.create({ user_id: user_id })
-			newCommitCount.push(addCommitCount)
-
-
-			join_ch(userArray, userCount, newCommitCount)
-
-			if (user === null) {
-				console.log('user가 존재하지 않음.')
-				res.send('false')
-			}
-			var chArray = [];
-			chArray = user.ch_list
-			if (chArray.indexOf(challenge_id) >= 0) {	// 이미 해당 Id의 challenge에 가입되어 있는지 확인.
-				console.log('already join')
-				res.send('false')
-			}
-			chArray.push(challenge_id);
-
-			join_user(chArray)
-		}
-
-		const challenge = await Challenge.findOneById(id)
-		const user = await User.findOneByUsername(user_id)
-		if(challenge === null || user === null) throw "존재하지 않는 challenge 또는 user 입니다."
-		if (challenge.private_key === private_key) {
-			if (challenge.challenge_users.indexOf(user_id) < 0 && user.ch_list.indexOf(challenge_id)) join(challenge)
-			else {
-				console.log('already join user!')
-				res.send('false')
-			}
-		}
-		else {
-			console.log('private_key different!')
-			res.send('false')
-		}
-	} catch (err) {
+		return true
+	}catch(err) {
 		console.log(err)
-		res.status(401).json({ error: err })
+		return false
 	}
 }
 
@@ -497,5 +457,6 @@ module.exports = {
 	deleteChallenge: DeleteChallenge,
 	joinChallenge: JoinChallenge,
 	outChallenge: OutChallenge,
-	getAllChallenge: GetAllChallenge
+	getAllChallenge: GetAllChallenge,
+	join: join
 };

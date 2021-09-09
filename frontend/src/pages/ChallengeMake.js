@@ -13,13 +13,16 @@ function ChallengeMake({ history }) {
 	const [Name, setName] = useState("");
 	const [Password, setPassword] = useState("");
 	const [PWcheck, setPWcheck] = useState("");
-	const [Category, setCategory] = useState("");
-	const [CateSel, setCateSel] = useState("notsel");
+	const [Category, setCategory] = useState("커밋");
+	const [CateSel, setCateSel] = useState("커밋");
+	const [Pass, setPass] = useState("0");
+	const [Passcount, setPasscount] = useState("0");
 	const [sDate, setsDate] = useState(today);
 	const [eDate, seteDate] = useState(endday);
 	const [Intro, setIntro] = useState("");
 	const [dateRef, setDateRef] = useState(true);
 	const [selRef, setSelRef] = useState(true);
+	const [passRef, setPassRef] = useState(true);
 	const [Nameerror, setNameerror] = useState(false);
 	const [Namehint, setNamehint] = useState("");
 	const [PWerror, setPWerror] = useState(false);
@@ -45,6 +48,19 @@ function ChallengeMake({ history }) {
 		} else {
 			setSelRef(true);
 			setCategory(e.target.value);
+		}
+	};
+	const changePass = (e) => {
+		setPass(e.currentTarget.value);
+	};
+	const changePasscount = (e) => {
+		setPasscount(e.target.value);
+		if (e.target.value === "직접입력") {
+			setPassRef(false);
+			setPass("");
+		} else {
+			setPassRef(true);
+			setPass(e.target.value);
 		}
 	};
 	const changeIntro = (e) => {
@@ -78,6 +94,7 @@ function ChallengeMake({ history }) {
 			const challengeInfo = {
 				user_id: user.user_id,
 				name: Name,
+				pass_count: Pass,
 				challenge_start: sDate,
 				challenge_end: eDate,
 				private_key: Password,
@@ -165,6 +182,38 @@ function ChallengeMake({ history }) {
 							<MenuItem value="운동">운동</MenuItem>
 							<MenuItem value="공부">공부</MenuItem>
 							<MenuItem value="기타">기타</MenuItem>
+							<MenuItem value="직접입력">직접입력</MenuItem>
+						</Select>
+					</div>
+				</div>
+				<div className="info_grid">
+					<div className="info_title">
+						패스 횟수
+					</div>
+					<div className="passtext_box">
+						<div className="passtext">월</div>
+						<TextField
+							className="passcount_txt"
+							variant="outlined"
+							inputProps={isMobile ? { style: { fontSize: 16, textAlign: 'right' } } : { style: { fontSize: 20, textAlign: 'right' } }}
+							disabled={passRef}
+							value={Pass}
+							margin="dense"
+							onChange={changePass}
+						/>
+						<div className="passtext">회</div>
+					</div>
+					<div className="category_selbox">
+						<Select
+							className="passcount_sel"
+							value={Passcount}
+							onChange={changePasscount}
+						>
+							<MenuItem value="0">0</MenuItem>
+							<MenuItem value="1">1</MenuItem>
+							<MenuItem value="2">2</MenuItem>
+							<MenuItem value="3">3</MenuItem>
+							<MenuItem value="4">4</MenuItem>
 							<MenuItem value="직접입력">직접입력</MenuItem>
 						</Select>
 					</div>

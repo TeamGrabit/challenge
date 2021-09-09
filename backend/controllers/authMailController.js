@@ -160,4 +160,5 @@ module.exports = {
 	checkAuthNum: CheckAuthNum,
 	inviteUser: InviteUser,
 	sendId: SendId,
+	makeAuthNum: makeAuthNum
 }

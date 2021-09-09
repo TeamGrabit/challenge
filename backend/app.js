@@ -14,6 +14,11 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 const cookieSecret = process.env.COOKIE_SECRET;
 
+const http = require("http");
+setInterval(() => {
+	http.get(`${process.env.CLIENT_URL}`);
+}, 600000)
+
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
 })
@@ -43,7 +48,7 @@ app.use(expressSession({
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(jwtMiddleware); // jwt 해석해서 user정보 req에 넣어주는 미들웨어
-app.use('/',router);
+app.use('/api',router);
 
 if(process.env.NODE_ENV=='production') {
 	let root = path.join(__dirname, '../frontend/build')
