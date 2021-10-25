@@ -4,16 +4,11 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const expressSession = require('express-session');
 const path = require('path');
-
 const port = process.env.PORT || 5000;
-
 const bodyParser = require('body-parser')
-
 const router = require('./routes/routes');
-
-
 const config = require('./config/key');
-
+const { jwtMiddleware } = require('./lib/token');
 const mongoose = require('mongoose');
 
 require("dotenv").config();
@@ -23,7 +18,6 @@ const http = require("http");
 setInterval(() => {
 	http.get(`${process.env.CLIENT_URL}`);
 }, 600000)
-
 
 mongoose.connect(config.mongoURI,{
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true, useFindAndModify:false
@@ -53,6 +47,7 @@ app.use(expressSession({
 }))
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(jwtMiddleware); // jwt 해석해서 user정보 req에 넣어주는 미들웨어
 app.use('/api',router);
 
 if(process.env.NODE_ENV=='production') {

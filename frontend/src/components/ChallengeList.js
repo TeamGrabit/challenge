@@ -3,7 +3,8 @@ import { Button, Grid, Box } from '@material-ui/core';
 import { Spinner } from '../components';
 import { Link } from 'react-router-dom';
 
-function ChallengeList({ list, index, user_id }) {
+function ChallengeList({ list, index, user }) {
+	
 	return (
 		<div>
 			<div className="challengeList">
@@ -20,7 +21,7 @@ function ChallengeList({ list, index, user_id }) {
 										</div>
 										<div className="wheel">
 											{
-												c.challenge_leader === user_id.userId ?
+												c.challenge_leader === user.user_id ?
 													<Link className="link" to={`/challenge/manage/${c.challenge_id}`}>
 														<img className="cha_manage" src="/image/바퀴black.png" alt="설정" />
 													</Link>

@@ -14,11 +14,11 @@ const inviteController = require('../controllers/inviteController');
 // <-- userCon
 router.post('/signup', userController.createUser);
 router.delete('/signout/:id', userController.deleteUser);
-router.get('/challenge/list/:userId', userController.getChallengeList);
+router.get('/challenge/list/:user_id', userController.getChallengeList);
 router.patch('/challengeOut/user', userController.outChallenge);
 router.post('/login', userController.logIn);
 router.post('/logout', userController.logOut);
-router.post('/auth/jwtvalidcheck', userController.verifyToken);
+router.get('/check', userController.check);
 router.get('/user/uniqueid/:user_id', userController.checkIdDupl);
 router.patch('/user/changepw', userController.changePw);
 router.patch('/user/change', userController.change);

@@ -92,7 +92,7 @@ function ChallengeMake({ history }) {
 		}
 		if (Name !== "" && Password === PWcheck) {
 			const challengeInfo = {
-				userId: user.userId,
+				user_id: user.user_id,
 				name: Name,
 				pass_count: Pass,
 				challenge_start: sDate,

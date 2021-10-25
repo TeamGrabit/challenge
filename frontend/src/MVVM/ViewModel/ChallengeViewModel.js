@@ -18,10 +18,10 @@ export const ChallengeLogicProvider = ({ children }) => {
 	console.log(user);
 
 	useEffect(() => {
-		if (user.userId !== undefined) getChallengeList();
+		if (user.user_id !== undefined) getChallengeList();
 	}, [user]);
 	const getChallengeList = async () => {
-		axios.get(`${API_URL}/challenge/list/${user.userId}`).then((res) => {
+		axios.get(`${API_URL}/challenge/list/${user.user_id}`).then((res) => {
 			challengeDispatch(res.data);
 			console.log(res.data);
 		})
@@ -37,7 +37,7 @@ export const ChallengeLogicProvider = ({ children }) => {
 		console.log(challengeInfo);
 		let flag = false;
 		await axios.post(`${API_URL}/challenge`, {
-			user_id: challengeInfo.userId,
+			user_id: challengeInfo.user_id,
 			name: challengeInfo.name,
 			pass_count: challengeInfo.pass_count,
 			challenge_start: challengeInfo.challenge_start,
@@ -52,7 +52,7 @@ export const ChallengeLogicProvider = ({ children }) => {
 	const expelChallenge = async (CId, user_id) => {
 		let flag = false;
 		await axios.patch(`/challengeOut/user`, {
-			userId: user_id,
+			user_id: user_id,
 			challengeId: CId
 		}).then((res) => {
 			flag = res.data;

@@ -16,7 +16,6 @@ var User = new Schema({
 });
 
 User.pre("save", function(next) {
-	console.log("aaaaaaaaa");
 	var user = this;
 	if (user.isModified("user_pw")) {
 		bcrypt.genSalt(10, (err,salt) => {

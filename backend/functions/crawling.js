@@ -22,9 +22,9 @@ const getDate = () => {
 }
 
 /*
-	crawlingModule(gitId)
+	crawlingModule(git_id)
 	axios와 cheerio를 이용하여 깃허브 사이트 크롤링!
-	props로 받은 gitId를 이용함.
+	props로 받은 git_id를 이용함.
 	result = [
 	{ date: '2021-01-01', count: '0' },
     { date: '2021-01-02', count: '0' },
@@ -32,11 +32,11 @@ const getDate = () => {
 	...
 	]
 */
-const crawlingModule = async (gitId) => {
+const crawlingModule = async (git_id) => {
 	let result = [];
 	const to = getDate();
 	for(let i=0; i<to.length; i++){
-		await axios.get(`https://github.com/${gitId}?tab=overview&from=${to[i]}-01-01&to=${to[i]}-12-31`)
+		await axios.get(`https://github.com/${git_id}?tab=overview&from=${to[i]}-01-01&to=${to[i]}-12-31`)
 		.then(html => {
 			$ = cheerio.load(html.data);
 			const crawl = $('svg > g > g > rect');
@@ -143,20 +143,20 @@ const isLastDay = (date) => {
 }
 
 /* 유저의 깃 데이터 만들기. 이미 있으면 최신화, 없으면 새로 만들어줌! */
-async function CreateGitData(userId) {
-	const user = await User.findOneByUsername(userId);
+async function CreateGitData(user_id) {
+	const user = await User.findOneByUsername(user_id);
 	if (user) {
 		// 이미 생성된 grass가 있는지?
-		const grass = await gitData.findOneByUserId(userId)
+		const grass = await gitData.findOneByUserId(user_id)
 		if(grass) {
-			gitData.findOneAndDelete({ user_id: userId }, function (err,docs) {
+			gitData.findOneAndDelete({ user_id: user_id }, function (err,docs) {
 				if (err) { console.log(err) }
 				else { console.log("Deleted: ", docs); }
 			})
 		}
 		// 깃 크롤링
 		const commit_data = await crawlingModule(user.git_id);
-		await gitData.create(userId, user.git_id, commit_data);
+		await gitData.create(user_id, user.git_id, commit_data);
 	} else {
 		throw 'user not exists';
 	}

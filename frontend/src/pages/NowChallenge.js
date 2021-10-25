@@ -39,8 +39,8 @@ function NowChallenge({ match }) {
 	useEffect(() => {
 		axios.get(`${API_URL}/challenge/${CId}`).then((res) => {
 			if(userData.auth){
-				if(res.data.challenge_users.includes(userData.userId) === false) setPwModal(true);
-				if(res.data.challenge_users.includes(userData.userId) === true) setPwModal(false);
+				if(res.data.challenge_users.includes(userData.user_id) === false) setPwModal(true);
+				if(res.data.challenge_users.includes(userData.user_id) === true) setPwModal(false);
 			}
 		});
 		// todo : grass mvvm 만들기. approve mvvm 이용하기.
@@ -60,7 +60,7 @@ function NowChallenge({ match }) {
 			.catch((error) => { console.log(error); });
 		// my grass
 		axios.get(`${API_URL}/grass/personal`, { params: {
-			user_id: userData.userId,
+			user_id: userData.user_id,
 			challenge_id: CId,
 			month: today.getMonth() + 1,
 			year: today.getFullYear()
@@ -70,7 +70,7 @@ function NowChallenge({ match }) {
 			.catch((error) => { console.log(error); });
 		// other grass
 		axios.get(`${API_URL}/grass/other`, { params: {
-			user_id: userData.userId,
+			user_id: userData.user_id,
 			challenge_id: CId,
 			month: today.getMonth() + 1,
 			year: today.getFullYear()
@@ -89,7 +89,7 @@ function NowChallenge({ match }) {
 		});
 		// approve
 		axios.get(`${API_URL}/approve/list/${CId}`, { params: {
-			user_id: userData.userId
+			user_id: userData.user_id
 		}}).then((res) => {
 			setAdmit(res.data.result);
 			if(res.data.result.length === 0) setAdmit(null);
@@ -238,7 +238,7 @@ function NowChallenge({ match }) {
 					</Grid>
 				</Fade>
 			</Modal>
-			<EntrancePwModal open={pwModal} closeHandler={()=>null} CId={CId} UId={userData.userId} />
+			<EntrancePwModal open={pwModal} closeHandler={()=>null} CId={CId} UId={userData.user_id} />
 		</>
 	);
 }

@@ -6,7 +6,7 @@ import { useUserState } from '../MVVM/Model/UserModel';
 import { useChallengeState } from '../MVVM/Model/ChallengeModel';
 
 function Main() {
-	const user_id = useUserState();
+	const user = useUserState();
 	const challengeData = useChallengeState();
 	const [value, setValue] = useState(0);
 
@@ -64,7 +64,7 @@ function Main() {
 						<AntTab label="참여중인 챌린지" />
 						<AntTab label="종료된 챌린지" />
 					</AntTabs>
-					<ChallengeList list={challengeData} index={value} user_id={user_id} />
+					<ChallengeList list={challengeData} index={value} user={user} />
 				</div>
 			</div>
 		</div>

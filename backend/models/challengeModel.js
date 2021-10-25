@@ -68,16 +68,16 @@ Challenge.statics.create = function (userId, name, challenge_start, challenge_en
 		name,
 		challenge_start,
 		challenge_end,
-		challenge_leader: userId,
+		challenge_leader: user_id,
 		private_key,
 		pass_count
 	})
 
-	const commitCount = challenge.commitCount.create({ user_id: userId })
+	const commitCount = challenge.commitCount.create({ user_id: user_id })
 
 	challenge.commitCount = commitCount
 
-	challenge.challenge_users.push(userId)
+	challenge.challenge_users.push(user_id)
 	//commitCount 추가.
 
 	console.log(challenge);

@@ -37,7 +37,7 @@ function ChallengeTable({ data, user_id, loading}) {
 							<TableCell className="bodyEnd">{DateToString(c.challenge_end)}</TableCell>
 							<TableCell className="bodyLeader">{c.challenge_leader}</TableCell>
 							<TableCell className="bodyJoin">
-								{c.challenge_users.includes(user_id.userId) === false ?
+								{c.challenge_users.includes(user_id.user_id) === false ?
 									<div>
 										<Button className="joinBtn" variant="contained" color="secondary" onClick={() => JoinHandler(c._id)}>Join</Button>
 									</div>
@@ -50,7 +50,7 @@ function ChallengeTable({ data, user_id, loading}) {
 				</TableBody>
 			</Table>
 			}
-			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={selChallenge} UId={user_id.userId} />
+			<EntrancePwModal open={pwModal} closeHandler={()=>setPwModal(false)} CId={selChallenge} UId={user_id.user_id} />
 		</div>
 	)
 }

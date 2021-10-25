@@ -41,7 +41,7 @@ function ChallengeInfoFix(props) {
 	useEffect(() => {
 		axios.get(`${API_URL}/grass/personal`, {
 			params: {
-				user_id: userData.userId,
+				user_id: userData.user_id,
 				challenge_id: _challengeId,
 				month: today.getMonth() + 1,
 				year: today.getFullYear()
@@ -115,7 +115,7 @@ function ChallengeInfoFix(props) {
 			>
 				<Fade in={open}>
 					<div className="modalPaper">
-						<RequestApproval onClose={handleClose} challengeId={_challengeId} userId={userData.userId} year={Year} month={Month} day={Day} />
+						<RequestApproval onClose={handleClose} challengeId={_challengeId} user_id={userData.user_id} year={Year} month={Month} day={Day} />
 					</div>
 				</Fade>
 			</Modal>
